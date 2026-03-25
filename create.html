@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Create Your Apology Page — Wisherly</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Serif+Display:ital@0;1&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const _cfg={
+    apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",
+    authDomain:"wisherly-d07d7.firebaseapp.com",
+    projectId:"wisherly-d07d7",
+    storageBucket:"wisherly-d07d7.firebasestorage.app",
+    messagingSenderId:"919116839261",
+    appId:"1:919116839261:web:147d6b5924f3cbe35050b4"
+  };
+  if(!firebase.apps.length){firebase.initializeApp(_cfg);}
+  window._db=firebase.firestore();
+})();
+</script>
+
+<style>
+/* ══ ROOT ══ */
+:root{
+  --cream:#FFFAF8;
+  --snow:#FFF5F5;
+  --blush:#FFE8E8;
+  --petal:#FECDD3;
+  --rose:#FDA4AF;
+  --mauve:#E879A0;
+  --plum:#BE185D;
+  --mist:#FDF2F8;
+  --ink:#3D1A24;
+  --ink2:#5C2D3A;
+  --muted:rgba(61,26,36,.5);
+  --muted2:rgba(61,26,36,.28);
+  --border:rgba(253,164,175,.25);
+  --grad:linear-gradient(135deg,#FDA4AF,#E879A0);
+  --grad-deep:linear-gradient(135deg,#BE185D,#E879A0);
+  --shadow:rgba(190,24,93,.07);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Jost',sans-serif;
+  font-weight:300;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* Soft ambient */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 10% 10%,rgba(253,164,175,.12),transparent 65%),
+    radial-gradient(ellipse 40% 30% at 90% 90%,rgba(232,121,160,.08),transparent 60%);
+}
+
+/* ── NAVBAR ── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:62px;
+  background:rgba(255,250,248,.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'DM Serif Display',serif;font-style:italic;
+  font-size:20px;
+  background:var(--grad);-webkit-background-clip:text;color:transparent;
+  text-decoration:none;
+}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;font-weight:400;}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{
+  padding:8px 22px;border-radius:999px;
+  background:var(--grad);color:#fff;
+  font-size:13px;font-weight:500;text-decoration:none;
+  box-shadow:0 4px 16px rgba(232,121,160,.3);
+  transition:all .25s;
+}
+.nav-cta:hover{box-shadow:0 6px 24px rgba(232,121,160,.45);transform:translateY(-1px);}
+
+/* ── PAGE HEADER ── */
+.page-header{
+  text-align:center;padding:72px 24px 48px;
+  position:relative;z-index:1;
+}
+.page-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(253,164,175,.12);border:1px solid rgba(253,164,175,.35);
+  border-radius:999px;padding:6px 18px;
+  font-size:10px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--plum);margin-bottom:20px;
+}
+.page-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--rose);animation:dot-pulse 2s ease infinite;}
+@keyframes dot-pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+.page-header h1{
+  font-family:'DM Serif Display',serif;font-style:italic;
+  font-size:clamp(32px,5vw,52px);font-weight:400;
+  color:var(--ink);line-height:1.15;margin-bottom:12px;
+}
+.page-header h1 span{background:var(--grad);-webkit-background-clip:text;color:transparent;}
+.page-header p{font-size:15px;color:var(--muted);font-weight:300;max-width:480px;margin:0 auto;}
+
+/* ── MAIN LAYOUT ── */
+.builder{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:36px;
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 40px 80px;
+  position:relative;z-index:1;
+  align-items:start;
+}
+
+/* ── PANELS ── */
+.panel{
+  background:rgba(255,250,248,.95);
+  border:1px solid rgba(253,164,175,.2);
+  border-radius:20px;
+  padding:28px;
+  margin-bottom:18px;
+  box-shadow:0 2px 20px var(--shadow);
+}
+.panel-title{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:20px;
+}
+.panel-title h3{
+  font-family:'DM Serif Display',serif;font-style:italic;
+  font-size:17px;font-weight:400;color:var(--ink);
+}
+.panel-badge{
+  font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  background:rgba(253,164,175,.15);color:var(--plum);
+  padding:3px 10px;border-radius:999px;
+  border:1px solid rgba(253,164,175,.3);
+}
+.panel-icon{font-size:18px;}
+
+/* ── INPUTS ── */
+label{
+  display:block;
+  font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-top:16px;margin-bottom:4px;
+}
+label:first-of-type{margin-top:0;}
+input,textarea,select{
+  width:100%;padding:11px 14px;
+  margin-top:0;
+  border-radius:10px;
+  border:1px solid rgba(253,164,175,.3);
+  background:rgba(255,232,232,.15);
+  color:var(--ink);
+  font-family:'Jost',sans-serif;font-size:14px;font-weight:300;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  resize:vertical;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--rose);box-shadow:0 0 0 3px rgba(253,164,175,.2);
+}
+input::placeholder,textarea::placeholder{color:var(--muted2);}
+select option{background:#fff;color:var(--ink);}
+
+/* ── PHOTO GRID ── */
+.photoGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-top:12px;}
+.photoItem{position:relative;}
+.photoItem img{width:100%;height:76px;object-fit:cover;border-radius:10px;display:block;border:1px solid rgba(253,164,175,.2);}
+.remove{
+  position:absolute;top:4px;right:4px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--plum);display:flex;align-items:center;justify-content:center;
+  font-size:11px;cursor:pointer;border:none;color:white;
+}
+.upload-zone{
+  border:2px dashed rgba(253,164,175,.35);
+  border-radius:12px;padding:22px;
+  text-align:center;cursor:pointer;
+  color:var(--muted2);font-size:13px;
+  transition:.2s;margin-top:10px;
+  background:rgba(255,232,232,.08);
+}
+.upload-zone:hover{border-color:var(--rose);color:var(--plum);background:rgba(253,164,175,.07);}
+
+/* ── EXPANDABLE CARD ── */
+.memoryCard{
+  background:rgba(253,164,175,.05);
+  border:1px solid rgba(253,164,175,.15);
+  padding:14px;border-radius:14px;margin-top:10px;
+}
+.memoryHeader{display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.memoryHeader strong{font-size:13px;font-weight:500;color:var(--ink);}
+.memoryHeader small{font-size:11px;color:var(--muted2);display:block;margin-top:2px;}
+.deleteBtn{
+  color:var(--plum);font-size:13px;cursor:pointer;
+  padding:3px 8px;border-radius:6px;
+  background:rgba(190,24,93,.08);border:none;
+}
+.hiddenForm{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(253,164,175,.15);}
+.add-btn{
+  margin-top:12px;padding:10px 16px;
+  background:rgba(253,164,175,.1);
+  border:1px dashed rgba(253,164,175,.4);
+  border-radius:10px;color:var(--plum);
+  cursor:pointer;font-size:13px;width:100%;
+  font-family:'Jost',sans-serif;font-weight:400;
+  transition:.2s;
+}
+.add-btn:hover{background:rgba(253,164,175,.2);}
+
+/* ── RIGHT COLUMN: PREVIEW ── */
+.preview-sticky{
+  position:sticky;top:80px;
+}
+.preview-phone{
+  background:#fff;
+  border:1px solid rgba(253,164,175,.3);
+  border-radius:32px;
+  overflow:hidden;
+  box-shadow:0 8px 48px rgba(190,24,93,.1),0 2px 12px rgba(253,164,175,.2);
+  max-width:360px;
+  margin:0 auto;
+}
+.phone-bar{
+  background:linear-gradient(135deg,rgba(255,232,232,.6),rgba(253,212,228,.4));
+  border-bottom:1px solid rgba(253,164,175,.2);
+  padding:12px 18px;
+  display:flex;align-items:center;gap:8px;
+}
+.phone-dot{width:8px;height:8px;border-radius:50%;}
+.phone-dot.r{background:#ff5f57;}.phone-dot.y{background:#febc2e;}.phone-dot.g{background:#28c840;}
+.phone-url{flex:1;background:rgba(253,164,175,.15);border-radius:5px;padding:4px 10px;font-size:10px;color:var(--muted);margin:0 12px;font-family:monospace;}
+
+.phone-body{padding:20px 18px;max-height:580px;overflow-y:auto;scrollbar-width:none;}
+.phone-body::-webkit-scrollbar{display:none;}
+
+/* Preview elements */
+.p-occasion{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mauve);margin-bottom:6px;font-weight:500;}
+.p-name{font-family:'DM Serif Display',serif;font-style:italic;font-size:28px;background:var(--grad);-webkit-background-clip:text;color:transparent;line-height:1.1;margin-bottom:8px;}
+.p-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.p-divider{display:flex;align-items:center;gap:8px;margin:12px 0;}
+.p-divider-line{flex:1;height:1px;background:rgba(253,164,175,.25);}
+.p-divider-heart{font-size:12px;}
+
+.p-section-title{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(190,24,93,.5);margin:16px 0 8px;}
+
+.p-letter-box{
+  background:rgba(255,232,232,.2);border:1px solid rgba(253,164,175,.2);
+  border-radius:10px;padding:12px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:12px;color:var(--muted);line-height:1.7;
+  min-height:56px;
+}
+
+.p-moment{margin-bottom:8px;padding:10px 12px;background:rgba(255,250,248,.95);border:1px solid rgba(253,164,175,.15);border-radius:10px;}
+.p-moment-icon{font-size:14px;margin-bottom:4px;}
+.p-moment-title{font-family:'DM Serif Display',serif;font-style:italic;font-size:12px;color:var(--ink);margin-bottom:4px;}
+.p-moment-body{font-size:10px;color:var(--muted);line-height:1.55;}
+
+.p-promise{padding:10px 12px;background:rgba(255,250,248,.95);border:1px solid rgba(253,164,175,.15);border-radius:10px;margin-bottom:8px;text-align:center;}
+.p-promise-icon{font-size:16px;margin-bottom:4px;}
+.p-promise-title{font-family:'DM Serif Display',serif;font-style:italic;font-size:12px;color:var(--ink);}
+
+.p-wish{padding:10px 12px;background:rgba(255,250,248,.95);border:1px solid rgba(253,164,175,.15);border-radius:10px;margin-bottom:8px;}
+.p-wish-name{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mauve);margin-bottom:4px;}
+.p-wish-msg{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:var(--muted);line-height:1.5;}
+
+.p-love{padding:10px 12px;background:rgba(255,250,248,.95);border:1px solid rgba(253,164,175,.15);border-radius:10px;margin-bottom:8px;text-align:center;}
+.p-love-num{font-family:'DM Serif Display',serif;font-style:italic;font-size:16px;color:rgba(253,164,175,.5);}
+.p-love-title{font-family:'DM Serif Display',serif;font-style:italic;font-size:12px;color:var(--ink);}
+
+.p-closing{
+  background:rgba(255,232,232,.2);border:1px solid rgba(253,164,175,.2);
+  border-radius:10px;padding:12px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px;
+}
+
+/* ── GENERATE BUTTON ── */
+.generateBtn{
+  width:100%;margin-top:24px;padding:16px 24px;
+  border-radius:999px;border:none;
+  background:var(--grad);color:#fff;
+  font-family:'Jost',sans-serif;font-size:15px;font-weight:500;letter-spacing:.06em;
+  cursor:pointer;transition:all .3s;
+  box-shadow:0 6px 28px rgba(232,121,160,.35);
+}
+.generateBtn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(232,121,160,.5);}
+.generateBtn.loading{opacity:.75;pointer-events:none;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .builder{grid-template-columns:1fr;padding:0 20px 60px;}
+  .preview-sticky{position:relative;top:auto;order:-1;}
+  .nav{padding:0 20px;}
+  .page-header{padding:48px 20px 36px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">Wisherly</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="demo.html">Demo</a></li>
+    <li><a href="create.html">Birthday Builder</a></li>
+  </ul>
+  <a href="demo.html" class="nav-cta">See a demo</a>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-eyebrow"><span class="page-eyebrow-dot"></span>Apology Page Builder</div>
+  <h1>Create an <span>apology</span><br>that truly speaks.</h1>
+  <p>A heartfelt, beautiful page to say sorry — with photos, memories, promises, and love.</p>
+</div>
+
+<!-- BUILDER -->
+<div class="builder">
+
+  <!-- ════ LEFT: FORM PANELS ════ -->
+  <div id="formSide">
+
+    <!-- Panel 1: Basics -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">💌</span>
+        <h3>The Basics</h3>
+      </div>
+      <label>Their name (for the unlock screen)</label>
+      <input id="recipientName" placeholder="e.g. Aisha" oninput="updatePreview()">
+      <label>Your name (sender)</label>
+      <input id="senderName" placeholder="e.g. Rohan" oninput="updatePreview()">
+      <label>Page headline / occasion</label>
+      <input id="title" placeholder="e.g. I'm sorry, from the bottom of my heart" oninput="updatePreview()">
+      <label>Opening quote (optional — shown on the Quote section)</label>
+      <textarea id="openingQuote" rows="3" placeholder="Your own words, or leave blank for default..." oninput="updatePreview()"></textarea>
+    </div>
+
+    <!-- Panel 2: The Letter -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">✉️</span>
+        <h3>The Apology Letter</h3>
+        <span class="panel-badge">Secret</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">This is hidden in an envelope — they click to reveal a typewriter reveal of your message.</p>
+      <label>Your letter (the full apology)</label>
+      <textarea id="message" rows="8" placeholder="Write your apology letter here... Take your time. It'll typewrite out letter by letter when they open it." oninput="updatePreview()"></textarea>
+    </div>
+
+    <!-- Panel 3: What went wrong -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">💔</span>
+        <h3>What Went Wrong</h3>
+        <span class="panel-badge">Moments</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Own the moments. Be specific — it shows you truly understand.</p>
+      <div id="momentsBuilder"></div>
+      <button class="add-btn" onclick="addMoment()">+ Add a moment</button>
+    </div>
+
+    <!-- Panel 4: Photos -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">📸</span>
+        <h3>Photos Together</h3>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Upload photos of you two — they'll appear in a gallery and polaroid wall.</p>
+      <div class="photoGrid" id="photoGrid"></div>
+      <div class="upload-zone" onclick="document.getElementById('photoInput').click()">
+        🌸 Click to add photos<br><span style="font-size:11px;opacity:.6">JPG, PNG up to 5MB each</span>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" multiple hidden onchange="handlePhotos(event)">
+    </div>
+
+    <!-- Panel 5: Promises -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">🕯️</span>
+        <h3>My Promises</h3>
+        <span class="panel-badge">The Pledge</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">What you commit to changing. These aren't just words — make them real.</p>
+      <div id="promisesBuilder"></div>
+      <button class="add-btn" onclick="addPromise()">+ Add a promise</button>
+    </div>
+
+    <!-- Panel 6: Memory Timeline -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">📅</span>
+        <h3>Our Story — Timeline</h3>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Chapters of your relationship — the good ones, the hard ones, all of it.</p>
+      <div id="timelineBuilder"></div>
+      <button class="add-btn" onclick="addTimeline()">+ Add a chapter</button>
+    </div>
+
+    <!-- Panel 7: Memory Map -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">📍</span>
+        <h3>Places We Shared</h3>
+      </div>
+      <div id="mapBuilder"></div>
+      <button class="add-btn" onclick="addMapPin()">+ Add a place</button>
+    </div>
+
+    <!-- Panel 8: What I love about you -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">❤️</span>
+        <h3>What I Love About You</h3>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Remind them of all the things you admire about them. Be specific.</p>
+      <div id="lovesBuilder"></div>
+      <button class="add-btn" onclick="addLove()">+ Add something you love</button>
+    </div>
+
+    <!-- Panel 9: Wishes from friends -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">💕</span>
+        <h3>Kind Words from Others</h3>
+        <span class="panel-badge">Optional</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Add supportive messages from mutual friends, or share a contributor link later.</p>
+      <div id="wishBuilder"></div>
+      <button class="add-btn" onclick="addWish()">+ Add a message</button>
+    </div>
+
+    <!-- Panel 10: Closing -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">🌸</span>
+        <h3>Closing Words</h3>
+        <span class="panel-badge">Final Section</span>
+      </div>
+      <label>A final quote (shown before the reveal button)</label>
+      <textarea id="finalMessage" rows="3" placeholder="e.g. I know sorry isn't enough. But I'm asking for the chance to show you..." oninput="updatePreview()"></textarea>
+      <label>The closing message (revealed after they click)</label>
+      <textarea id="closingMessage" rows="5" placeholder="Your heartfelt closing words — what you want them to walk away feeling..." oninput="updatePreview()"></textarea>
+    </div>
+
+    <!-- Panel 11: Background Music -->
+    <div class="panel">
+      <div class="panel-title">
+        <span class="panel-icon">🎵</span>
+        <h3>Background Music</h3>
+        <span class="panel-badge">Optional</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:18px;">Upload an MP3 — it will play softly and automatically when they open the page.</p>
+
+      <!-- Drop zone -->
+      <div id="audioDropZone" class="upload-zone" style="padding:28px 20px;"
+           onclick="document.getElementById('audioInput').click()"
+           ondragover="event.preventDefault();this.style.borderColor='var(--rose)'"
+           ondragleave="this.style.borderColor=''"
+           ondrop="handleAudioDrop(event)">
+        🎶 Click or drag an MP3 here<br>
+        <span style="font-size:11px;opacity:.55;">MP3 · M4A · WAV · OGG — max 10 MB</span>
+      </div>
+      <input type="file" id="audioInput" accept="audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/*" hidden onchange="handleAudioFile(event)">
+
+      <!-- Preview card (hidden until file chosen) -->
+      <div id="audioPreviewCard" style="display:none;margin-top:14px;
+           background:rgba(253,164,175,.07);border:1px solid rgba(253,164,175,.3);
+           border-radius:14px;padding:16px 18px;display:none;align-items:center;gap:14px;">
+        <div id="audioPlayBtn" onclick="toggleAudioPreview()" style="
+             width:40px;height:40px;flex-shrink:0;border-radius:50%;
+             background:var(--grad);display:flex;align-items:center;justify-content:center;
+             font-size:16px;cursor:pointer;box-shadow:0 4px 14px rgba(232,121,160,.35);">▶</div>
+        <div style="flex:1;min-width:0;">
+          <div id="audioFileName" style="font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+          <div id="audioFileSize" style="font-size:11px;color:var(--muted2);margin-top:2px;"></div>
+          <!-- Waveform bar -->
+          <div style="margin-top:8px;height:3px;background:rgba(253,164,175,.2);border-radius:2px;overflow:hidden;">
+            <div id="audioProgress" style="height:100%;width:0%;background:var(--grad);border-radius:2px;transition:width .1s linear;"></div>
+          </div>
+        </div>
+        <button onclick="clearAudio()" style="background:none;border:none;color:var(--muted2);font-size:18px;cursor:pointer;padding:4px;line-height:1;" title="Remove">✕</button>
+      </div>
+      <audio id="audioPreviewEl" style="display:none;" ontimeupdate="updateAudioProgress()" onended="resetAudioBtn()"></audio>
+
+      <p id="audioHint" style="display:none;margin-top:10px;font-size:11px;color:var(--plum);">✓ Song ready — will upload and autoplay when you generate the page.</p>
+    </div>
+
+    <!-- Generate -->
+    <button class="generateBtn" id="generateBtn">💌 Generate Apology Page</button>
+    <div id="gen-error" style="display:none;margin-top:14px;padding:14px 18px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:12px;color:#dc2626;font-size:13px;line-height:1.6;"></div>
+
+  </div><!-- /formSide -->
+
+  <!-- ════ RIGHT: PREVIEW ════ -->
+  <div class="preview-sticky">
+    <div style="text-align:center;font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);margin-bottom:16px;">Live Preview</div>
+    <div class="preview-phone">
+      <div class="phone-bar">
+        <div class="phone-dot r"></div>
+        <div class="phone-dot y"></div>
+        <div class="phone-dot g"></div>
+        <div class="phone-url">wisherly.app/apology-view?id=…</div>
+      </div>
+      <div class="phone-body">
+        <!-- Hero -->
+        <div style="text-align:center;padding:16px 0 12px;">
+          <div class="p-occasion" id="pOccasion">An Apology</div>
+          <div class="p-name" id="pName">Their Name</div>
+          <div class="p-divider"><div class="p-divider-line"></div><div class="p-divider-heart">💗</div><div class="p-divider-line"></div></div>
+          <div class="p-title" id="pTitle">Some things are too important to leave unsaid.</div>
+        </div>
+
+        <!-- Letter preview -->
+        <div class="p-section-title">✉️ The Letter</div>
+        <div class="p-letter-box" id="pLetter">Your letter will appear here as a typewriter reveal…</div>
+
+        <!-- Moments -->
+        <div class="p-section-title" id="pMomentsLabel" style="display:none">💔 What Went Wrong</div>
+        <div id="pMoments"></div>
+
+        <!-- Promises -->
+        <div class="p-section-title" id="pPromisesLabel" style="display:none">🕯️ My Promises</div>
+        <div id="pPromises"></div>
+
+        <!-- Wishes -->
+        <div class="p-section-title" id="pWishesLabel" style="display:none">💕 Kind Words</div>
+        <div id="pWishes"></div>
+
+        <!-- Loves -->
+        <div class="p-section-title" id="pLovesLabel" style="display:none">❤️ What I Love About You</div>
+        <div id="pLoves"></div>
+
+        <!-- Closing -->
+        <div class="p-section-title" id="pClosingLabel" style="display:none">🌸 Closing</div>
+        <div class="p-closing" id="pClosing" style="display:none"></div>
+
+        <div style="text-align:center;margin-top:20px;font-size:10px;color:var(--muted2);font-family:'Cormorant Garamond',serif;font-style:italic;">Made with Wisherly 💕</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /builder -->
+
+<script>
+/* ════════════════════════════════
+   PHOTO HANDLING
+════════════════════════════════ */
+const photos=[];
+
+function handlePhotos(e){
+  const files=Array.from(e.target.files);
+  files.forEach(f=>{
+    if(!f.type.startsWith('image/'))return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      // Compress
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        // Keep max dimension at 800px and quality at 0.6 so base64 stays well under 700KB
+        const MAX=800;
+        let {width:w,height:h}=img;
+        if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+        if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        const data=canvas.toDataURL('image/jpeg',0.6);
+        photos.push(data);
+        renderPhotoGrid();
+      };
+      img.src=ev.target.result;
+    };
+    reader.readAsDataURL(f);
+  });
+  e.target.value='';
+}
+
+function renderPhotoGrid(){
+  const grid=document.getElementById('photoGrid');
+  grid.innerHTML='';
+  photos.forEach((src,i)=>{
+    const item=document.createElement('div');item.className='photoItem';
+    item.innerHTML=`<img src="${src}" alt=""><button class="remove" onclick="removePhoto(${i})">✕</button>`;
+    grid.appendChild(item);
+  });
+}
+function removePhoto(i){photos.splice(i,1);renderPhotoGrid();}
+
+/* ════════════════════════════════
+   DYNAMIC SECTIONS
+════════════════════════════════ */
+let momentCount=0,promiseCount=0,timelineCount=0,mapCount=0,loveCount=0,wishCount=0;
+
+/* MOMENTS */
+function addMoment(){
+  momentCount++;
+  const block=document.createElement('div');block.className='memoryCard';
+  block.innerHTML=`
+    <div class="memoryHeader" onclick="toggleSection(this)">
+      <div><strong>Moment ${momentCount}</strong><small>Click to edit</small></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span style="opacity:.4;font-size:12px">▼</span>
+        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
+      </div>
+    </div>
+    <div class="hiddenForm">
+      <label>Icon / Emoji</label>
+      <input placeholder="💔" style="text-align:center;font-size:20px" maxlength="4" oninput="updateMomentsPreview()">
+      <label>Title (the moment)</label>
+      <input placeholder="e.g. When I didn't listen" oninput="updateMomentsPreview()">
+      <label>What happened / your reflection</label>
+      <textarea rows="3" placeholder="Be honest. Own it fully." oninput="updateMomentsPreview()"></textarea>
+    </div>`;
+  document.getElementById('momentsBuilder').appendChild(block);
+}
+
+function updateMomentsPreview(){
+  const el=document.getElementById('pMoments');
+  const label=document.getElementById('pMomentsLabel');
+  const cards=document.querySelectorAll('#momentsBuilder .memoryCard');
+  el.innerHTML='';let any=false;
+  cards.forEach(card=>{
+    const inputs=card.querySelectorAll('input');
+    const icon=inputs[0]?.value||'💔';
+    const title=inputs[1]?.value;
+    const body=card.querySelector('textarea')?.value;
+    if(title||body){
+      any=true;
+      el.innerHTML+=`<div class="p-moment"><div class="p-moment-icon">${icon}</div><div class="p-moment-title">${title||'A moment'}</div><div class="p-moment-body">${body||''}</div></div>`;
+    }
+  });
+  label.style.display=any?'block':'none';
+}
+
+/* PROMISES */
+function addPromise(){
+  promiseCount++;
+  const block=document.createElement('div');block.className='memoryCard';
+  block.innerHTML=`
+    <div class="memoryHeader" onclick="toggleSection(this)">
+      <div><strong>Promise ${promiseCount}</strong><small>Click to edit</small></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span style="opacity:.4;font-size:12px">▼</span>
+        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
+      </div>
+    </div>
+    <div class="hiddenForm">
+      <label>Icon / Emoji</label>
+      <input placeholder="🕯️" style="text-align:center;font-size:20px" maxlength="4" oninput="updatePromisesPreview()">
+      <label>Promise title</label>
+      <input placeholder="e.g. I will listen better" oninput="updatePromisesPreview()">
+      <label>What this means / how you'll do it</label>
+      <textarea rows="3" placeholder="Make it specific and real." oninput="updatePromisesPreview()"></textarea>
+    </div>`;
+  document.getElementById('promisesBuilder').appendChild(block);
+}
+function updatePromisesPreview(){
+  const el=document.getElementById('pPromises');
+  const label=document.getElementById('pPromisesLabel');
+  const cards=document.querySelectorAll('#promisesBuilder .memoryCard');
+  el.innerHTML='';let any=false;
+  cards.forEach(card=>{
+    const inputs=card.querySelectorAll('input');
+    const icon=inputs[0]?.value||'🕯️';
+    const title=inputs[1]?.value;
+    if(title){any=true;el.innerHTML+=`<div class="p-promise"><div class="p-promise-icon">${icon}</div><div class="p-promise-title">${title}</div></div>`;}
+  });
+  label.style.display=any?'block':'none';
+}
+
+/* TIMELINE */
+function addTimeline(){
+  timelineCount++;
+  const block=document.createElement('div');block.className='memoryCard';
+  block.innerHTML=`
+    <div class="memoryHeader" onclick="toggleSection(this)">
+      <div><strong>Chapter ${timelineCount}</strong><small>Click to edit</small></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span style="opacity:.4;font-size:12px">▼</span>
+        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
+      </div>
+    </div>
+    <div class="hiddenForm">
+      <label>Year / Time label</label>
+      <input placeholder="e.g. 2022 or 'The beginning'">
+      <label>Chapter heading</label>
+      <input placeholder="e.g. When we first understood each other">
+      <label>Description</label>
+      <textarea rows="3" placeholder="What happened during this time?"></textarea>
+    </div>`;
+  document.getElementById('timelineBuilder').appendChild(block);
+}
+
+/* MAP PINS */
+function addMapPin(){
+  mapCount++;
+  const block=document.createElement('div');block.className='memoryCard';
+  block.innerHTML=`
+    <div class="memoryHeader" onclick="toggleSection(this)">
+      <div><strong>Place ${mapCount}</strong><small>Click to edit</small></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span style="opacity:.4;font-size:12px">▼</span>
+        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
+      </div>
+    </div>
+    <div class="hiddenForm">
+      <label>Emoji</label>
+      <input placeholder="☕" style="text-align:center;font-size:20px" maxlength="4">
+      <label>Place name</label>
+      <input placeholder="e.g. The coffee shop on MG Road">
+      <label>Memory / what happened there</label>
+      <textarea rows="2" placeholder="What does this place mean to you both?"></textarea>
+    </div>`;
+  document.getElementById('mapBuilder').appendChild(block);
+}
+
+/* WHAT I LOVE */
+function addLove(){
+  loveCount++;
+  const block=document.createElement('div');block.className='memoryCard';
+  block.innerHTML=`
+    <div class="memoryHeader" onclick="toggleSection(this)">
+      <div><strong>Thing ${loveCount}</strong><small>Click to edit</small></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span style="opacity:.4;font-size:12px">▼</span>
+        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
+      </div>
+    </div>
+    <div class="hiddenForm">
+      <label>Title (what you love)</label>
+      <input placeholder="e.g. The way you laugh" oninput="updateLovesPreview()">
+      <label>Description</label>
+      <textarea rows="3" placeholder="Say more about it. Be specific, not generic." oninput="updateLovesPreview()"></textarea>
+    </div>`;
+  document.getElementById('lovesBuilder').appendChild(block);
+  block.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',updateLovesPreview));
+}
+function updateLovesPreview(){
+  const el=document.getElementById('pLoves');
+  const label=document.getElementById('pLovesLabel');
+  const cards=document.querySelectorAll('#lovesBuilder .memoryCard');
+  el.innerHTML='';let any=false;
+  cards.forEach((card,i)=>{
+    const title=card.querySelector('input')?.value;
+    if(title){any=true;el.innerHTML+=`<div class="p-love"><div class="p-love-num">${String(i+1).padStart(2,'0')}.</div><div class="p-love-title">${title}</div></div>`;}
+  });
+  label.style.display=any?'block':'none';
+}
+
+/* WISHES */
+function addWish(){
+  wishCount++;
+  const block=document.createElement('div');block.className='memoryCard';
+  block.innerHTML=`
+    <div class="memoryHeader" onclick="toggleSection(this)">
+      <div><strong>Message ${wishCount}</strong><small>Click to edit</small></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span style="opacity:.4;font-size:12px">▼</span>
+        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
+      </div>
+    </div>
+    <div class="hiddenForm">
+      <label>From (name)</label>
+      <input placeholder="e.g. Priya" oninput="updateWishPreview()">
+      <label>Message</label>
+      <textarea rows="2" placeholder="Their supportive words…" oninput="updateWishPreview()"></textarea>
+    </div>`;
+  document.getElementById('wishBuilder').appendChild(block);
+  block.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input',updateWishPreview));
+}
+function updateWishPreview(){
+  const el=document.getElementById('pWishes');
+  const label=document.getElementById('pWishesLabel');
+  const cards=document.querySelectorAll('#wishBuilder .memoryCard');
+  el.innerHTML='';let any=false;
+  cards.forEach(card=>{
+    const name=card.querySelector('input')?.value;
+    const msg=card.querySelector('textarea')?.value;
+    if(name||msg){any=true;el.innerHTML+=`<div class="p-wish"><div class="p-wish-name">${name||'Anonymous'}</div><div class="p-wish-msg">${msg||''}</div></div>`;}
+  });
+  label.style.display=any?'block':'none';
+}
+
+/* ════════════════════════════════
+   LIVE PREVIEW UPDATE
+════════════════════════════════ */
+function updatePreview(){
+  const name=document.getElementById('recipientName').value||'Their Name';
+  const title=document.getElementById('title').value||'Some things are too important to leave unsaid.';
+  const letter=document.getElementById('message').value;
+  const closing=document.getElementById('closingMessage').value;
+
+  document.getElementById('pName').textContent=name;
+  document.getElementById('pTitle').textContent=title;
+  document.getElementById('pLetter').textContent=letter||'Your letter will appear here as a typewriter reveal…';
+
+  const closingEl=document.getElementById('pClosing');
+  const closingLabel=document.getElementById('pClosingLabel');
+  if(closing){closingEl.textContent=closing;closingEl.style.display='block';closingLabel.style.display='block';}
+  else{closingEl.style.display='none';closingLabel.style.display='none';}
+}
+
+/* ════════════════════════════════
+   HELPERS
+════════════════════════════════ */
+function toggleSection(header){
+  const form=header.parentElement.querySelector('.hiddenForm');
+  const arrow=header.querySelector('span');
+  const open=form.style.display==='block';
+  form.style.display=open?'none':'block';
+  if(arrow)arrow.textContent=open?'▼':'▲';
+}
+function deleteBlock(el){el.closest('.memoryCard').remove();updateMomentsPreview();updatePromisesPreview();updateWishPreview();updateLovesPreview();}
+
+/* ════════════════════════════════
+   AUDIO / MP3 HANDLING
+════════════════════════════════ */
+let _audioFile=null;
+
+function handleAudioDrop(e){
+  e.preventDefault();
+  document.getElementById('audioDropZone').style.borderColor='';
+  const file=e.dataTransfer.files[0];
+  if(file)loadAudioFile(file);
+}
+function handleAudioFile(e){
+  const file=e.target.files[0];
+  if(file)loadAudioFile(file);
+  e.target.value='';
+}
+function loadAudioFile(file){
+  if(file.size>10*1024*1024){
+    alert('Please choose a file under 10 MB.');return;
+  }
+  _audioFile=file;
+  const url=URL.createObjectURL(file);
+  const audio=document.getElementById('audioPreviewEl');
+  audio.src=url;
+
+  document.getElementById('audioFileName').textContent=file.name.replace(/\.[^.]+$/,'');
+  document.getElementById('audioFileSize').textContent=(file.size/1024/1024).toFixed(2)+' MB';
+  document.getElementById('audioPreviewCard').style.display='flex';
+  document.getElementById('audioDropZone').style.display='none';
+  document.getElementById('audioHint').style.display='block';
+  document.getElementById('audioProgress').style.width='0%';
+  document.getElementById('audioPlayBtn').textContent='▶';
+}
+function toggleAudioPreview(){
+  const audio=document.getElementById('audioPreviewEl');
+  const btn=document.getElementById('audioPlayBtn');
+  if(audio.paused){audio.play();btn.textContent='⏸';}
+  else{audio.pause();btn.textContent='▶';}
+}
+function updateAudioProgress(){
+  const audio=document.getElementById('audioPreviewEl');
+  if(!audio.duration)return;
+  document.getElementById('audioProgress').style.width=(audio.currentTime/audio.duration*100)+'%';
+}
+function resetAudioBtn(){document.getElementById('audioPlayBtn').textContent='▶';}
+function clearAudio(){
+  _audioFile=null;
+  const audio=document.getElementById('audioPreviewEl');
+  audio.pause();audio.src='';
+  document.getElementById('audioPreviewCard').style.display='none';
+  document.getElementById('audioDropZone').style.display='block';
+  document.getElementById('audioHint').style.display='none';
+}
+
+/* ════════════════════════════════
+   GENERATE PAGE
+════════════════════════════════ */
+function showErr(btn,msg){
+  btn.classList.remove('loading');btn.textContent='💌 Generate Apology Page';
+  const box=document.getElementById('gen-error');
+  box.style.display='block';box.innerHTML=msg;
+}
+
+async function generatePage(){
+  const btn=document.getElementById('generateBtn');
+  const errBox=document.getElementById('gen-error');
+  errBox.style.display='none';
+  btn.classList.add('loading');btn.textContent='💕 Connecting…';
+
+  try{
+    const db=window._db;
+    const pageId=crypto.randomUUID?crypto.randomUUID().slice(0,8):Math.random().toString(36).slice(2,10);
+
+    // Collect data
+    const data={
+      createdAt:Date.now(),
+      pageType:'apology',
+      name:document.getElementById('recipientName').value,
+      senderName:document.getElementById('senderName').value,
+      title:document.getElementById('title').value,
+      message:document.getElementById('message').value,
+      openingQuote:document.getElementById('openingQuote').value,
+      finalMessage:document.getElementById('finalMessage').value,
+      closingMessage:document.getElementById('closingMessage').value,
+    };
+
+    // Moments
+    data.moments=[];
+    document.querySelectorAll('#momentsBuilder .memoryCard').forEach(card=>{
+      const inputs=card.querySelectorAll('input');
+      const icon=inputs[0]?.value||'💔';
+      const title=inputs[1]?.value;
+      const body=card.querySelector('textarea')?.value;
+      if(title||body)data.moments.push({icon,title,body});
+    });
+
+    // Promises
+    data.promises=[];
+    document.querySelectorAll('#promisesBuilder .memoryCard').forEach(card=>{
+      const inputs=card.querySelectorAll('input');
+      const icon=inputs[0]?.value||'🕯️';
+      const title=inputs[1]?.value;
+      const body=card.querySelector('textarea')?.value;
+      if(title)data.promises.push({icon,title,body});
+    });
+
+    // Timeline
+    data.timeline=[];
+    document.querySelectorAll('#timelineBuilder .memoryCard').forEach(card=>{
+      const inputs=card.querySelectorAll('input');
+      const year=inputs[0]?.value;const title=inputs[1]?.value;
+      const text=card.querySelector('textarea')?.value;
+      if(year||title||text)data.timeline.push({year,title,text});
+    });
+
+    // Map pins
+    data.mapPins=[];
+    document.querySelectorAll('#mapBuilder .memoryCard').forEach(card=>{
+      const inputs=card.querySelectorAll('input');
+      const emoji=inputs[0]?.value;const place=inputs[1]?.value;
+      const memory=card.querySelector('textarea')?.value;
+      if(place)data.mapPins.push({emoji,place:place,title:place,text:memory,memory});
+    });
+
+    // Loves
+    data.loves=[];
+    document.querySelectorAll('#lovesBuilder .memoryCard').forEach(card=>{
+      const title=card.querySelector('input')?.value;
+      const body=card.querySelector('textarea')?.value;
+      if(title)data.loves.push({title,body});
+    });
+
+    // Wishes
+    data.wishes=[];
+    document.querySelectorAll('#wishBuilder .memoryCard').forEach(card=>{
+      const name=card.querySelector('input')?.value;
+      const msg=card.querySelector('textarea')?.value;
+      if(name||msg)data.wishes.push({sender:name,message:msg});
+    });
+
+    // Save photos separately — guard each one against 1MB Firestore limit
+    btn.textContent='🌸 Saving photos…';
+    const photoURLs=[];
+    for(let i=0;i<photos.length;i++){
+      btn.textContent=`🌸 Saving photo ${i+1} of ${photos.length}…`;
+      // base64 string: 1MB doc limit → ~750KB base64 safe
+      if(photos[i].length>750000){
+        console.warn(`Photo ${i+1} still too large (${(photos[i].length/1024).toFixed(0)}KB), skipping.`);
+        continue;
+      }
+      await window._db.collection('photos').doc(`${pageId}_${i}`).set({pageId,index:i,data:photos[i]});
+      photoURLs.push(`__photo__${pageId}_${i}`);
+    }
+    data.photos=photoURLs;
+
+    // Save MP3 as base64 chunks in Firestore (~700KB base64 per doc, safe under 1MB limit)
+    if(_audioFile){
+      btn.textContent='🎵 Reading audio file…';
+      const arrayBuf=await _audioFile.arrayBuffer();
+      const bytes=new Uint8Array(arrayBuf);
+
+      // Safe base64 encode — loop character by character in small slices (no spread operator)
+      // Process 3-byte aligned slices of 3*1024 = 3072 bytes at a time
+      const SLICE=3*1024; // must be multiple of 3 so base64 alignment stays clean
+      let fullB64='';
+      for(let i=0;i<bytes.length;i+=SLICE){
+        const end=Math.min(i+SLICE,bytes.length);
+        let bin='';
+        for(let j=i;j<end;j++)bin+=String.fromCharCode(bytes[j]);
+        fullB64+=btoa(bin);
+        // Yield to browser every 512 slices to keep UI responsive
+        if((i/SLICE)%512===0)await new Promise(r=>setTimeout(r,0));
+      }
+
+      // Split encoded string into ~700KB Firestore doc chunks
+      const FS_CHUNK=700000;
+      const chunks=[];
+      for(let i=0;i<fullB64.length;i+=FS_CHUNK){
+        chunks.push(fullB64.slice(i,i+FS_CHUNK));
+      }
+
+      btn.textContent=`🎵 Saving music… 0 / ${chunks.length}`;
+      for(let i=0;i<chunks.length;i++){
+        btn.textContent=`🎵 Saving music… ${i+1} / ${chunks.length}`;
+        await window._db.collection('audio').doc(`${pageId}_${i}`).set({
+          pageId, index:i, total:chunks.length,
+          mimeType:_audioFile.type||'audio/mpeg',
+          data:chunks[i]
+        });
+      }
+      data.audioChunks=chunks.length;
+      data.audioMime=_audioFile.type||'audio/mpeg';
+    }
+
+    // Save page
+    btn.textContent='💕 Saving page…';
+    await window._db.collection('pages').doc(pageId).set(data);
+
+    // Redirect
+    if(window.location.protocol==='file:'){
+      const p=new URLSearchParams({name:data.name||'',title:data.title||'',message:data.message||''});
+      window.location.href='view.html?'+p.toString();
+    } else {
+      window.location.href='view.html?id='+pageId;
+    }
+
+  }catch(err){
+    console.error('Error:',err);
+    showErr(btn,`❌ <strong>Something went wrong.</strong><br>${err.message}`);
+  }
+}
+
+document.getElementById('generateBtn').addEventListener('click',generatePage);
+
+// Init preview
+updatePreview();
+</script>
+
+</body>
+</html>

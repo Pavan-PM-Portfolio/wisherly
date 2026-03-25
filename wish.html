@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Add Wishes</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0F172A;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.card{
+background:#1E293B;
+padding:30px;
+border-radius:12px;
+width:340px;
+text-align:center;
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+}
+
+button{
+margin-top:15px;
+padding:12px;
+border:none;
+background:#7C3AED;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+</style>
+
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    (function(){
+      const _cfg = {
+        apiKey: "AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",
+        authDomain: "wisherly-d07d7.firebaseapp.com",
+        projectId: "wisherly-d07d7",
+        storageBucket: "wisherly-d07d7.firebasestorage.app",
+        messagingSenderId: "919116839261",
+        appId: "1:919116839261:web:147d6b5924f3cbe35050b4"
+      };
+      if (!firebase.apps.length) { firebase.initializeApp(_cfg); }
+      window._db = firebase.firestore();
+    })();
+  </script>
+
+<style id="wly-footer-css">
+/* ══ WISHERLY SHARED FOOTER ══ */
+#wly-footer{background:#050508;border-top:1px solid rgba(255,255,255,.07);padding:60px 0 0;font-family:'Inter',sans-serif;}
+.wly-fi{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding:0 40px 52px;border-bottom:1px solid rgba(255,255,255,.06);}
+.wly-flogo{font-family:'Space Grotesk','Inter',sans-serif;font-size:22px;font-weight:800;display:block;margin-bottom:10px;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;color:transparent;}
+.wly-fbrand p{font-size:13px;color:rgba(255,255,255,.38);line-height:1.7;max-width:220px;margin:0 0 18px;}
+.wly-fsoc-row{display:flex;gap:8px;}
+.wly-fsoc{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:13px;text-decoration:none;transition:all .2s;}
+.wly-fsoc:hover{border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.1);}
+.wly-fct{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px;}
+.wly-fcol ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
+.wly-fcol ul a{font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;transition:color .2s;}
+.wly-fcol ul a:hover{color:rgba(255,255,255,.9);}
+.wly-fbot{max-width:1100px;margin:0 auto;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.wly-fcopy{font-size:12px;color:rgba(255,255,255,.22);}
+.wly-fbadge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;border:1px solid rgba(16,185,129,.2);background:rgba(16,185,129,.06);font-size:10px;font-weight:600;color:#34d399;}
+.wly-bdot{width:5px;height:5px;border-radius:50%;background:#10B981;animation:wlypulse 2s ease infinite;flex-shrink:0;}
+@keyframes wlypulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.wly-fleg{display:flex;gap:18px;}
+.wly-fleg a{font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;transition:color .2s;}
+.wly-fleg a:hover{color:rgba(255,255,255,.55);}
+/* tablet */
+@media(max-width:900px){
+  .wly-fi{grid-template-columns:1fr 1fr;gap:28px;padding:0 24px 40px;}
+  .wly-fbrand{grid-column:span 2;}
+  .wly-fbrand p{max-width:100%;}
+  .wly-fbot{padding:18px 24px;}
+}
+/* mobile */
+@media(max-width:560px){
+  .wly-fi{grid-template-columns:1fr 1fr;gap:24px;padding:0 18px 32px;}
+  .wly-fbrand{grid-column:span 2;}
+  .wly-fct{margin-bottom:10px;}
+  .wly-fcol ul{gap:7px;}
+  .wly-fbot{flex-direction:column;align-items:flex-start;padding:16px 18px;gap:8px;}
+  .wly-fleg{gap:12px;flex-wrap:wrap;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Add Wishes 💌</h2>
+
+<p id="recipient"></p>
+
+<input id="sender" placeholder="Your name">
+
+<textarea id="message" placeholder="Your message"></textarea>
+
+<button onclick="submitWish()">Submit Wish</button>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search)
+const pageId = params.get("id")    // the Firestore page document ID
+const name   = params.get("name")  // recipient's name (for display)
+
+document.getElementById("recipient").innerText = "For " + (name || "them") + " 💌"
+
+function submitWish(){
+  return; // stub — real logic is in the module below
+}
+
+</script>
+
+<script>
+// Firebase initialized in <head> via compat SDK
+
+const btn = document.querySelector('button');
+
+async function submitWish(){
+  const sender  = document.getElementById("sender").value.trim();
+  const message = document.getElementById("message").value.trim();
+
+  if(!sender || !message){
+    alert("Please fill both fields 💌");
+    return;
+  }
+  if(!pageId){
+    alert("Missing page ID — make sure you opened the correct share link.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Sending… 🌸";
+
+  try {
+    await window._db.collection('pages').doc(pageId).update({
+      wishes: firebase.firestore.FieldValue.arrayUnion({ sender, message })
+    });
+
+    btn.textContent = "Wish sent! 💖";
+
+    setTimeout(()=>{
+      document.querySelector('.card').innerHTML = `
+        <div style="font-size:48px;margin-bottom:16px">💌</div>
+        <h2 style="margin-bottom:8px">Your wish was added!</h2>
+        <p style="opacity:.6;font-size:14px">It'll appear on the surprise page when ${name||'they'} opens it.</p>
+      `;
+    }, 800);
+
+  } catch(err){
+    console.error(err);
+    btn.disabled = false;
+    btn.textContent = "Submit Wish";
+    alert("Something went wrong. Please try again.");
+  }
+}
+
+// Override the onclick
+document.querySelector('button').onclick = submitWish;
+</script>
+
+<footer id="wly-footer">
+  <div class="wly-fi">
+    <div class="wly-fbrand">
+      <span class="wly-flogo">Wisherly</span>
+      <p>Create beautiful digital surprise pages with photos, music, memories and heartfelt messages.</p>
+      <div class="wly-fsoc-row">
+        <a class="wly-fsoc" href="#" title="Instagram">📸</a>
+        <a class="wly-fsoc" href="#" title="Twitter">🐦</a>
+        <a class="wly-fsoc" href="#" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="wly-fcol">
+      <div class="wly-fct">Product</div>
+      <ul>
+        <li><a href="create.html">Create a Page</a></li>
+        <li><a href="demo.html">See a Demo</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#pricing">Pricing</a></li>
+      </ul>
+    </div>
+    <div class="wly-fcol">
+      <div class="wly-fct">Occasions</div>
+      <ul>
+        <li><a href="#">Birthday Surprises</a></li>
+        <li><a href="#">Anniversary Pages</a></li>
+        <li><a href="#">Friendship Pages</a></li>
+        <li><a href="#">Farewell Pages</a></li>
+      </ul>
+    </div>
+    <div class="wly-fcol">
+      <div class="wly-fct">Company</div>
+      <ul>
+        <li><a href="#">About Wisherly</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wly-fbot">
+    <span class="wly-fcopy">© 2026 Wisherly — Crafted with ❤️ to create unforgettable digital surprises</span>
+    <span class="wly-fbadge"><span class="wly-bdot"></span>All systems operational</span>
+    <div class="wly-fleg"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+  </div>
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wisherly — See a Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@600;800&family=Bodoni+Moda:ital,opsz,wght@1,6..96,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --v:#7C3AED;--p:#EC4899;
+  --grad:linear-gradient(135deg,#7C3AED,#EC4899);
+  --ink:#080810;--ink2:#0F0F1A;
+  --border:rgba(255,255,255,.07);
+  --muted:rgba(255,255,255,.45);
+}
+body{background:var(--ink);color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* AMBIENT */
+.hero-glow{position:fixed;width:900px;height:900px;background:radial-gradient(circle,rgba(124,58,237,.22),transparent 70%);top:-300px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:0;}
+
+/* NAVBAR */
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;background:rgba(8,8,16,.8);backdrop-filter:blur(14px);}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;text-decoration:none;}
+.nav-cta{display:flex;gap:12px;}
+.btn-ghost{padding:9px 20px;border-radius:999px;border:1px solid var(--border);color:var(--muted);font-size:13px;text-decoration:none;transition:all .2s;}
+.btn-ghost:hover{border-color:rgba(124,58,237,.4);color:#fff;}
+.btn-fill{padding:9px 20px;border-radius:999px;background:var(--grad);color:#fff;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;}
+.btn-fill:hover{box-shadow:0 6px 24px rgba(124,58,237,.4);}
+
+/* HERO */
+.demo-hero{text-align:center;padding:80px 40px 60px;position:relative;z-index:1;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);border-radius:999px;padding:6px 16px;font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#a78bfa;margin-bottom:24px;}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:#a78bfa;animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.demo-hero h1{font-size:clamp(32px,6vw,56px);font-weight:700;line-height:1.1;letter-spacing:-1px;margin-bottom:16px;}
+.demo-hero h1 em{font-family:'Bodoni Moda',serif;font-style:italic;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+.demo-hero p{font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 36px;}
+
+/* UNLOCK TIP */
+.unlock-tip{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:14px 20px;font-size:14px;color:var(--muted);margin-bottom:36px;}
+.unlock-tip strong{color:#fff;}
+.tip-icon{font-size:20px;}
+
+/* CTA BUTTONS */
+.cta-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:70px;}
+.btn-xl{padding:15px 36px;border-radius:999px;background:var(--grad);color:#fff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 8px 32px rgba(124,58,237,.45);transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
+.btn-xl:hover{transform:translateY(-2px);box-shadow:0 14px 48px rgba(124,58,237,.55);}
+.btn-xl-out{padding:15px 36px;border-radius:999px;border:1px solid var(--border);color:var(--muted);font-size:15px;font-weight:600;text-decoration:none;transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
+.btn-xl-out:hover{border-color:rgba(124,58,237,.4);color:#fff;}
+
+/* ═══ PREVIEW STRIP ═══ */
+.preview-section{max-width:1100px;margin:0 auto;padding:0 40px 100px;position:relative;z-index:1;}
+.preview-label{text-align:center;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:40px;}
+
+/* Surprise page card mockup */
+.mockup-wrap{
+  background:linear-gradient(160deg,#0d0d1a,#141428);
+  border:1px solid rgba(124,58,237,.2);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 40px 120px rgba(0,0,0,.7), 0 0 0 1px rgba(124,58,237,.1);
+}
+
+/* Header bar of mockup */
+.mockup-bar{
+  background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(236,72,153,.1));
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:14px 24px;
+  display:flex;align-items:center;gap:8px;
+}
+.mockup-dot{width:10px;height:10px;border-radius:50%;}
+.mockup-dot.r{background:#ff5f57;}.mockup-dot.y{background:#febc2e;}.mockup-dot.g{background:#28c840;}
+.mockup-url{flex:1;background:rgba(255,255,255,.05);border-radius:6px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.3);margin:0 16px;font-family:monospace;}
+
+/* Mockup content */
+.mockup-body{padding:0;}
+
+/* Hero section of mock page */
+.mock-hero{
+  background:linear-gradient(135deg,#0a0015,#120025,#0f001f);
+  padding:48px 40px 36px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.mock-hero::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(124,58,237,.3),transparent 70%);top:-200px;left:50%;transform:translateX(-50%);pointer-events:none;}
+.mock-occasion{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:rgba(124,58,237,.8);margin-bottom:10px;}
+.mock-name{font-size:clamp(28px,5vw,48px);font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;letter-spacing:-1px;margin-bottom:8px;}
+.mock-tagline{font-size:14px;color:rgba(255,255,255,.45);font-style:italic;}
+
+/* Photo gallery strip */
+.mock-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin:0;}
+.mock-photo{aspect-ratio:4/3;overflow:hidden;position:relative;}
+.mock-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.mock-photo:hover img{transform:scale(1.05);}
+.mock-photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.4),transparent);opacity:0;transition:opacity .3s;}
+.mock-photo:hover .mock-photo-overlay{opacity:1;}
+
+/* Stats row */
+.mock-stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);}
+.mock-stat{padding:20px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.06);}
+.mock-stat:last-child{border-right:none;}
+.mock-stat-num{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+.mock-stat-lbl{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px;}
+
+/* Wish cards strip */
+.mock-wishes{padding:28px 32px;display:flex;flex-direction:column;gap:14px;}
+.mock-wish-label{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:4px;}
+.wish-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.wish-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px;}
+.wish-card-from{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#a78bfa;margin-bottom:6px;}
+.wish-card-msg{font-size:12px;color:rgba(255,255,255,.55);line-height:1.5;}
+
+/* Timeline row */
+.mock-timeline{padding:24px 32px;border-top:1px solid rgba(255,255,255,.06);}
+.mock-tl-label{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:16px;}
+.tl-strip{display:flex;gap:0;overflow:hidden;border-radius:10px;}
+.tl-item{flex:1;padding:14px;background:rgba(255,255,255,.03);border-right:1px solid rgba(255,255,255,.05);text-align:center;}
+.tl-item:last-child{border-right:none;}
+.tl-year{font-size:18px;font-weight:800;background:var(--grad);-webkit-background-clip:text;color:transparent;}
+.tl-title{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px;}
+
+/* Mockup footer bar */
+.mock-footer-bar{padding:16px 32px;background:rgba(124,58,237,.06);border-top:1px solid rgba(124,58,237,.1);display:flex;align-items:center;justify-content:center;gap:8px;}
+.mock-footer-bar span{font-size:11px;color:rgba(255,255,255,.3);}
+.mock-footer-bar strong{font-size:12px;color:#a78bfa;}
+
+/* Feature highlights below mockup */
+.features-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px;}
+.feat-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;padding:22px 18px;text-align:center;transition:all .25s;}
+.feat-card:hover{background:rgba(124,58,237,.07);border-color:rgba(124,58,237,.25);transform:translateY(-3px);}
+.feat-icon{font-size:26px;margin-bottom:10px;}
+.feat-title{font-size:13px;font-weight:600;margin-bottom:5px;}
+.feat-desc{font-size:12px;color:var(--muted);}
+
+/* Responsive */
+@media(max-width:900px){
+  nav{padding:16px 20px;}
+  .demo-hero{padding:60px 20px 40px;}
+  .preview-section{padding:0 20px 70px;}
+  .mock-gallery{grid-template-columns:repeat(2,1fr);}
+  .mock-gallery .mock-photo:nth-child(3),.mock-gallery .mock-photo:nth-child(4){display:none;}
+  .wish-cards{grid-template-columns:1fr 1fr;}
+  .wish-cards .wish-card:nth-child(3){display:none;}
+  .features-row{grid-template-columns:1fr 1fr;gap:12px;}
+  .tl-strip .tl-item:nth-child(4),.tl-strip .tl-item:nth-child(5){display:none;}
+}
+@media(max-width:560px){
+  .mock-stats{grid-template-columns:1fr 1fr;}
+  .mock-stats .mock-stat:nth-child(3){display:none;}
+  .wish-cards{grid-template-columns:1fr;}
+  .wish-cards .wish-card:nth-child(2){display:none;}
+  .features-row{grid-template-columns:1fr 1fr;}
+  .tl-strip .tl-item:nth-child(3){display:none;}
+}
+</style>
+
+<style id="wly-footer-css">
+#wly-footer{background:#050508;border-top:1px solid rgba(255,255,255,.07);padding:60px 0 0;font-family:'Inter',sans-serif;}
+.wly-fi{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding:0 40px 52px;border-bottom:1px solid rgba(255,255,255,.06);}
+.wly-flogo{font-family:'Space Grotesk','Inter',sans-serif;font-size:22px;font-weight:800;display:block;margin-bottom:10px;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;color:transparent;}
+.wly-fbrand p{font-size:13px;color:rgba(255,255,255,.38);line-height:1.7;max-width:220px;margin:0 0 18px;}
+.wly-fsoc-row{display:flex;gap:8px;}
+.wly-fsoc{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:13px;text-decoration:none;transition:all .2s;}
+.wly-fsoc:hover{border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.1);}
+.wly-fct{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px;}
+.wly-fcol ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
+.wly-fcol ul a{font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;transition:color .2s;}
+.wly-fcol ul a:hover{color:rgba(255,255,255,.9);}
+.wly-fbot{max-width:1100px;margin:0 auto;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.wly-fcopy{font-size:12px;color:rgba(255,255,255,.22);}
+.wly-fbadge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;border:1px solid rgba(16,185,129,.2);background:rgba(16,185,129,.06);font-size:10px;font-weight:600;color:#34d399;}
+.wly-bdot{width:5px;height:5px;border-radius:50%;background:#10B981;animation:wlypulse 2s ease infinite;flex-shrink:0;}
+@keyframes wlypulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.wly-fleg{display:flex;gap:18px;}
+.wly-fleg a{font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;transition:color .2s;}
+.wly-fleg a:hover{color:rgba(255,255,255,.55);}
+@media(max-width:900px){.wly-fi{grid-template-columns:1fr 1fr;gap:28px;padding:0 24px 40px;}.wly-fbrand{grid-column:span 2;}.wly-fbrand p{max-width:100%;}.wly-fbot{padding:18px 24px;}}
+@media(max-width:560px){.wly-fi{grid-template-columns:1fr 1fr;gap:20px;padding:0 18px 32px;}.wly-fbrand{grid-column:span 2;}.wly-fbot{flex-direction:column;align-items:flex-start;padding:16px 18px;gap:8px;}.wly-fleg{gap:12px;flex-wrap:wrap;}}
+</style>
+</head>
+
+<body>
+<div class="hero-glow"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="nav-logo">Wisherly</a>
+  <div class="nav-cta">
+    <a href="index.html" class="btn-ghost">← Home</a>
+    <a href="create.html" class="btn-fill">Create Free ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="demo-hero">
+  <div class="eyebrow"><span class="eyebrow-dot"></span>Live Demo Preview</div>
+  <h1>This is what your<br><em>surprise page</em> looks like</h1>
+  <p>A real Wisherly page — photos, wishes from friends, memories and more. Scroll to explore, then create yours.</p>
+
+  <div class="unlock-tip">
+    <span class="tip-icon">🔐</span>
+    <span>To unlock the live demo, type <strong>Sarah</strong> when prompted</span>
+  </div>
+
+  <div class="cta-row">
+    <a href="view.html?title=Happy%20Birthday&name=Sarah&msg=You%20are%20amazing!&unlock=none" class="btn-xl">🎉 Open Live Demo</a>
+    <a href="create.html" class="btn-xl-out">✦ Create Yours Free</a>
+  </div>
+</div>
+
+<!-- MOCKUP PREVIEW -->
+<div class="preview-section">
+  <div class="preview-label">↓ Here's a preview of what a Wisherly page looks like</div>
+
+  <div class="mockup-wrap">
+    <!-- Browser bar -->
+    <div class="mockup-bar">
+      <div class="mockup-dot r"></div>
+      <div class="mockup-dot y"></div>
+      <div class="mockup-dot g"></div>
+      <div class="mockup-url">wisherly.app/view?id=sarah-birthday-2026</div>
+    </div>
+
+    <!-- Mock page hero -->
+    <div class="mock-hero">
+      <div class="mock-occasion">🎂 Birthday Surprise</div>
+      <div class="mock-name">Happy Birthday, Sarah!</div>
+      <div class="mock-tagline">"Every year with you is better than the last"</div>
+    </div>
+
+    <!-- Photo gallery -->
+    <div class="mock-gallery">
+      <div class="mock-photo"><img src="images/db-poster.jpeg" alt="Dragon Ball Super" loading="lazy"><div class="mock-photo-overlay"></div></div>
+      <div class="mock-photo"><img src="images/db-vegeta-goku.jpeg" alt="Vegeta vs Goku" loading="lazy"><div class="mock-photo-overlay"></div></div>
+      <div class="mock-photo"><img src="images/db-goku-power.jpeg" alt="Goku Power Up" loading="lazy"><div class="mock-photo-overlay"></div></div>
+      <div class="mock-photo"><img src="images/db-black-goku.jpeg" alt="Black Goku" loading="lazy"><div class="mock-photo-overlay"></div></div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="mock-stats">
+      <div class="mock-stat"><div class="mock-stat-num">12</div><div class="mock-stat-lbl">Photos shared</div></div>
+      <div class="mock-stat"><div class="mock-stat-num">8</div><div class="mock-stat-lbl">Wishes received</div></div>
+      <div class="mock-stat"><div class="mock-stat-num">5</div><div class="mock-stat-lbl">Years of memories</div></div>
+    </div>
+
+    <!-- Wishes -->
+    <div class="mock-wishes">
+      <div class="mock-wish-label">💌 Wishes from friends & family</div>
+      <div class="wish-cards">
+        <div class="wish-card">
+          <div class="wish-card-from">Priya ✨</div>
+          <div class="wish-card-msg">Sarah, you bring so much light into every room. Wishing you the most magical birthday! 🎂</div>
+        </div>
+        <div class="wish-card">
+          <div class="wish-card-from">Rohan 🚀</div>
+          <div class="wish-card-msg">Happy birthday to the most amazing person I know. Here's to another year of adventures!</div>
+        </div>
+        <div class="wish-card">
+          <div class="wish-card-from">Ananya 💜</div>
+          <div class="wish-card-msg">You deserve all the happiness in the world. So glad to be your friend, always. 🥂</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="mock-timeline">
+      <div class="mock-tl-label">📅 Memory Timeline</div>
+      <div class="tl-strip">
+        <div class="tl-item"><div class="tl-year">2020</div><div class="tl-title">First met</div></div>
+        <div class="tl-item"><div class="tl-year">2021</div><div class="tl-title">Road trip</div></div>
+        <div class="tl-item"><div class="tl-year">2022</div><div class="tl-title">Graduation</div></div>
+        <div class="tl-item"><div class="tl-year">2023</div><div class="tl-title">New city</div></div>
+        <div class="tl-item"><div class="tl-year">2026</div><div class="tl-title">Today 🎉</div></div>
+      </div>
+    </div>
+
+    <!-- Mockup footer -->
+    <div class="mock-footer-bar">
+      <span>Made with</span><strong>Wisherly</strong><span>❤️ · Share this page with anyone</span>
+    </div>
+  </div>
+
+  <!-- Feature highlights -->
+  <div class="features-row">
+    <div class="feat-card">
+      <div class="feat-icon">📸</div>
+      <div class="feat-title">Photo Gallery</div>
+      <div class="feat-desc">Upload up to 20 photos in a cinematic slideshow</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">💌</div>
+      <div class="feat-title">Group Wishes</div>
+      <div class="feat-desc">Friends add their wishes via a shareable link</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📅</div>
+      <div class="feat-title">Memory Timeline</div>
+      <div class="feat-desc">Relive your favourite moments year by year</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔐</div>
+      <div class="feat-title">Password Unlock</div>
+      <div class="feat-desc">The recipient types their name to reveal the surprise</div>
+    </div>
+  </div>
+</div>
+
+<footer id="wly-footer">
+  <div class="wly-fi">
+    <div class="wly-fbrand">
+      <span class="wly-flogo">Wisherly</span>
+      <p>Create beautiful digital surprise pages with photos, music, memories and heartfelt messages.</p>
+      <div class="wly-fsoc-row">
+        <a class="wly-fsoc" href="#" title="Instagram">📸</a>
+        <a class="wly-fsoc" href="#" title="Twitter">🐦</a>
+        <a class="wly-fsoc" href="#" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="wly-fcol">
+      <div class="wly-fct">Product</div>
+      <ul><li><a href="create.html">Create a Page</a></li><li><a href="demo.html">See a Demo</a></li><li><a href="index.html#features">Features</a></li><li><a href="index.html#pricing">Pricing</a></li></ul>
+    </div>
+    <div class="wly-fcol">
+      <div class="wly-fct">Occasions</div>
+      <ul><li><a href="#">Birthday Surprises</a></li><li><a href="#">Anniversary Pages</a></li><li><a href="#">Friendship Pages</a></li><li><a href="#">Farewell Pages</a></li></ul>
+    </div>
+    <div class="wly-fcol">
+      <div class="wly-fct">Company</div>
+      <ul><li><a href="#">About Wisherly</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact Us</a></li></ul>
+    </div>
+  </div>
+  <div class="wly-fbot">
+    <span class="wly-fcopy">© 2026 Wisherly — Crafted with ❤️ to create unforgettable digital surprises</span>
+    <span class="wly-fbadge"><span class="wly-bdot"></span>All systems operational</span>
+    <div class="wly-fleg"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
