@@ -1,1565 +1,1036 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Create a Birthday Surprise Page — Wisherly</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
 
-<title>Create Your Surprise Page</title>
-
-<link rel="stylesheet" href="styles.css">
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const cfg={apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",authDomain:"wisherly-d07d7.firebaseapp.com",projectId:"wisherly-d07d7",storageBucket:"wisherly-d07d7.firebasestorage.app",messagingSenderId:"919116839261",appId:"1:919116839261:web:147d6b5924f3cbe35050b4"};
+  if(!firebase.apps.length)firebase.initializeApp(cfg);
+  window._db=firebase.firestore();
+})();
+</script>
 
 <style>
+/* ══════════════════════════════════
+   ROOT & RESET
+══════════════════════════════════ */
+:root{
+  --gold:#FFD700;
+  --gold2:#FFA500;
+  --rose:#FF6B9D;
+  --violet:#9B59B6;
+  --cyan:#00D2FF;
+  --mint:#00E5A0;
+  --ink:#0D0621;
+  --surface:rgba(255,255,255,.04);
+  --surface2:rgba(255,255,255,.07);
+  --border:rgba(255,215,0,.15);
+  --border2:rgba(255,255,255,.08);
+  --text:rgba(255,255,255,.85);
+  --muted:rgba(255,255,255,.45);
+  --muted2:rgba(255,255,255,.25);
+  --grad-warm:linear-gradient(135deg,#FFD700,#FF6B9D);
+  --grad-cool:linear-gradient(135deg,#00D2FF,#9B59B6);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:linear-gradient(160deg,#0D0621 0%,#1A0A2E 50%,#0E1A3D 100%);
+  color:var(--text);
+  font-family:'Nunito',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 10%,rgba(255,107,157,.1),transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 80%,rgba(155,89,182,.1),transparent 60%);
+}
 
-/* ── LAYOUT ── */
-.header{text-align:center;margin-bottom:40px}
-.header h1{font-size:48px;font-weight:600}
-.header p{opacity:.7;margin-top:8px}
+/* ══ NAVBAR ══ */
+.nav{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:64px;
+  background:rgba(13,6,33,.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Playfair Display',serif;font-style:italic;font-size:22px;
+  background:var(--grad-warm);-webkit-background-clip:text;color:transparent;
+  text-decoration:none;font-weight:700;
+}
+.nav-links{display:flex;gap:24px;list-style:none;}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;font-weight:500;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{
+  padding:8px 22px;border-radius:999px;
+  background:linear-gradient(135deg,var(--rose),var(--gold2));
+  color:white;font-size:13px;font-weight:700;text-decoration:none;
+  box-shadow:0 4px 16px rgba(255,107,157,.3);transition:all .25s;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,107,157,.45);}
 
-.builder{display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:start}
+/* ══ HEADER ══ */
+.page-header{
+  text-align:center;padding:72px 24px 52px;
+  position:relative;z-index:1;
+}
+.header-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);
+  border-radius:999px;padding:7px 20px;
+  font-size:10px;font-weight:800;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;
+}
+.badge-pulse{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:bpulse 2s ease infinite;}
+@keyframes bpulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.page-header h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(30px,5vw,52px);font-weight:900;
+  line-height:1.1;margin-bottom:14px;color:white;
+}
+.page-header h1 em{
+  font-style:italic;
+  background:var(--grad-warm);-webkit-background-clip:text;color:transparent;
+}
+.page-header p{font-size:15px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7;}
 
-/* ── PANELS ── */
+/* ══ BUILDER LAYOUT ══ */
+.builder{
+  display:grid;
+  grid-template-columns:1fr 360px;
+  gap:28px;
+  max-width:1200px;margin:0 auto;
+  padding:0 32px 80px;
+  position:relative;z-index:1;
+  align-items:start;
+}
+
+/* ══ PANELS ══ */
 .panel{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;
-  padding:28px;
-  margin-bottom:20px
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:20px;padding:28px;
+  margin-bottom:16px;
+  transition:border-color .3s;
 }
+.panel:hover{border-color:rgba(255,215,0,.25);}
 
-.panel-title{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:18px
+.panel-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:22px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border2);
 }
-
-.panel-title h3{font-size:16px;font-weight:600}
+.panel-icon{font-size:20px;}
+.panel-head h3{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:17px;font-weight:700;color:white;
+}
 .panel-badge{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-  background:rgba(124,58,237,.25);
-  color:#c4b5fd;
-  padding:3px 10px;
-  border-radius:999px;
-  border:1px solid rgba(124,58,237,.3)
+  margin-left:auto;
+  font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  background:rgba(255,215,0,.1);color:var(--gold);
+  padding:3px 10px;border-radius:999px;
+  border:1px solid rgba(255,215,0,.25);
 }
 
-/* ── INPUTS ── */
-input,textarea,select{
-  width:100%;
-  padding:12px 14px;
-  margin-top:10px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.08);
-  background:#020617;
-  color:white;
-  font-family:inherit;
-  font-size:14px;
-  outline:none;
-  transition:border-color .2s
-}
-
-input:focus,textarea:focus,select:focus{
-  border-color:rgba(124,58,237,.5)
-}
-
-input::placeholder,textarea::placeholder{color:rgba(255,255,255,.3)}
-
-select option{background:#0f172a}
-
+/* ══ INPUTS ══ */
 label{
   display:block;
-  font-size:12px;
-  font-weight:600;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.5);
-  margin-top:16px;
-  margin-bottom:2px
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted2);margin-top:16px;margin-bottom:5px;
 }
-
-label:first-child{margin-top:0}
-
-/* ── TEMPLATE GRID ── */
-.templateGrid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-top:10px
-}
-
-.templateCard{
+label:first-of-type{margin-top:0;}
+input[type=text],input[type=date],input[type=url],input[type=email],textarea,select{
+  width:100%;padding:11px 14px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.1);
   background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
-  padding:14px 8px;
-  border-radius:12px;
-  text-align:center;
-  cursor:pointer;
-  font-size:12px;
-  transition:.2s
+  color:var(--text);
+  font-family:'Nunito',sans-serif;font-size:14px;font-weight:500;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  resize:vertical;
 }
-
-.templateCard:hover{background:rgba(255,255,255,.09)}
-
-.templateCard.active{
-  background:linear-gradient(135deg,rgba(124,58,237,.5),rgba(236,72,153,.5));
-  border-color:rgba(124,58,237,.6)
+input:focus,textarea:focus,select:focus{
+  border-color:rgba(255,215,0,.4);
+  box-shadow:0 0 0 3px rgba(255,215,0,.08);
 }
+input::placeholder,textarea::placeholder{color:var(--muted2);}
+select option{background:#1A0A2E;color:white;}
 
-/* ── PHOTO GRID ── */
-.photoGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
-  gap:8px;
-  margin-top:12px
-}
+/* Two-col row */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
-.photoItem{position:relative}
-
-.photoItem img{
-  width:100%;
-  height:80px;
-  object-fit:cover;
-  border-radius:8px;
-  display:block
-}
-
-.remove{
-  position:absolute;
-  top:4px;
-  right:4px;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:#ef4444;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:11px;
-  cursor:pointer;
-  border:none;
-  color:white;
-  line-height:1
+/* ══ PHOTO GRID ══ */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:12px;}
+.photo-thumb{position:relative;}
+.photo-thumb img{width:100%;height:72px;object-fit:cover;border-radius:10px;display:block;border:1px solid var(--border2);}
+.photo-remove{
+  position:absolute;top:4px;right:4px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--rose);color:white;
+  border:none;cursor:pointer;font-size:11px;
+  display:flex;align-items:center;justify-content:center;
 }
 
 .upload-zone{
-  border:2px dashed rgba(255,255,255,.12);
-  border-radius:10px;
-  padding:20px;
-  text-align:center;
-  cursor:pointer;
-  color:rgba(255,255,255,.4);
-  font-size:13px;
+  border:2px dashed rgba(255,215,0,.25);
+  border-radius:12px;padding:24px;
+  text-align:center;cursor:pointer;
+  color:var(--muted2);font-size:13px;font-weight:500;
+  transition:.2s;margin-top:10px;
+  background:rgba(255,215,0,.02);
+}
+.upload-zone:hover{border-color:var(--gold);color:var(--gold);background:rgba(255,215,0,.04);}
+.upload-zone input{display:none;}
+
+/* ══ DYNAMIC CARDS ══ */
+.dcard{
+  background:rgba(255,215,0,.03);
+  border:1px solid rgba(255,215,0,.1);
+  border-radius:14px;padding:14px;margin-top:10px;
+}
+.dcard-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:8px;}
+.dcard-head strong{font-size:13px;font-weight:700;color:var(--text);}
+.dcard-head small{font-size:11px;color:var(--muted2);}
+.dcard-del{
+  background:rgba(255,107,157,.1);
+  border:none;color:var(--rose);
+  padding:3px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-family:'Nunito',sans-serif;
   transition:.2s;
-  margin-top:10px
 }
-
-.upload-zone:hover{
-  border-color:rgba(124,58,237,.4);
-  color:rgba(255,255,255,.7)
-}
-
-/* ── MEMORY / WISH CARDS ── */
-.memoryCard{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
-  padding:14px;
-  border-radius:12px;
-  margin-top:10px
-}
-
-.memoryHeader{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  cursor:pointer
-}
-
-.memoryHeader strong{font-size:13px}
-.memoryHeader small{font-size:11px;color:rgba(255,255,255,.35);display:block;margin-top:2px}
-
-.deleteBtn{
-  color:#ef4444;
-  font-size:14px;
-  cursor:pointer;
-  padding:4px 8px;
-  border-radius:6px;
-  background:rgba(239,68,68,.1);
-  border:none;
-  color:#ef4444;
-  line-height:1
-}
-
-.hiddenForm{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)}
+.dcard-del:hover{background:rgba(255,107,157,.2);}
+.dcard-body{display:none;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06);}
 
 .add-btn{
-  margin-top:12px;
-  padding:10px 16px;
-  background:rgba(124,58,237,.15);
-  border:1px dashed rgba(124,58,237,.4);
-  border-radius:10px;
-  color:#c4b5fd;
-  cursor:pointer;
-  font-size:13px;
-  width:100%;
-  transition:.2s
+  margin-top:12px;width:100%;padding:11px;
+  background:rgba(255,215,0,.04);
+  border:1px dashed rgba(255,215,0,.25);
+  border-radius:10px;color:var(--gold);
+  cursor:pointer;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;
+  transition:.2s;
 }
+.add-btn:hover{background:rgba(255,215,0,.1);border-color:var(--gold);}
 
-.add-btn:hover{background:rgba(124,58,237,.25)}
+/* Caption input row */
+.caption-inputs{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+.cap-row{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;font-size:12px;color:var(--muted2);}
 
-/* ── GUESS GAME FIELDS ── */
-.guess-options-list{margin-top:10px;display:flex;flex-direction:column;gap:8px}
-
-/* ── GUESS IMAGE UPLOAD ── */
-.guess-img-upload{
-  margin-top:10px;
-  border:2px dashed rgba(255,255,255,.1);
-  border-radius:12px;
-  cursor:pointer;
-  transition:border-color .2s, background .2s;
-  overflow:hidden;
-  position:relative;
+/* ══ AUDIO PANEL ══ */
+.audio-drop{
+  border:2px dashed rgba(0,210,255,.2);
+  border-radius:12px;padding:24px;text-align:center;cursor:pointer;
+  color:var(--muted2);font-size:13px;font-weight:500;
+  transition:.2s;margin-top:10px;background:rgba(0,210,255,.02);
 }
-.guess-img-upload:hover{
-  border-color:rgba(124,58,237,.45);
-  background:rgba(124,58,237,.04);
+.audio-drop:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,210,255,.04);}
+.audio-drop input{display:none;}
+.audio-preview{
+  display:none;
+  align-items:center;gap:12px;
+  background:rgba(0,210,255,.05);
+  border:1px solid rgba(0,210,255,.2);
+  border-radius:12px;padding:14px;margin-top:10px;
 }
-.guess-img-preview{
-  padding:24px 16px;
-  text-align:center;
-  font-size:12px;
-  color:rgba(255,255,255,.35);
-  line-height:1.5;
-}
-/* When image is set — show thumbnail strip */
-.guess-img-change{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px 14px;
-  background:rgba(124,58,237,.08);
-  border-top:1px solid rgba(124,58,237,.15);
-}
-.guess-img-change img{
-  width:52px;height:40px;
-  object-fit:cover;
-  border-radius:6px;
-  border:1.5px solid rgba(124,58,237,.3);
-}
-.guess-change-btn{
-  padding:5px 12px;
-  border-radius:999px;
-  border:1px solid rgba(239,68,68,.3);
-  background:rgba(239,68,68,.08);
-  color:#f87171;
-  font-size:11px;font-weight:600;
-  cursor:pointer;transition:.2s;
-}
-.guess-change-btn:hover{background:rgba(239,68,68,.15);}
-
-/* Blurred image preview overlay inside upload zone */
-.guess-img-blurred-wrap{
-  position:relative;
-  width:100%;
-  line-height:0;
-}
-.guess-img-blurred-wrap img{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-  display:block;
-  filter:blur(10px) brightness(1.05);
-  transform:scale(1.04);
-}
-.guess-img-blurred-wrap .blur-badge{
-  position:absolute;inset:0;
+.audio-play-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--grad-cool);color:white;
+  border:none;cursor:pointer;font-size:14px;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.15);
-  font-size:11px;font-weight:700;
-  color:rgba(255,255,255,.7);
-  letter-spacing:.15em;text-transform:uppercase;
-  pointer-events:none;
-}
-
-.guess-option-row{
-  display:flex;
-  gap:8px;
-  align-items:center
-}
-
-.guess-option-row input{margin-top:0;flex:1}
-
-.correct-radio{
-  width:auto!important;
-  cursor:pointer;
   flex-shrink:0;
-  accent-color:#7C3AED
 }
+.audio-info{flex:1;overflow:hidden;}
+.audio-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.audio-size{font-size:11px;color:var(--muted2);}
+.audio-bar-wrap{height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:8px;}
+.audio-bar-fill{height:100%;background:var(--grad-cool);border-radius:2px;width:0%;transition:width .3s;}
+.audio-clear{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:14px;padding:4px;}
 
-.radio-label{font-size:11px;color:rgba(255,255,255,.4);white-space:nowrap;text-transform:none;letter-spacing:0;margin-top:0}
-
-/* ── FUN FACTS ── */
-.fact-row{
-  display:grid;
-  grid-template-columns:48px 1fr 2fr;
-  gap:8px;
-  margin-top:10px;
-  align-items:end
+/* ══ RIGHT: PREVIEW ══ */
+.preview-sticky{position:sticky;top:80px;}
+.preview-panel{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:20px;overflow:hidden;
 }
-
-.fact-row input{margin-top:0}
-
-/* ── MAP PINS ── */
-.pin-row{
-  display:grid;
-  grid-template-columns:38px 1fr;
-  gap:8px;
-  align-items:end;
-  margin-top:10px
+.preview-head{
+  padding:16px 20px;
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;
 }
+.preview-head span{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.preview-live-dot{width:7px;height:7px;border-radius:50%;background:var(--mint);animation:bpulse 2s ease infinite;}
 
-.pin-row input{margin-top:0}
-
-/* ── PHONE PREVIEW — Futuristic Dark ── */
-.phone-wrap{
-  position:sticky;
-  top:30px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:0;
-}
-
-/* Label above phone */
-.phone-label{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.25em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.2);
-  margin-bottom:14px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.phone-label::before,.phone-label::after{
-  content:'';display:block;width:28px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(124,58,237,.5));
-}
-.phone-label::after{transform:scaleX(-1);}
-
-.phone{
-  width:100%;
-  max-width:340px;
-  border-radius:44px;
-  background:linear-gradient(160deg,#0d0d14,#0a0a10);
-  padding:14px;
-  border:1.5px solid rgba(255,255,255,.08);
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,.8),
-    0 40px 100px rgba(0,0,0,.9),
-    0 0 60px rgba(124,58,237,.08),
-    inset 0 1px 0 rgba(255,255,255,.06);
-  position:relative;
-}
-
-/* side buttons */
-.phone::before{
-  content:'';
-  position:absolute;
-  left:-3px;top:100px;
-  width:3px;height:32px;
-  background:rgba(255,255,255,.08);
-  border-radius:3px 0 0 3px;
-  box-shadow:0 44px 0 rgba(255,255,255,.08),0 80px 0 rgba(255,255,255,.06);
-}
-.phone::after{
-  content:'';
-  position:absolute;
-  right:-3px;top:130px;
-  width:3px;height:48px;
-  background:rgba(255,255,255,.08);
-  border-radius:0 3px 3px 0;
-}
-
-/* Dynamic island */
-.phone-island{
-  width:90px;height:26px;
-  background:#000;
-  border-radius:999px;
-  margin:0 auto 10px;
-  position:relative;
-  border:1px solid rgba(255,255,255,.04);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-}
-.phone-island-cam{
-  width:8px;height:8px;
-  border-radius:50%;
-  background:rgba(30,30,40,1);
-  border:1.5px solid rgba(255,255,255,.06);
-  position:relative;
-}
-.phone-island-cam::after{
-  content:'';position:absolute;
-  width:3px;height:3px;border-radius:50%;
-  background:rgba(30,120,255,.5);
-  top:50%;left:50%;transform:translate(-50%,-50%);
-}
-
-.phoneScreen{
-  background:linear-gradient(170deg,#0b0b14 0%,#080810 100%);
-  height:680px;
-  border-radius:34px;
-  overflow:auto;
-  position:relative;
-  scrollbar-width:none;
-  border:1px solid rgba(255,255,255,.04);
-}
-
-.phoneScreen::-webkit-scrollbar{display:none}
-
-/* subtle grid overlay */
-.phoneScreen::before{
-  content:'';
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(124,58,237,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(124,58,237,.03) 1px,transparent 1px);
-  background-size:20px 20px;
-  pointer-events:none;
-  z-index:0;
-  border-radius:34px;
-}
-
-/* preview topbar */
-.p-topbar{
-  background:rgba(8,8,16,.92);
-  backdrop-filter:blur(12px);
-  padding:10px 14px 9px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid rgba(124,58,237,.15);
-  position:sticky;
-  top:0;
-  z-index:10;
-}
-.p-topbar-left{display:flex;align-items:center;gap:7px;}
-.p-topbar-dot{width:5px;height:5px;border-radius:50%;background:#7C3AED;animation:pdot 2s ease infinite;}
-@keyframes pdot{0%,100%{opacity:1;box-shadow:0 0 4px #7C3AED;}50%{opacity:.4;box-shadow:none;}}
-.p-logo{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7);font-family:inherit;}
-.p-date{font-size:8px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.25);text-transform:uppercase;}
-
-/* preview hero */
-.p-hero{
-  background:linear-gradient(170deg,rgba(124,58,237,.12) 0%,rgba(236,72,153,.06) 50%,transparent 100%);
-  padding:22px 16px 18px;
-  text-align:center;
-  border-bottom:1px solid rgba(255,255,255,.04);
-  position:relative;
+/* Phone mockup */
+.phone-frame{
+  margin:20px auto;
+  width:220px;
+  background:#0D0621;
+  border-radius:32px;
+  border:2px solid rgba(255,255,255,.1);
   overflow:hidden;
-}
-.p-hero::before{
-  content:'';position:absolute;
-  width:150px;height:150px;
-  background:radial-gradient(circle,rgba(124,58,237,.2),transparent 70%);
-  top:-60px;left:50%;transform:translateX(-50%);
-  pointer-events:none;
-}
-.p-occasion{
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  background:linear-gradient(135deg,#a78bfa,#f472b6);
-  -webkit-background-clip:text;color:transparent;
-  margin-bottom:8px;
-}
-.p-for{font-size:9px;color:rgba(255,255,255,.3);margin-bottom:4px;letter-spacing:.1em;}
-.p-name{
-  font-size:26px;font-weight:800;color:#fff;
-  margin-bottom:8px;letter-spacing:-.5px;
-  text-shadow:0 0 30px rgba(167,139,250,.3);
-}
-.p-msg{
-  font-size:10px;color:rgba(255,255,255,.45);
-  line-height:1.7;max-width:200px;margin:0 auto;
-}
-
-/* preview sections */
-.p-section{
-  padding:12px 14px;
-  border-bottom:1px solid rgba(255,255,255,.03);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
   position:relative;
 }
-.p-section-label{
-  font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(124,58,237,.8);
-  margin-bottom:8px;
-  display:flex;align-items:center;gap:6px;
+.phone-notch{
+  width:80px;height:20px;
+  background:#0D0621;border-radius:0 0 14px 14px;
+  margin:0 auto;position:relative;z-index:2;
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
-.p-section-label::after{
-  content:'';flex:1;height:1px;
-  background:linear-gradient(90deg,rgba(124,58,237,.3),transparent);
-}
-
-/* preview photo strip */
-.p-photos{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-top:4px;}
-.p-photos::-webkit-scrollbar{display:none}
-.p-photos img{
-  width:68px;height:52px;object-fit:cover;border-radius:8px;flex-shrink:0;
-  border:1.5px solid rgba(124,58,237,.25);
-  box-shadow:0 2px 12px rgba(0,0,0,.4);
+.phone-screen{
+  min-height:380px;
+  background:linear-gradient(160deg,#0D0621,#1A0A2E);
+  padding:0 0 20px;
+  text-align:center;
 }
 
-/* preview timeline */
-.p-tl-item{display:flex;gap:9px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.03);}
-.p-tl-item:last-child{border-bottom:none;}
-.p-tl-dot{
-  width:7px;height:7px;border-radius:50%;
-  background:linear-gradient(135deg,#7C3AED,#EC4899);
-  margin-top:5px;flex-shrink:0;
-  box-shadow:0 0 6px rgba(124,58,237,.5);
+/* Preview sections */
+.pv-hero{
+  padding:28px 16px 16px;
+  background:linear-gradient(180deg,rgba(155,89,182,.25),transparent);
 }
-.p-tl-year{font-size:8px;font-weight:700;color:#a78bfa;letter-spacing:.1em;margin-bottom:2px;}
-.p-tl-title{font-size:10px;font-weight:600;color:rgba(255,255,255,.75);}
-
-/* preview guess */
-.p-guess{
-  background:rgba(124,58,237,.06);
-  border:1px solid rgba(124,58,237,.15);
-  border-radius:10px;padding:10px;
-  text-align:center;font-size:10px;
-  color:rgba(255,255,255,.4);
+.pv-badge{
+  font-size:8px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);
+  background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);
+  border-radius:999px;padding:3px 10px;display:inline-block;margin-bottom:8px;
 }
-
-/* preview facts */
-.p-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:4px;}
-.p-fact{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.05);
-  border-radius:8px;padding:7px 4px;text-align:center;
+.pv-name{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:22px;font-weight:900;
+  background:var(--grad-warm);-webkit-background-clip:text;color:transparent;
+  line-height:1;margin-bottom:6px;
 }
-.p-fact-emoji{font-size:14px;display:block;margin-bottom:2px;}
-.p-fact-val{font-size:11px;font-weight:700;color:#a78bfa;display:block;}
-.p-fact-lbl{font-size:7px;color:rgba(255,255,255,.35);display:block;line-height:1.3;}
+.pv-title{font-size:10px;color:rgba(255,255,255,.5);font-style:italic;}
+.pv-emojis{font-size:14px;margin:8px 0;letter-spacing:2px;}
 
-/* preview wishes */
-.p-wish{
-  background:rgba(236,72,153,.05);
-  border:1px solid rgba(236,72,153,.12);
-  border-radius:8px;padding:8px 10px;margin-top:5px;
+.pv-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.2),transparent);margin:12px 0;}
+
+.pv-message-box{
+  margin:0 14px 12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,215,0,.15);
+  border-radius:12px;padding:12px;
+  text-align:left;
 }
-.p-wish-name{font-size:8px;font-weight:700;color:#f472b6;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px;}
-.p-wish-msg{font-size:10px;color:rgba(255,255,255,.5);line-height:1.5;}
+.pv-from{font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.pv-msg{font-size:9px;color:rgba(255,255,255,.55);line-height:1.6;font-style:italic;}
 
-/* preview final */
-.p-final{
-  text-align:center;padding:16px;
-  background:linear-gradient(160deg,rgba(124,58,237,.08),rgba(236,72,153,.05));
-}
-.p-final-quote{
-  font-size:11px;font-style:italic;
-  background:linear-gradient(135deg,#a78bfa,#f472b6);
-  -webkit-background-clip:text;color:transparent;
-  font-weight:600;line-height:1.6;
-}
+.pv-section-label{font-size:8px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);margin:12px 14px 6px;text-align:left;}
+.pv-photo-strip{display:flex;gap:4px;margin:0 14px;overflow:hidden;border-radius:8px;}
+.pv-photo-strip>div{flex:1;height:52px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+.pv-photo-strip img{width:100%;height:100%;object-fit:cover;}
 
-/* preview map */
-.p-pin{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.03);}
-.p-pin:last-child{border-bottom:none;}
-.p-pin-icon{font-size:15px;}
-.p-pin-place{font-size:10px;font-weight:600;color:rgba(255,255,255,.75);}
-.p-pin-mem{font-size:9px;color:rgba(255,255,255,.35);}
+.pv-special-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 14px;}
+.pv-scard{background:rgba(255,255,255,.04);border-radius:8px;padding:8px 10px;}
+.pv-scard-num{font-size:8px;color:rgba(255,215,0,.4);font-family:'Playfair Display',serif;}
+.pv-scard-title{font-size:8px;font-weight:700;color:rgba(255,255,255,.7);margin-top:2px;line-height:1.2;}
 
-/* phone bottom bar */
-.phone-home-bar{
-  width:100px;height:4px;
-  background:rgba(255,255,255,.12);
-  border-radius:999px;
-  margin:10px auto 0;
-}
+.pv-wishes{display:flex;flex-direction:column;gap:6px;margin:0 14px;}
+.pv-wish{background:rgba(255,255,255,.04);border-radius:8px;padding:8px 10px;display:flex;gap:8px;}
+.pv-wish-av{width:20px;height:20px;border-radius:50%;background:var(--grad-warm);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;}
+.pv-wish-text{font-size:8px;color:rgba(255,255,255,.5);font-style:italic;line-height:1.5;}
 
-/* ── GENERATE BTN ── */
-.generateBtn{
-  margin-top:24px;
-  width:100%;
-  padding:18px;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:700;
+/* ══ GENERATE BUTTON ══ */
+.gen-wrap{margin-top:8px;}
+#generateBtn{
+  width:100%;padding:17px;
+  border-radius:14px;border:none;
+  background:linear-gradient(135deg,var(--rose),var(--gold2));
   color:white;
-  cursor:pointer;
-  background:linear-gradient(135deg,#7C3AED,#EC4899);
-  box-shadow:0 8px 30px rgba(124,58,237,.4);
-  transition:.25s
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;
+  cursor:pointer;letter-spacing:.05em;
+  box-shadow:0 8px 30px rgba(255,107,157,.35);
+  transition:all .3s;position:relative;overflow:hidden;
+}
+#generateBtn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+  opacity:0;transition:opacity .3s;
+}
+#generateBtn:hover::before{opacity:1;}
+#generateBtn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,107,157,.5);}
+#generateBtn.loading{opacity:.7;pointer-events:none;cursor:not-allowed;}
+
+.gen-note{font-size:12px;color:var(--muted2);text-align:center;margin-top:10px;line-height:1.5;}
+#gen-error{
+  display:none;
+  background:rgba(255,100,100,.08);
+  border:1px solid rgba(255,100,100,.25);
+  border-radius:10px;padding:12px 16px;
+  color:#ff8080;font-size:13px;margin-top:10px;
 }
 
-/* ── Generate button loading state ── */
-.generateBtn.loading{
-  opacity:.7;pointer-events:none;
-  background:rgba(255,255,255,.08);
+/* Share link panel */
+.share-panel{
+  display:none;
+  background:rgba(0,229,160,.05);
+  border:1px solid rgba(0,229,160,.25);
+  border-radius:14px;padding:20px;margin-top:12px;
+  text-align:center;
 }
-.generateBtn.loading::after{
-  content:' uploading…';font-size:12px;opacity:.7;
+.share-panel.show{display:block;}
+.share-title{font-size:14px;font-weight:800;color:var(--mint);margin-bottom:12px;}
+.share-link-box{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;padding:10px 14px;
+  font-size:12px;color:var(--muted);word-break:break-all;margin-bottom:12px;
 }
-.generateBtn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 16px 50px rgba(236,72,153,.5)
+.share-btn{
+  padding:10px 24px;border-radius:999px;
+  background:var(--mint);color:#0D0621;
+  border:none;cursor:pointer;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;
+  transition:.2s;margin:4px;
+}
+.share-btn:hover{transform:scale(1.02);}
+.share-btn.outline{background:transparent;border:1px solid var(--mint);color:var(--mint);}
+
+/* ══ PROGRESS BAR ══ */
+.progress-bar{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  height:3px;background:var(--grad-warm);
+  width:0%;transition:width .4s ease;
 }
 
-/* ── FOOTER ── */
-.footer{
-  margin-top:80px;
-  background:#020617;
-  padding:60px 20px 30px;
-  border-top:1px solid rgba(255,255,255,.08)
-}
-
-.footer-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:30px;
-  max-width:1200px;
-  margin:auto
-}
-
-.footer-col h3{margin-bottom:10px}
-.footer-col ul{list-style:none;padding:0}
-.footer-col ul li{margin:6px 0}
-.footer-col ul a{color:#94a3b8;text-decoration:none}
-.footer-bottom{text-align:center;margin-top:40px;opacity:.7}
-
+/* ══ RESPONSIVE ══ */
 @media(max-width:900px){
-  .builder{grid-template-columns:1fr}
-  .phone{display:none}
+  .builder{grid-template-columns:1fr;}
+  .preview-sticky{position:static;}
+  .phone-frame{display:none;}
 }
-
-</style>
-
-<link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
-
-
-  <!-- Firebase Compat SDK — works on file:// and https:// -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script>
-    (function(){
-      const _cfg = {
-        apiKey:            "AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",
-        authDomain:        "wisherly-d07d7.firebaseapp.com",
-        projectId:         "wisherly-d07d7",
-        storageBucket:     "wisherly-d07d7.firebasestorage.app",
-        messagingSenderId: "919116839261",
-        appId:             "1:919116839261:web:147d6b5924f3cbe35050b4"
-      };
-      if (!firebase.apps.length) { firebase.initializeApp(_cfg); }
-      window._db = firebase.firestore();
-    })();
-  </script>
-
-<style id="wly-footer-css">
-/* ══ WISHERLY SHARED FOOTER ══ */
-#wly-footer{background:#050508;border-top:1px solid rgba(255,255,255,.07);padding:60px 0 0;font-family:'Inter',sans-serif;}
-.wly-fi{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding:0 40px 52px;border-bottom:1px solid rgba(255,255,255,.06);}
-.wly-flogo{font-family:'Space Grotesk','Inter',sans-serif;font-size:22px;font-weight:800;display:block;margin-bottom:10px;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;color:transparent;}
-.wly-fbrand p{font-size:13px;color:rgba(255,255,255,.38);line-height:1.7;max-width:220px;margin:0 0 18px;}
-.wly-fsoc-row{display:flex;gap:8px;}
-.wly-fsoc{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:13px;text-decoration:none;transition:all .2s;}
-.wly-fsoc:hover{border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.1);}
-.wly-fct{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:14px;}
-.wly-fcol ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
-.wly-fcol ul a{font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;transition:color .2s;}
-.wly-fcol ul a:hover{color:rgba(255,255,255,.9);}
-.wly-fbot{max-width:1100px;margin:0 auto;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-.wly-fcopy{font-size:12px;color:rgba(255,255,255,.22);}
-.wly-fbadge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;border:1px solid rgba(16,185,129,.2);background:rgba(16,185,129,.06);font-size:10px;font-weight:600;color:#34d399;}
-.wly-bdot{width:5px;height:5px;border-radius:50%;background:#10B981;animation:wlypulse 2s ease infinite;flex-shrink:0;}
-@keyframes wlypulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-.wly-fleg{display:flex;gap:18px;}
-.wly-fleg a{font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;transition:color .2s;}
-.wly-fleg a:hover{color:rgba(255,255,255,.55);}
-/* tablet */
-@media(max-width:900px){
-  .wly-fi{grid-template-columns:1fr 1fr;gap:28px;padding:0 24px 40px;}
-  .wly-fbrand{grid-column:span 2;}
-  .wly-fbrand p{max-width:100%;}
-  .wly-fbot{padding:18px 24px;}
-}
-/* mobile */
-@media(max-width:560px){
-  .wly-fi{grid-template-columns:1fr 1fr;gap:24px;padding:0 18px 32px;}
-  .wly-fbrand{grid-column:span 2;}
-  .wly-fct{margin-bottom:10px;}
-  .wly-fcol ul{gap:7px;}
-  .wly-fbot{flex-direction:column;align-items:flex-start;padding:16px 18px;gap:8px;}
-  .wly-fleg{gap:12px;flex-wrap:wrap;}
+@media(max-width:600px){
+  .nav{padding:0 20px;}.builder{padding:0 16px 60px;}
 }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="progress-bar" id="progressBar"></div>
 
-  <div class="header">
-    <h1>Create Your Surprise Page</h1>
-    <br>
-    <p>Design a beautiful memory page in minutes</p>
-  </div>
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">Wisherly</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="demo.html">Demo</a></li>
+    <li><a href="create.html">Apology Page</a></li>
+  </ul>
+  <a href="birthday-view.html" class="nav-cta">🎉 View Demo</a>
+</nav>
 
-  <div class="builder">
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="header-badge"><span class="badge-pulse"></span>Birthday Surprise Builder</div>
+  <h1>Create a Birthday <em>Surprise Page</em> 🎂</h1>
+  <p>Fill in the details below and we'll build a magical birthday page your loved one will never forget. Takes about 5 minutes.</p>
+</div>
 
-    <!-- ════════════ LEFT COLUMN: FORM ════════════ -->
-    <div>
+<!-- BUILDER -->
+<div class="builder">
 
-      <!-- TEMPLATE -->
-      <div class="panel">
-        <div class="panel-title"><h3>🎨 Template</h3></div>
-        <div class="templateGrid">
-          <div class="templateCard" data-title="Happy Birthday">🎂 Birthday</div>
-          <div class="templateCard" data-title="For Someone Special">❤️ Romantic</div>
-          <div class="templateCard" data-title="To My Best Friend">🤝 Friendship</div>
-          <div class="templateCard" data-title="Let's Celebrate">🎉 Celebration</div>
+  <!-- ═══ LEFT: FORM ═══ -->
+  <div>
+
+    <!-- 1. BASICS -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">🎂</span>
+        <h3>The Birthday Person</h3>
+      </div>
+      <div class="row2">
+        <div>
+          <label>Their First Name *</label>
+          <input id="recipientName" type="text" placeholder="e.g. Priya" oninput="updatePreview()">
+        </div>
+        <div>
+          <label>Their Date of Birth</label>
+          <input id="birthdayDate" type="date" onchange="updatePreview()">
         </div>
       </div>
+      <label>Your Name (sender)</label>
+      <input id="senderName" type="text" placeholder="e.g. Rahul" oninput="updatePreview()">
+      <label>Page Title / Hero Line</label>
+      <input id="heroTitle" type="text" placeholder="Happy Birthday! 🎂" value="Happy Birthday! 🎂" oninput="updatePreview()">
+      <label>Badge Text (top of page)</label>
+      <input id="badgeText" type="text" placeholder="It's Your Day 🎂" value="It's Your Day 🎂" oninput="updatePreview()">
+    </div>
 
-      <!-- BASIC INFO -->
-      <div class="panel">
-        <div class="panel-title"><h3>✏️ Basic Info</h3></div>
-        <label>Occasion Title</label>
-        <input id="title" placeholder="e.g. Happy Birthday, Happy Anniversary…">
-        <label>Recipient Name</label>
-        <input id="recipientName" placeholder="Who is this surprise for?">
-        <label>Hero Message</label>
-        <textarea id="message" rows="3" placeholder="A heartfelt opening message…"></textarea>
-        <label>Final Surprise Quote <span style="opacity:.5;font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">— shown at the very end</span></label>
-        <input id="finalMessage" placeholder="e.g. You mean the world to me 💖">
+    <!-- 2. PERSONAL MESSAGE -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">💌</span>
+        <h3>Personal Message</h3>
+        <span class="panel-badge">typed animation</span>
       </div>
+      <label>Your heartfelt letter *</label>
+      <textarea id="message" rows="5" placeholder="Write your personal message here. It'll appear as a typewriter animation on the page…" oninput="updatePreview()"></textarea>
+      <label>Opening Quote / Reveal Sub-Message</label>
+      <input id="openingQuote" type="text" placeholder="This page was made with every ounce of love, just for you." oninput="updatePreview()">
+      <label>Closing / Gratitude Note</label>
+      <textarea id="closingNote" rows="3" placeholder='"I'm so incredibly lucky to have you in my life…"' oninput="updatePreview()"></textarea>
+    </div>
 
-      <!-- PHOTOS -->
-      <div class="panel">
-        <div class="panel-title">
-          <h3>📸 Photos</h3>
-          <span class="panel-badge">Slideshow + Polaroid Wall</span>
-        </div>
-        <div class="upload-zone" onclick="photoUpload.click()">
-          📷 Click to upload photos
-          <div style="font-size:11px;margin-top:4px;opacity:.6">Used in the slideshow &amp; polaroid wall</div>
-        </div>
-        <input type="file" id="photoUpload" multiple accept="image/*" hidden>
-        <div class="photoGrid" id="photoGrid"></div>
+    <!-- 3. PHOTOS -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">📸</span>
+        <h3>Photos & Memories</h3>
+        <span class="panel-badge">slideshow + polaroids</span>
       </div>
-
-      <!-- VIDEO -->
-      <div class="panel">
-        <div class="panel-title"><h3>🎬 Special Video</h3></div>
-        <label>YouTube URL</label>
-        <input id="videoURL" placeholder="Paste a YouTube link…">
-        <div id="videoPreviewThumb" style="margin-top:10px"></div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Upload your favourite photos together. They'll appear as a slideshow and polaroid wall.</p>
+      <div class="photo-grid" id="photoGrid"></div>
+      <div class="upload-zone" onclick="document.getElementById('photoInput').click()">
+        <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(this)">
+        📸 Click to upload photos (max 8)
       </div>
-
-      <!-- TIMELINE / MEMORIES -->
-      <div class="panel">
-        <div class="panel-title">
-          <h3>📅 Timeline Memories</h3>
-          <span class="panel-badge">Timeline + Story + Map</span>
-        </div>
-        <p style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:4px">Each memory is used in the Timeline, "If Time Could Talk" story, and Memory Map sections.</p>
-        <div id="timelineBuilder"></div>
-        <button class="add-btn" onclick="addMemory()">＋ Add Memory</button>
-      </div>
-
-      <!-- MEMORY MAP PINS (dedicated) -->
-      <div class="panel">
-        <div class="panel-title">
-          <h3>🌍 Memory Map Places</h3>
-          <span class="panel-badge">Map Section</span>
-        </div>
-        <p style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:4px">Optional: add specific places with a short memory line. Leave empty to auto-use your timeline memories above.</p>
-        <div id="mapBuilder"></div>
-        <button class="add-btn" onclick="addMapPin()">＋ Add Place</button>
-      </div>
-
-      <!-- GUESS THE MEMORY GAME -->
-      <div class="panel">
-        <div class="panel-title">
-          <h3>🎯 Guess the Memory Game</h3>
-          <span class="panel-badge">Mini Game Section</span>
-        </div>
-        <p style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:14px">A fun blurred-photo quiz. Upload a dedicated image for the game — it stays blurred until they answer correctly.</p>
-
-        <!-- Dedicated image upload -->
-        <label>Game Image <span style="opacity:.5;font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">— the photo shown blurred</span></label>
-        <div class="guess-img-upload" id="guessImgUploadZone" onclick="guessImgInput.click()">
-          <div class="guess-img-preview" id="guessImgPreview">
-            <span id="guessImgPlaceholder">
-              <span style="font-size:24px;display:block;margin-bottom:6px">🖼️</span>
-              Click to upload the game image
-            </span>
-          </div>
-          <div class="guess-img-change" id="guessImgChange" style="display:none">
-            <span id="guessImgThumb"></span>
-            <button class="guess-change-btn" onclick="event.stopPropagation();clearGuessImg()">✕ Remove</button>
-          </div>
-        </div>
-        <input type="file" id="guessImgInput" accept="image/*" hidden>
-
-        <label style="margin-top:18px">Question</label>
-        <input id="guessQuestion" placeholder="e.g. Where was this photo taken?">
-
-        <label>Answer Options <span style="opacity:.5;font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">— click ✓ to mark the correct one</span></label>
-        <div class="guess-options-list" id="guessOptionsList">
-          <!-- built by JS -->
-        </div>
-        <button class="add-btn" style="margin-top:8px" onclick="addGuessOption()">＋ Add Option</button>
-      </div>
-
-      <!-- FUN FACTS -->
-      <div class="panel">
-        <div class="panel-title">
-          <h3>🔢 Fun Facts</h3>
-          <span class="panel-badge">Fun Facts Section</span>
-        </div>
-        <p style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:4px">Emoji · Number/Value · Short label. Leave empty to use beautiful defaults.</p>
-        <div id="factsBuilder"></div>
-        <button class="add-btn" onclick="addFact()">＋ Add Fact</button>
-      </div>
-
-      <!-- FRIEND WISHES -->
-      <div class="panel">
-        <div class="panel-title">
-          <h3>💌 Friend Wishes</h3>
-          <span class="panel-badge">Wishes Section</span>
-        </div>
-        <div id="wishBuilder"></div>
-        <button class="add-btn" onclick="addWish()">＋ Add Wish</button>
-      </div>
-
-      <!-- GENERATE -->
-      <button class="generateBtn">
-        ✦ Generate Surprise Page
-      </button>
-
-    </div><!-- end left col -->
-
-
-    <!-- ════════════ RIGHT COLUMN: PREVIEW ════════════ -->
-    <div class="phone-wrap">
-      <div class="phone-label">Live Preview</div>
-      <div class="phone">
-        <div class="phone-island"><div class="phone-island-cam"></div></div>
-        <div class="phoneScreen" id="phoneScreen">
-
-          <!-- Topbar -->
-          <div class="p-topbar">
-            <div class="p-topbar-left"><div class="p-topbar-dot"></div><div class="p-logo">Wisherly</div></div>
-            <div class="p-date" id="p-date"></div>
-        </div>
-
-          <!-- Hero -->
-          <div class="p-hero">
-            <div class="p-occasion" id="pOccasion">Happy Birthday</div>
-            <div class="p-for">this is for</div>
-            <div class="p-name" id="pName">You ✦</div>
-            <p class="p-msg" id="pMsg">Every moment with you is a memory worth keeping forever.</p>
-          </div>
-
-          <!-- Photos -->
-          <div class="p-section" id="pPhotosSection" style="display:none">
-            <div class="p-section-label">📸 Photos</div>
-            <div class="p-photos" id="pPhotos"></div>
-          </div>
-
-          <!-- Timeline -->
-          <div class="p-section" id="pTimelineSection" style="display:none">
-            <div class="p-section-label">📅 Timeline</div>
-            <div id="pTimeline"></div>
-          </div>
-
-          <!-- Map -->
-          <div class="p-section" id="pMapSection" style="display:none">
-            <div class="p-section-label">🌍 Memory Map</div>
-            <div id="pMap"></div>
-          </div>
-
-          <!-- Video -->
-          <div class="p-section" id="pVideoSection" style="display:none">
-            <div class="p-section-label">🎬 Video</div>
-            <div id="pVideo"></div>
-          </div>
-
-          <!-- Guess Game -->
-          <div class="p-section" id="pGuessSection" style="display:none">
-            <div class="p-section-label">🎯 Guess the Memory</div>
-            <div id="pGuessImg" style="margin-bottom:8px"></div>
-            <div class="p-guess" id="pGuess">Set a question and options to preview the game</div>
-          </div>
-
-          <!-- Fun Facts -->
-          <div class="p-section" id="pFactsSection" style="display:none">
-            <div class="p-section-label">🔢 Fun Facts</div>
-            <div class="p-facts" id="pFacts"></div>
-          </div>
-
-          <!-- Wishes -->
-          <div class="p-section" id="pWishesSection" style="display:none">
-            <div class="p-section-label">💌 Wishes</div>
-            <div id="pWishes"></div>
-          </div>
-
-          <!-- Final Quote -->
-          <div class="p-section" id="pFinalSection" style="display:none">
-            <div class="p-section-label">✦ Final Surprise</div>
-            <div class="p-final"><div class="p-final-quote" id="pFinalQuote"></div></div>
-          </div>
-
-        </div><!-- phoneScreen -->
-        <div class="phone-home-bar"></div>
-      </div><!-- phone -->
-    </div><!-- phone-wrap -->
-
-  </div><!-- builder -->
-
-</div><!-- container -->
-
-<!-- FOOTER -->
-<footer id="wly-footer">
-  <div class="wly-fi">
-    <div class="wly-fbrand">
-      <span class="wly-flogo">Wisherly</span>
-      <p>Create beautiful digital surprise pages with photos, music, memories and heartfelt messages.</p>
-      <div class="wly-fsoc-row">
-        <a class="wly-fsoc" href="#" title="Instagram">📸</a>
-        <a class="wly-fsoc" href="#" title="Twitter">🐦</a>
-        <a class="wly-fsoc" href="#" title="WhatsApp">💬</a>
+      <div id="captionInputs" class="caption-inputs" style="display:none;">
+        <label style="margin-top:16px;">Photo Captions</label>
       </div>
     </div>
-    <div class="wly-fcol">
-      <div class="wly-fct">Product</div>
-      <ul>
-        <li><a href="create.html">Create a Page</a></li>
-        <li><a href="demo.html">See a Demo</a></li>
-        <li><a href="index.html#features">Features</a></li>
-        <li><a href="index.html#pricing">Pricing</a></li>
-      </ul>
-    </div>
-    <div class="wly-fcol">
-      <div class="wly-fct">Occasions</div>
-      <ul>
-        <li><a href="#">Birthday Surprises</a></li>
-        <li><a href="#">Anniversary Pages</a></li>
-        <li><a href="#">Friendship Pages</a></li>
-        <li><a href="#">Farewell Pages</a></li>
-      </ul>
-    </div>
-    <div class="wly-fcol">
-      <div class="wly-fct">Company</div>
-      <ul>
-        <li><a href="#">About Wisherly</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Service</a></li>
-        <li><a href="#">Contact Us</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="wly-fbot">
-    <span class="wly-fcopy">© 2026 Wisherly — Crafted with ❤️ to create unforgettable digital surprises</span>
-    <span class="wly-fbadge"><span class="wly-bdot"></span>All systems operational</span>
-    <div class="wly-fleg"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
-  </div>
-</footer>
 
+    <!-- 4. MUSIC -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">🎵</span>
+        <h3>Background Music</h3>
+        <span class="panel-badge">auto-plays on open</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px;">Upload an MP3 and it'll play softly in the background when they open their page.</p>
+      <div class="audio-drop" id="audioDropZone"
+        ondragover="e=>e.preventDefault()"
+        ondrop="handleAudioDrop(event)">
+        <input type="file" id="audioInput" accept="audio/*" onchange="handleAudioFile(this)">
+        🎵 Drop an MP3 here or <span style="color:var(--cyan);cursor:pointer;" onclick="document.getElementById('audioInput').click()">click to upload</span>
+        <div style="font-size:11px;color:var(--muted2);margin-top:4px;">Max 10MB · MP3, AAC, OGG</div>
+      </div>
+      <div class="audio-preview" id="audioPreviewCard">
+        <audio id="audioPreviewEl" onended="resetAudioBtn()" ontimeupdate="updateAudioProgress()"></audio>
+        <button class="audio-play-btn" id="audioPlayBtn" onclick="toggleAudioPreview()">▶</button>
+        <div class="audio-info">
+          <div class="audio-name" id="audioFileName">—</div>
+          <div class="audio-size" id="audioFileSize">—</div>
+          <div class="audio-bar-wrap"><div class="audio-bar-fill" id="audioProgress"></div></div>
+        </div>
+        <button class="audio-clear" onclick="clearAudio()">✕</button>
+      </div>
+    </div>
+
+    <!-- 5. VIDEO -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">🎥</span>
+        <h3>Birthday Video (Optional)</h3>
+        <span class="panel-badge">youtube embed</span>
+      </div>
+      <label>YouTube Video Link</label>
+      <input id="videoUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." oninput="updatePreview()">
+      <p style="font-size:12px;color:var(--muted2);margin-top:6px;">Paste a YouTube link and it'll be embedded beautifully on the page.</p>
+    </div>
+
+    <!-- 6. WHY THEY'RE SPECIAL -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">🌟</span>
+        <h3>Why They're Special</h3>
+        <span class="panel-badge">hover cards</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px;">Add reasons why this person is incredible. Leave empty to use our beautiful defaults.</p>
+      <div id="lovesBuilder"></div>
+      <button class="add-btn" onclick="addLove()">+ Add a reason</button>
+    </div>
+
+    <!-- 7. INSIDE JOKES -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">😂</span>
+        <h3>Inside Jokes / "Remember When"</h3>
+        <span class="panel-badge">optional</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px;">Add funny shared memories. These appear as fun cards on the page.</p>
+      <div id="jokesBuilder"></div>
+      <button class="add-btn" onclick="addJoke()">+ Add a memory / joke</button>
+    </div>
+
+    <!-- 8. TAP GIFTS -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">🎮</span>
+        <h3>Interactive Tap Gifts</h3>
+        <span class="panel-badge">tap to reveal</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px;">Small emoji buttons they can tap to reveal hidden messages. Leave empty to use defaults.</p>
+      <div id="tapGiftsBuilder"></div>
+      <button class="add-btn" onclick="addTapGift()">+ Add a tap gift</button>
+    </div>
+
+    <!-- 9. SCRATCH CARD -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">🎯</span>
+        <h3>Scratch Card Message</h3>
+        <span class="panel-badge">interactive</span>
+      </div>
+      <label>Hidden Scratch Message</label>
+      <input id="scratchMessage" type="text" placeholder="You're my favourite person in the world! 🌍" oninput="updatePreview()">
+      <p style="font-size:12px;color:var(--muted2);margin-top:6px;">They'll scratch a card to reveal this message. Leave blank to skip.</p>
+    </div>
+
+    <!-- 10. GIFT REVEAL -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">🎁</span>
+        <h3>Gift Reveal (Optional)</h3>
+        <span class="panel-badge">big moment</span>
+      </div>
+      <label>Gift Code / Voucher</label>
+      <input id="giftCode" type="text" placeholder="e.g. BDAY2026 or Amazon ₹500">
+      <label>Gift Message</label>
+      <textarea id="giftMessage2" rows="2" placeholder="A little something from the heart 💛"></textarea>
+      <p style="font-size:12px;color:var(--muted2);margin-top:6px;">They tap a gift box emoji to reveal this. Leave blank to hide section.</p>
+    </div>
+
+    <!-- 11. WISHES -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-icon">💌</span>
+        <h3>Pre-add Wishes</h3>
+        <span class="panel-badge">+ friends can add via link</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px;">Add wishes from friends & family. You can also share a contributor link after creating the page.</p>
+      <div id="wishBuilder"></div>
+      <button class="add-btn" onclick="addWish()">+ Add a wish</button>
+    </div>
+
+  </div><!-- end left col -->
+
+  <!-- ═══ RIGHT: PREVIEW ═══ -->
+  <div class="preview-sticky">
+    <div class="preview-panel">
+      <div class="preview-head">
+        <span>Live Preview</span>
+        <div class="preview-live-dot"></div>
+      </div>
+
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="pv-hero">
+            <div class="pv-badge" id="pv-badge">It's Your Day 🎂</div>
+            <div class="pv-name" id="pv-name">Their Name</div>
+            <div class="pv-title" id="pv-title">Happy Birthday! 🎂</div>
+            <div class="pv-emojis">🎂 ✨ 🎊 💫 🎈</div>
+          </div>
+          <div class="pv-divider"></div>
+          <div class="pv-message-box">
+            <div class="pv-from" id="pv-from">A message from you</div>
+            <div class="pv-msg" id="pv-msg">Your heartfelt message will appear here as a beautiful typewriter animation...</div>
+          </div>
+          <div class="pv-divider"></div>
+          <div class="pv-section-label">📸 MEMORIES</div>
+          <div class="pv-photo-strip" id="pv-photos">
+            <div></div><div></div><div></div>
+          </div>
+          <div class="pv-divider"></div>
+          <div class="pv-section-label">🌟 WHY YOU'RE SPECIAL</div>
+          <div class="pv-special-grid" id="pv-special">
+            <div class="pv-scard"><div class="pv-scard-num">01.</div><div class="pv-scard-title">Your reasons will show here</div></div>
+            <div class="pv-scard"><div class="pv-scard-num">02.</div><div class="pv-scard-title">Beautiful cards</div></div>
+          </div>
+          <div class="pv-divider"></div>
+          <div class="pv-section-label">💌 BIRTHDAY WISHES</div>
+          <div class="pv-wishes" id="pv-wishes">
+            <div class="pv-wish"><div class="pv-wish-av">?</div><div class="pv-wish-text">Wishes from friends will appear here…</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GENERATE -->
+    <div class="panel gen-wrap" style="margin-top:16px;">
+      <button id="generateBtn" onclick="generatePage()">🎂 Create Birthday Surprise Page</button>
+      <p class="gen-note">Your page saves to the cloud and gets a shareable link instantly ✨</p>
+      <div id="gen-error"></div>
+    </div>
+
+    <!-- SHARE PANEL -->
+    <div class="share-panel" id="sharePanel">
+      <div class="share-title">🎉 Your page is live!</div>
+      <div class="share-link-box" id="shareLinkBox"></div>
+      <button class="share-btn" onclick="copyLink()">📋 Copy Link</button>
+      <button class="share-btn outline" onclick="openPage()">▶ Open Page</button>
+      <div style="margin-top:14px;font-size:12px;color:var(--muted2);">Share the wish link with friends so they can add their own messages:</div>
+      <div class="share-link-box" id="wishLinkBox" style="margin-top:8px;"></div>
+      <button class="share-btn outline" onclick="copyWishLink()">💌 Copy Wish Link</button>
+    </div>
+
+  </div><!-- end right col -->
+
+</div><!-- end builder -->
 
 <script>
-
-/* ════════════════════════════════
-   LIVE DATE IN PREVIEW
-════════════════════════════════ */
-document.getElementById('p-date').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
-
-/* ════════════════════════════════
-   BASIC INFO — live preview
-════════════════════════════════ */
-document.getElementById('title').addEventListener('input', updateHero);
-document.getElementById('recipientName').addEventListener('input', updateHero);
-document.getElementById('message').addEventListener('input', updateHero);
-document.getElementById('finalMessage').addEventListener('input', updateFinalPreview);
-
-function updateHero(){
-  document.getElementById('pOccasion').textContent = document.getElementById('title').value || 'Happy Birthday';
-  document.getElementById('pName').textContent = document.getElementById('recipientName').value || 'You ✦';
-  document.getElementById('pMsg').textContent = document.getElementById('message').value || 'Every moment with you is a memory worth keeping forever.';
-}
-
-function updateFinalPreview(){
-  const val = document.getElementById('finalMessage').value.trim();
-  const sec = document.getElementById('pFinalSection');
-  const q   = document.getElementById('pFinalQuote');
-  if(val){ sec.style.display='block'; q.textContent = '"'+val+'"'; }
-  else { sec.style.display='none'; }
-}
-
-/* ════════════════════════════════
-   TEMPLATE SELECTOR
-════════════════════════════════ */
-document.querySelectorAll('.templateCard').forEach(card=>{
-  card.onclick=()=>{
-    document.querySelectorAll('.templateCard').forEach(c=>c.classList.remove('active'));
-    card.classList.add('active');
-    document.getElementById('title').value = card.dataset.title;
-    updateHero();
-  };
-});
-
-/* ════════════════════════════════
-   PHOTOS
-════════════════════════════════ */
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
 let photos=[];
+let photoCaptions=[];
+let _audioFile=null;
+let generatedPageId=null;
 
-// Compress image to max 800px wide, quality 0.7 — keeps Firestore under 1MB limit
-function compressImage(file, maxW=800, quality=0.72){
-  return new Promise(resolve=>{
-    const reader = new FileReader();
-    reader.onload = ev=>{
-      const img = new Image();
-      img.onload = ()=>{
-        const scale = Math.min(1, maxW / img.width);
-        const canvas = document.createElement('canvas');
-        canvas.width  = Math.round(img.width  * scale);
-        canvas.height = Math.round(img.height * scale);
-        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.src = ev.target.result;
+/* ══════════════════════════════════
+   LIVE PREVIEW
+══════════════════════════════════ */
+function updatePreview(){
+  const name=document.getElementById('recipientName').value||'Their Name';
+  const title=document.getElementById('heroTitle').value||'Happy Birthday! 🎂';
+  const badge=document.getElementById('badgeText').value||"It's Your Day 🎂";
+  const msg=document.getElementById('message').value||'Your heartfelt message will appear here as a beautiful typewriter animation...';
+  const sender=document.getElementById('senderName').value||'you';
+
+  document.getElementById('pv-name').textContent=name;
+  document.getElementById('pv-title').textContent=title;
+  document.getElementById('pv-badge').textContent=badge;
+  document.getElementById('pv-from').textContent=`A message from ${sender}`;
+  document.getElementById('pv-msg').textContent=msg.slice(0,100)+(msg.length>100?'…':'');
+
+  // Photos preview
+  const strip=document.getElementById('pv-photos');
+  strip.innerHTML='';
+  const show=photos.slice(0,3);
+  if(show.length){
+    show.forEach(src=>{
+      const d=document.createElement('div');
+      const img=document.createElement('img');img.src=src;
+      d.appendChild(img);strip.appendChild(d);
+    });
+  } else {
+    for(let i=0;i<3;i++){const d=document.createElement('div');strip.appendChild(d);}
+  }
+
+  // Special preview
+  const loves=getLoves();
+  const sg=document.getElementById('pv-special');
+  sg.innerHTML='';
+  const show2=loves.length?loves.slice(0,4):defaultPreviewLoves;
+  show2.forEach((l,i)=>{
+    const d=document.createElement('div');d.className='pv-scard';
+    d.innerHTML=`<div class="pv-scard-num">${String(i+1).padStart(2,'0')}.</div><div class="pv-scard-title">${(l.title||'').slice(0,28)}</div>`;
+    sg.appendChild(d);
+  });
+
+  // Wishes preview
+  const wishes=getWishes();
+  const wg=document.getElementById('pv-wishes');
+  wg.innerHTML='';
+  if(wishes.length){
+    wishes.slice(0,2).forEach(w=>{
+      const name2=w.sender||'A friend';
+      const d=document.createElement('div');d.className='pv-wish';
+      d.innerHTML=`<div class="pv-wish-av">${name2.charAt(0).toUpperCase()}</div><div class="pv-wish-text">${(w.message||'').slice(0,50)}…</div>`;
+      wg.appendChild(d);
+    });
+  } else {
+    wg.innerHTML='<div class="pv-wish"><div class="pv-wish-av">?</div><div class="pv-wish-text">Wishes from friends will appear here…</div></div>';
+  }
+}
+const defaultPreviewLoves=[
+  {title:'You light up every room'},{title:'Your laugh is contagious'},{title:"You're my safe place"},{title:'Your kindness is rare'},
+];
+
+/* ══════════════════════════════════
+   PHOTOS
+══════════════════════════════════ */
+function handlePhotos(input){
+  const files=Array.from(input.files).slice(0,8-photos.length);
+  files.forEach(file=>{
+    if(photos.length>=8)return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      photos.push(e.target.result);
+      photoCaptions.push('');
+      renderPhotoGrid();
+      updatePreview();
     };
     reader.readAsDataURL(file);
   });
+  input.value='';
 }
-
-document.getElementById('photoUpload').onchange = async e=>{
-  for(let file of e.target.files){
-    const compressed = await compressImage(file);
-    photos.push(compressed);
-    renderPhotos();
-  }
-};
-
-function renderPhotos(){
-  const grid = document.getElementById('photoGrid');
-  const pPhotos = document.getElementById('pPhotos');
-  const pSec = document.getElementById('pPhotosSection');
-  grid.innerHTML = '';
-  pPhotos.innerHTML = '';
-  photos.forEach((p,i)=>{
-    grid.innerHTML += `<div class="photoItem"><img src="${p}"><button class="remove" onclick="removePhoto(${i})">×</button></div>`;
-    pPhotos.innerHTML += `<img src="${p}" alt="">`;
+function renderPhotoGrid(){
+  const grid=document.getElementById('photoGrid');
+  grid.innerHTML='';
+  photos.forEach((src,i)=>{
+    const wrap=document.createElement('div');wrap.className='photo-thumb';
+    wrap.innerHTML=`<img src="${src}" alt=""><button class="photo-remove" onclick="removePhoto(${i})">✕</button>`;
+    grid.appendChild(wrap);
   });
-  pSec.style.display = photos.length ? 'block' : 'none';
-}
 
-function removePhoto(i){ photos.splice(i,1); renderPhotos(); }
-
-/* ════════════════════════════════
-   VIDEO
-════════════════════════════════ */
-document.getElementById('videoURL').addEventListener('input', ()=>{
-  const url = document.getElementById('videoURL').value.trim();
-  let id='';
-  if(url.includes('youtu.be/')) id=url.split('youtu.be/')[1];
-  else if(url.includes('watch?v=')) id=url.split('watch?v=')[1];
-  if(id) id=id.split(/[?&]/)[0];
-  const thumb = document.getElementById('videoPreviewThumb');
-  const pVid  = document.getElementById('pVideo');
-  const pVSec = document.getElementById('pVideoSection');
-  if(id){
-    const img = `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" style="width:100%;border-radius:10px;display:block">`;
-    thumb.innerHTML = img;
-    pVid.innerHTML = `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" style="width:100%;border-radius:8px;display:block">`;
-    pVSec.style.display = 'block';
+  // Captions
+  const captionWrap=document.getElementById('captionInputs');
+  if(photos.length){
+    captionWrap.style.display='block';
+    captionWrap.innerHTML='<label style="margin-top:0">Photo Captions (optional)</label>';
+    photos.forEach((_,i)=>{
+      const row=document.createElement('div');row.className='cap-row';
+      row.innerHTML=`<span>📸 ${i+1}</span><input type="text" placeholder="Add a caption…" value="${photoCaptions[i]||''}" oninput="photoCaptions[${i}]=this.value">`;
+      captionWrap.appendChild(row);
+    });
   } else {
-    thumb.innerHTML=''; pVid.innerHTML=''; pVSec.style.display='none';
+    captionWrap.style.display='none';
   }
-});
+}
+function removePhoto(i){photos.splice(i,1);photoCaptions.splice(i,1);renderPhotoGrid();updatePreview();}
 
-/* ════════════════════════════════
-   TIMELINE MEMORIES
-════════════════════════════════ */
-let memCount=0;
-
-function addMemory(){
-  memCount++;
-  const block=document.createElement('div');
-  block.className='memoryCard';
-  block.innerHTML=`
-    <div class="memoryHeader" onclick="toggleSection(this)">
-      <div><strong>Memory ${memCount}</strong><small>Click to edit</small></div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <span style="opacity:.4;font-size:12px">▼</span>
-        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
-      </div>
-    </div>
-    <div class="hiddenForm">
-      <label>Year / Date</label>
-      <input placeholder="e.g. 2021">
-      <label>Title</label>
-      <input placeholder="e.g. Our First Trip to Goa">
-      <label>Story</label>
-      <textarea rows="2" placeholder="A short memory description…"></textarea>
-    </div>`;
-  document.getElementById('timelineBuilder').appendChild(block);
-  block.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input', updateTimelinePreview));
+/* ══════════════════════════════════
+   AUDIO
+══════════════════════════════════ */
+function handleAudioDrop(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)loadAudioFile(f);}
+function handleAudioFile(e){const f=e.target.files[0];if(f)loadAudioFile(f);e.target.value='';}
+function loadAudioFile(file){
+  if(file.size>10*1024*1024){alert('Please choose a file under 10 MB.');return;}
+  _audioFile=file;
+  const url=URL.createObjectURL(file);
+  const audio=document.getElementById('audioPreviewEl');audio.src=url;
+  document.getElementById('audioFileName').textContent=file.name.replace(/\.[^.]+$/,'');
+  document.getElementById('audioFileSize').textContent=(file.size/1024/1024).toFixed(2)+' MB';
+  document.getElementById('audioPreviewCard').style.display='flex';
+  document.getElementById('audioDropZone').style.display='none';
+  document.getElementById('audioProgress').style.width='0%';
+  document.getElementById('audioPlayBtn').textContent='▶';
+}
+function toggleAudioPreview(){
+  const audio=document.getElementById('audioPreviewEl');
+  const btn=document.getElementById('audioPlayBtn');
+  if(audio.paused){audio.play();btn.textContent='⏸';}else{audio.pause();btn.textContent='▶';}
+}
+function updateAudioProgress(){
+  const audio=document.getElementById('audioPreviewEl');
+  if(!audio.duration)return;
+  document.getElementById('audioProgress').style.width=(audio.currentTime/audio.duration*100)+'%';
+}
+function resetAudioBtn(){document.getElementById('audioPlayBtn').textContent='▶';}
+function clearAudio(){
+  _audioFile=null;
+  const audio=document.getElementById('audioPreviewEl');audio.pause();audio.src='';
+  document.getElementById('audioPreviewCard').style.display='none';
+  document.getElementById('audioDropZone').style.display='flex';
 }
 
-function updateTimelinePreview(){
-  const tl = document.getElementById('pTimeline');
-  const sec = document.getElementById('pTimelineSection');
-  const cards = document.querySelectorAll('#timelineBuilder .memoryCard');
-  tl.innerHTML='';
-  let any=false;
-  cards.forEach(card=>{
-    const year  = card.querySelectorAll('input')[0]?.value;
-    const title = card.querySelectorAll('input')[1]?.value;
-    if(year||title){
-      any=true;
-      tl.innerHTML+=`<div class="p-tl-item"><div class="p-tl-dot"></div><div><div class="p-tl-year">${year||'—'}</div><div class="p-tl-title">${title||'Memory'}</div></div></div>`;
+/* ══════════════════════════════════
+   DYNAMIC CARD HELPERS
+══════════════════════════════════ */
+function makeDCard(containerId,fields,label){
+  const wrap=document.getElementById(containerId);
+  const card=document.createElement('div');card.className='dcard';
+  const head=document.createElement('div');head.className='dcard-head';
+  head.innerHTML=`<div><strong>${label}</strong><br><small>Click to edit</small></div><button class="dcard-del" onclick="this.closest('.dcard').remove();updatePreview();">Remove</button>`;
+  head.querySelector('div').onclick=function(){
+    const body=card.querySelector('.dcard-body');
+    body.style.display=body.style.display==='block'?'none':'block';
+  };
+  const body=document.createElement('div');body.className='dcard-body';
+  fields.forEach(f=>{
+    const lbl=document.createElement('label');lbl.textContent=f.label;
+    body.appendChild(lbl);
+    if(f.type==='textarea'){
+      const ta=document.createElement('textarea');ta.rows=3;ta.placeholder=f.placeholder||'';ta.className=f.cls||'';ta.oninput=()=>updatePreview();
+      body.appendChild(ta);
+    } else {
+      const inp=document.createElement('input');inp.type=f.type||'text';inp.placeholder=f.placeholder||'';inp.className=f.cls||'';inp.oninput=()=>updatePreview();
+      if(f.value)inp.value=f.value;
+      body.appendChild(inp);
     }
   });
-  sec.style.display = any ? 'block' : 'none';
-  updateMapPreview();
+  body.style.display='block';
+  card.appendChild(head);card.appendChild(body);
+  wrap.appendChild(card);
+  return card;
 }
 
-/* ════════════════════════════════
-   MEMORY MAP PINS
-════════════════════════════════ */
-let pinCount=0;
-const PIN_EMOJIS=['☕','🌊','🌙','🏔️','🎭','🌿','🏖️','🎪','🌅','🎡'];
+function addLove(){makeDCard('lovesBuilder',[{label:'Title',placeholder:'e.g. You light up every room'},{label:'Description',type:'textarea',placeholder:'Expand on why this is special about them…'}],'Reason');}
+function addJoke(){makeDCard('jokesBuilder',[{label:'Emoji',placeholder:'😂',value:'😂'},{label:'Title / Moment',placeholder:"Remember when…"},{label:'Story',type:'textarea',placeholder:'Tell the story…'}],'Memory / Joke');}
+function addTapGift(){makeDCard('tapGiftsBuilder',[{label:'Emoji',placeholder:'🎈',value:'🎈'},{label:'Hidden Message',placeholder:'e.g. Keep floating high! ✨'}],'Tap Gift');}
+function addWish(){makeDCard('wishBuilder',[{label:'Friend\'s Name',placeholder:'e.g. Priya'},{label:'Their Message',type:'textarea',placeholder:'Write their wish…'}],'Wish');}
 
-function addMapPin(){
-  pinCount++;
-  const idx=pinCount-1;
-  const block=document.createElement('div');
-  block.className='memoryCard';
-  block.innerHTML=`
-    <div class="memoryHeader" onclick="toggleSection(this)">
-      <div><strong>Place ${pinCount}</strong><small>Click to edit</small></div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <span style="opacity:.4;font-size:12px">▼</span>
-        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
-      </div>
-    </div>
-    <div class="hiddenForm">
-      <div class="pin-row">
-        <div>
-          <label>Icon</label>
-          <input placeholder="☕" style="text-align:center;font-size:18px" maxlength="4" value="${PIN_EMOJIS[idx%PIN_EMOJIS.length]}">
-        </div>
-        <div>
-          <label>Place Name</label>
-          <input placeholder="e.g. Goa, Mumbai…">
-        </div>
-      </div>
-      <label>Memory</label>
-      <input placeholder="e.g. That crazy trip we still talk about">
-    </div>`;
-  document.getElementById('mapBuilder').appendChild(block);
-  block.querySelectorAll('input').forEach(el=>el.addEventListener('input', updateMapPreview));
+function getLoves(){
+  const loves=[];
+  document.querySelectorAll('#lovesBuilder .dcard').forEach(card=>{
+    const inputs=card.querySelectorAll('input,textarea');
+    const title=inputs[0]?.value||'';const body=inputs[1]?.value||'';
+    if(title)loves.push({title,body});
+  });
+  return loves;
 }
-
-function updateMapPreview(){
-  const mapEl = document.getElementById('pMap');
-  const sec   = document.getElementById('pMapSection');
-  const pinCards = document.querySelectorAll('#mapBuilder .memoryCard');
-  mapEl.innerHTML='';
-  let any=false;
-
-  if(pinCards.length>0){
-    pinCards.forEach(card=>{
-      const inputs = card.querySelectorAll('input');
-      const icon  = inputs[0]?.value||'📍';
-      const place = inputs[1]?.value;
-      const mem   = inputs[2]?.value;
-      if(place){
-        any=true;
-        mapEl.innerHTML+=`<div class="p-pin"><div class="p-pin-icon">${icon}</div><div><div class="p-pin-place">${place}</div><div class="p-pin-mem">${mem||''}</div></div></div>`;
-      }
-    });
-  } else {
-    // Fall back to timeline data
-    const tlCards = document.querySelectorAll('#timelineBuilder .memoryCard');
-    tlCards.forEach(card=>{
-      const title = card.querySelectorAll('input')[1]?.value;
-      const text  = card.querySelector('textarea')?.value;
-      if(title){
-        any=true;
-        mapEl.innerHTML+=`<div class="p-pin"><div class="p-pin-icon">📍</div><div><div class="p-pin-place">${title}</div><div class="p-pin-mem">${text||''}</div></div></div>`;
-      }
-    });
-  }
-  sec.style.display = any ? 'block' : 'none';
+function getJokes(){
+  const jokes=[];
+  document.querySelectorAll('#jokesBuilder .dcard').forEach(card=>{
+    const inputs=card.querySelectorAll('input,textarea');
+    const icon=inputs[0]?.value||'😂';const title=inputs[1]?.value||'';const body=inputs[2]?.value||'';
+    if(title)jokes.push({icon,title,body});
+  });
+  return jokes;
 }
-
-/* ════════════════════════════════
-   GUESS GAME — image + options
-════════════════════════════════ */
-let guessOptCount=0;
-let guessImageData = null; // base64 of dedicated game image
-
-// ── Image upload ──
-document.getElementById('guessImgInput').addEventListener('change', async e => {
-  const file = e.target.files[0];
-  if(!file) return;
-  guessImageData = await compressImage(file, 800, 0.72);
-  renderGuessImageUI();
-  updateGuessPreview();
-});
-
-function renderGuessImageUI(){
-  const preview  = document.getElementById('guessImgPreview');
-  const change   = document.getElementById('guessImgChange');
-  const thumbEl  = document.getElementById('guessImgThumb');
-
-  if(guessImageData){
-    // Show blurred image inside the zone
-    preview.innerHTML = `
-      <div class="guess-img-blurred-wrap">
-        <img src="${guessImageData}" alt="">
-        <div class="blur-badge">🔍 Blurred for recipient</div>
-      </div>`;
-    // Show bottom strip with thumbnail + remove
-    const img = document.createElement('img');
-    img.src = guessImageData;
-    thumbEl.innerHTML = '';
-    thumbEl.appendChild(img);
-    change.style.display = 'flex';
-    document.getElementById('guessImgPlaceholder') && (document.getElementById('guessImgPlaceholder').style.display='none');
-  } else {
-    preview.innerHTML = `<span id="guessImgPlaceholder"><span style="font-size:24px;display:block;margin-bottom:6px">🖼️</span>Click to upload the game image</span>`;
-    change.style.display = 'none';
-  }
-}
-
-function clearGuessImg(){
-  guessImageData = null;
-  document.getElementById('guessImgInput').value = '';
-  renderGuessImageUI();
-  updateGuessPreview();
-}
-
-// Seed 3 default options
-(function(){
-  addGuessOption('Goa');
-  addGuessOption('Coorg');
-  addGuessOption('Ooty');
-  // mark first as correct
-  document.querySelector('.correct-radio').checked=true;
-  updateGuessPreview();
-})();
-
-document.getElementById('guessQuestion').addEventListener('input', updateGuessPreview);
-
-function addGuessOption(defaultVal=''){
-  guessOptCount++;
-  const row=document.createElement('div');
-  row.className='guess-option-row';
-  row.innerHTML=`
-    <input type="radio" name="correctGuess" class="correct-radio" title="Mark as correct answer" value="${guessOptCount-1}">
-    <span class="radio-label">✓</span>
-    <input type="text" placeholder="Option ${guessOptCount}" value="${defaultVal}" style="margin-top:0">
-    <button class="deleteBtn" onclick="this.closest('.guess-option-row').remove();updateGuessPreview()" style="flex-shrink:0">✕</button>`;
-  document.getElementById('guessOptionsList').appendChild(row);
-  row.querySelector('input[type=text]').addEventListener('input', updateGuessPreview);
-  row.querySelector('.correct-radio').addEventListener('change', updateGuessPreview);
-}
-
-function updateGuessPreview(){
-  const q = document.getElementById('guessQuestion').value || 'Where was this photo taken?';
-  const rows = document.querySelectorAll('#guessOptionsList .guess-option-row');
-  const opts = [];
-  rows.forEach(r=>{ const t=r.querySelector('input[type=text]').value; if(t) opts.push(t); });
-  const pGuess = document.getElementById('pGuess');
-  const pSec   = document.getElementById('pGuessSection');
-  const pImg   = document.getElementById('pGuessImg');
-
-  // Show blurred image in preview phone
-  if(guessImageData){
-    pImg.innerHTML = `<div style="position:relative;border-radius:8px;overflow:hidden;line-height:0;margin-bottom:6px"><img src="${guessImageData}" style="width:100%;height:70px;object-fit:cover;filter:blur(7px) brightness(1.05);transform:scale(1.04);display:block"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.12em;color:rgba(255,255,255,.8);text-transform:uppercase;background:rgba(0,0,0,.15)">🤔 Guess!</div></div>`;
-  } else {
-    pImg.innerHTML = '';
-  }
-
-  if(opts.length || guessImageData){
-    pGuess.innerHTML = `<div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:6px;font-style:normal">${q}</div>`
-      + opts.map(o=>`<div style="display:inline-block;margin:3px;padding:4px 10px;background:rgba(124,58,237,.1);border-radius:999px;border:1px solid rgba(124,58,237,.25);font-size:10px;color:rgba(255,255,255,.55)">${o}</div>`).join('');
-    pSec.style.display = 'block';
-  } else {
-    pGuess.textContent = 'Set a question and options to preview the game';
-    pSec.style.display = 'none';
-  }
-}
-
-/* ════════════════════════════════
-   FUN FACTS
-════════════════════════════════ */
-let factCount=0;
-
-function addFact(){
-  factCount++;
-  const block=document.createElement('div');
-  block.className='memoryCard';
-  block.innerHTML=`
-    <div class="memoryHeader" onclick="toggleSection(this)">
-      <div><strong>Fact ${factCount}</strong><small>Click to edit</small></div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <span style="opacity:.4;font-size:12px">▼</span>
-        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
-      </div>
-    </div>
-    <div class="hiddenForm">
-      <div class="fact-row">
-        <div>
-          <label>Icon</label>
-          <input placeholder="📅" style="text-align:center;font-size:18px" maxlength="4">
-        </div>
-        <div>
-          <label>Value</label>
-          <input placeholder="365">
-        </div>
-        <div>
-          <label>Label</label>
-          <input placeholder="Days since we met">
-        </div>
-      </div>
-    </div>`;
-  document.getElementById('factsBuilder').appendChild(block);
-  block.querySelectorAll('input').forEach(el=>el.addEventListener('input', updateFactsPreview));
-}
-
-function updateFactsPreview(){
-  const factsEl = document.getElementById('pFacts');
-  const sec     = document.getElementById('pFactsSection');
-  const cards   = document.querySelectorAll('#factsBuilder .memoryCard');
-  factsEl.innerHTML='';
-  let any=false;
-  cards.forEach(card=>{
+function getTapGifts(){
+  const gifts=[];
+  document.querySelectorAll('#tapGiftsBuilder .dcard').forEach(card=>{
     const inputs=card.querySelectorAll('input');
-    const emoji=inputs[0]?.value||'✨';
-    const val  =inputs[1]?.value;
-    const lbl  =inputs[2]?.value;
-    if(val||lbl){
-      any=true;
-      factsEl.innerHTML+=`<div class="p-fact"><span class="p-fact-emoji">${emoji}</span><span class="p-fact-val">${val||'—'}</span><span class="p-fact-lbl">${lbl||''}</span></div>`;
-    }
+    const emoji=inputs[0]?.value||'🎈';const msg=inputs[1]?.value||'';
+    if(msg)gifts.push({emoji,msg});
   });
-  sec.style.display = any ? 'block' : 'none';
+  return gifts;
 }
-
-/* ════════════════════════════════
-   FRIEND WISHES
-════════════════════════════════ */
-let wishCount=0;
-
-function addWish(){
-  wishCount++;
-  const block=document.createElement('div');
-  block.className='memoryCard';
-  block.innerHTML=`
-    <div class="memoryHeader" onclick="toggleSection(this)">
-      <div><strong>Wish ${wishCount}</strong><small>Click to edit</small></div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <span style="opacity:.4;font-size:12px">▼</span>
-        <button class="deleteBtn" onclick="deleteBlock(this)">✕</button>
-      </div>
-    </div>
-    <div class="hiddenForm">
-      <label>Friend's Name</label>
-      <input placeholder="e.g. Priya">
-      <label>Message</label>
-      <textarea rows="2" placeholder="Their heartfelt wish…"></textarea>
-    </div>`;
-  document.getElementById('wishBuilder').appendChild(block);
-  block.querySelectorAll('input,textarea').forEach(el=>el.addEventListener('input', updateWishPreview));
-}
-
-function updateWishPreview(){
-  const wishEl=document.getElementById('pWishes');
-  const sec   =document.getElementById('pWishesSection');
-  const cards =document.querySelectorAll('#wishBuilder .memoryCard');
-  wishEl.innerHTML='';
-  let any=false;
-  cards.forEach(card=>{
-    const name=card.querySelector('input')?.value;
-    const msg =card.querySelector('textarea')?.value;
-    if(name||msg){
-      any=true;
-      wishEl.innerHTML+=`<div class="p-wish"><div class="p-wish-name">${name||'Anonymous'}</div><div class="p-wish-msg">${msg||''}</div></div>`;
-    }
+function getWishes(){
+  const wishes=[];
+  document.querySelectorAll('#wishBuilder .dcard').forEach(card=>{
+    const inputs=card.querySelectorAll('input,textarea');
+    const sender=inputs[0]?.value||'';const message=inputs[1]?.value||'';
+    if(sender||message)wishes.push({sender,message});
   });
-  sec.style.display = any ? 'block' : 'none';
+  return wishes;
 }
 
-/* ════════════════════════════════
-   HELPERS
-════════════════════════════════ */
-function toggleSection(header){
-  const form=header.parentElement.querySelector('.hiddenForm');
-  const arrow=header.querySelector('span');
-  const open=form.style.display==='block';
-  form.style.display=open?'none':'block';
-  if(arrow) arrow.textContent=open?'▼':'▲';
-}
-
-function deleteBlock(el){
-  el.closest('.memoryCard').remove();
-  updateTimelinePreview();
-  updateMapPreview();
-  updateFactsPreview();
-  updateWishPreview();
-}
-
-/* ════════════════════════════════
-   GENERATE — wired directly here, no module needed at page load
-════════════════════════════════ */
-
-function showErr(btn, msg){
-  btn.classList.remove('loading');
-  btn.textContent = '✦ Generate Surprise Page';
-  // Show error visibly on the page instead of silent fail
-  let errBox = document.getElementById('gen-error');
-  if(!errBox){
-    errBox = document.createElement('div');
-    errBox.id = 'gen-error';
-    errBox.style.cssText = 'margin-top:14px;padding:14px 18px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:10px;color:#fca5a5;font-size:13px;line-height:1.6;';
-    btn.parentNode.insertBefore(errBox, btn.nextSibling);
-  }
-  errBox.innerHTML = msg;
-}
+/* ══════════════════════════════════
+   GENERATE PAGE
+══════════════════════════════════ */
+function setProgress(p){document.getElementById('progressBar').style.width=p+'%';}
 
 async function generatePage(){
-  const btn = document.querySelector('.generateBtn');
-  const errBox = document.getElementById('gen-error');
-  if(errBox) errBox.remove();
+  const btn=document.getElementById('generateBtn');
+  const errBox=document.getElementById('gen-error');
+  errBox.style.display='none';
 
-  btn.classList.add('loading');
-  btn.textContent = '✦ Connecting…';
+  const name=document.getElementById('recipientName').value.trim();
+  if(!name){errBox.style.display='block';errBox.textContent='Please enter the birthday person\'s name ✨';return;}
 
-  try {
+  btn.classList.add('loading');btn.textContent='🎉 Building your surprise…';
+  setProgress(10);
 
-    // Firebase already initialized in <head> via compat SDK
-    btn.textContent = '✦ Connecting…';
-    const db = window._db;
-    const setDocFn = async (ref, data) => ref.set(data);
-    const docFn    = (db, col, id) => db.collection(col).doc(id);
+  try{
+    const pageId=crypto.randomUUID?crypto.randomUUID().slice(0,8):Math.random().toString(36).slice(2,10);
 
-    // ── Step 2: generate page ID ──
-    const pageId = crypto.randomUUID
-      ? crypto.randomUUID().slice(0,8)
-      : Math.random().toString(36).slice(2,10);
-
-    // ── Step 3: collect all text data ──
-    const data = {
-      createdAt:    Date.now(),
-      title:        document.getElementById('title').value,
-      name:         document.getElementById('recipientName').value,
-      message:      document.getElementById('message').value,
-      video:        document.getElementById('videoURL').value,
-      finalMessage: document.getElementById('finalMessage').value,
+    const data={
+      createdAt:Date.now(),
+      pageType:'birthday',
+      name,
+      senderName:document.getElementById('senderName').value.trim(),
+      heroTitle:document.getElementById('heroTitle').value.trim(),
+      badgeText:document.getElementById('badgeText').value.trim(),
+      message:document.getElementById('message').value.trim(),
+      openingQuote:document.getElementById('openingQuote').value.trim(),
+      closingNote:document.getElementById('closingNote').value.trim(),
+      birthdayDate:document.getElementById('birthdayDate').value,
+      videoUrl:document.getElementById('videoUrl').value.trim(),
+      scratchMessage:document.getElementById('scratchMessage').value.trim(),
+      giftCode:document.getElementById('giftCode').value.trim(),
+      giftMessage2:document.getElementById('giftMessage2').value.trim(),
+      loves:getLoves(),
+      jokes:getJokes(),
+      tapGifts:getTapGifts(),
+      wishes:getWishes(),
+      photoCaptions,
     };
 
-    // Timeline
-    data.timeline = [];
-    document.querySelectorAll('#timelineBuilder .memoryCard').forEach(card=>{
-      const year  = card.querySelectorAll('input')[0]?.value;
-      const title = card.querySelectorAll('input')[1]?.value;
-      const text  = card.querySelector('textarea')?.value;
-      if(year||title||text) data.timeline.push({year,title,text});
-    });
+    setProgress(25);
 
-    // Memory map pins
-    data.mapPins = [];
-    document.querySelectorAll('#mapBuilder .memoryCard').forEach(card=>{
-      const inputs = card.querySelectorAll('input');
-      const emoji  = inputs[0]?.value;
-      const place  = inputs[1]?.value;
-      const memory = inputs[2]?.value;
-      if(place) data.mapPins.push({emoji,place,memory});
-    });
-
-    // Guess game
-    const guessRows = document.querySelectorAll('#guessOptionsList .guess-option-row');
-    const guessOpts = [];
-    let guessCorrect = '';
-    guessRows.forEach(row=>{
-      const txt = row.querySelector('input[type=text]').value.trim();
-      const isCorrect = row.querySelector('.correct-radio').checked;
-      if(txt){ guessOpts.push(txt); if(isCorrect) guessCorrect = txt; }
-    });
-    data.guessGame = {
-      question: document.getElementById('guessQuestion').value || 'Where was this photo taken?',
-      options:  guessOpts,
-      correct:  guessCorrect || guessOpts[0] || '',
-      image:    guessImageData || null  // stored as base64 directly
-    };
-
-    // Fun facts
-    data.funFacts = [];
-    document.querySelectorAll('#factsBuilder .memoryCard').forEach(card=>{
-      const inputs = card.querySelectorAll('input');
-      const emoji  = inputs[0]?.value || '✨';
-      const value  = inputs[1]?.value;
-      const label  = inputs[2]?.value;
-      if(value||label) data.funFacts.push({emoji,value,label});
-    });
-
-    // Wishes
-    data.wishes = [];
-    document.querySelectorAll('#wishBuilder .memoryCard').forEach(card=>{
-      const name = card.querySelector('input')?.value;
-      const msg  = card.querySelector('textarea')?.value;
-      if(name||msg) data.wishes.push({sender:name, message:msg});
-    });
-
-    // ── Step 4: save photos as separate Firestore documents (bypasses 1MB limit) ──
-    btn.textContent = '✦ Saving photos…';
-    const photoURLs = [];
-    for(let i = 0; i < photos.length; i++){
-      btn.textContent = `✦ Saving photo ${i+1} of ${photos.length}…`;
-      await setDocFn(docFn(db, 'photos', `${pageId}_${i}`), {
-        pageId,
-        index: i,
-        data: photos[i]   // compressed base64
-      });
-      photoURLs.push(`__photo__${pageId}_${i}`);  // placeholder reference
+    // Save photos
+    btn.textContent='🌸 Saving photos…';
+    const photoRefs=[];
+    for(let i=0;i<photos.length;i++){
+      btn.textContent=`🌸 Saving photo ${i+1} of ${photos.length}…`;
+      setProgress(25+i*(30/photos.length));
+      if(photos[i].length>750000){console.warn(`Photo ${i+1} too large, skipping.`);continue;}
+      await window._db.collection('photos').doc(`${pageId}_${i}`).set({pageId,index:i,data:photos[i]});
+      photoRefs.push(`__photo__${pageId}_${i}`);
     }
-    data.photos = photoURLs;  // store refs, not the actual base64 in main doc
+    data.photos=photoRefs;
+    setProgress(55);
 
-    // ── Step 5: save everything to Firestore ──
-    btn.textContent = '✦ Saving page…';
-    await setDocFn(docFn(db, 'pages', pageId), data);
-
-    // ── Done ──
-    if(window.location.protocol==='file:'){
-      const p=new URLSearchParams({name:data.name||'',title:data.title||'',message:data.message||'',unlock:'name'});
-      window.location.href='view.html?'+p.toString();
-    } else {
-      window.location.href='view.html?id='+pageId;
+    // Save audio
+    if(_audioFile){
+      btn.textContent='🎵 Reading music…';
+      const arrayBuf=await _audioFile.arrayBuffer();
+      const bytes=new Uint8Array(arrayBuf);
+      const SLICE=3*1024;let fullB64='';
+      for(let i=0;i<bytes.length;i+=SLICE){
+        const end=Math.min(i+SLICE,bytes.length);let bin='';
+        for(let j=i;j<end;j++)bin+=String.fromCharCode(bytes[j]);
+        fullB64+=btoa(bin);
+        if((i/SLICE)%512===0)await new Promise(r=>setTimeout(r,0));
+      }
+      const FS_CHUNK=700000;const chunks=[];
+      for(let i=0;i<fullB64.length;i+=FS_CHUNK)chunks.push(fullB64.slice(i,i+FS_CHUNK));
+      for(let i=0;i<chunks.length;i++){
+        btn.textContent=`🎵 Saving music… ${i+1} / ${chunks.length}`;
+        setProgress(55+i*(20/chunks.length));
+        await window._db.collection('audio').doc(`${pageId}_${i}`).set({pageId,index:i,total:chunks.length,mimeType:_audioFile.type||'audio/mpeg',data:chunks[i]});
+      }
+      data.audioChunks=chunks.length;
+      data.audioMime=_audioFile.type||'audio/mpeg';
     }
+    setProgress(80);
 
-  } catch(err){
-    console.error('Upload failed:', err);
-    showErr(btn, `❌ <strong>Upload failed.</strong><br>${err.message}<br><br><small>Open browser DevTools (F12) → Console for details.</small>`);
+    // Save page doc
+    btn.textContent='💕 Saving page…';
+    await window._db.collection('birthdayPages').doc(pageId).set(data);
+    setProgress(100);
+
+    generatedPageId=pageId;
+
+    const base=window.location.origin+window.location.pathname.replace('birthday-create.html','');
+    const viewLink=`${base}birthday-view.html?id=${pageId}`;
+    const wishLink=`${base}wish.html?id=${pageId}&col=birthdayPages&name=${encodeURIComponent(name)}`;
+
+    document.getElementById('shareLinkBox').textContent=viewLink;
+    document.getElementById('wishLinkBox').textContent=wishLink;
+    document.getElementById('sharePanel').classList.add('show');
+
+    btn.textContent='✅ Page Created!';
+    btn.style.background='linear-gradient(135deg,#00E5A0,#00D2FF)';
+
+  }catch(err){
+    console.error(err);
+    btn.classList.remove('loading');
+    btn.textContent='🎂 Create Birthday Surprise Page';
+    setProgress(0);
+    const errBox=document.getElementById('gen-error');
+    errBox.style.display='block';
+    errBox.textContent=`❌ Something went wrong: ${err.message}`;
   }
 }
 
-document.querySelector('.generateBtn').addEventListener('click', generatePage);
-</script>
+function copyLink(){
+  const link=document.getElementById('shareLinkBox').textContent;
+  navigator.clipboard.writeText(link).then(()=>{
+    const btn=event.target;btn.textContent='✅ Copied!';setTimeout(()=>btn.textContent='📋 Copy Link',2000);
+  }).catch(()=>alert('Copy this link: '+link));
+}
+function copyWishLink(){
+  const link=document.getElementById('wishLinkBox').textContent;
+  navigator.clipboard.writeText(link).then(()=>{
+    const btn=event.target;btn.textContent='✅ Copied!';setTimeout(()=>btn.textContent='💌 Copy Wish Link',2000);
+  }).catch(()=>alert('Copy this link: '+link));
+}
+function openPage(){
+  if(generatedPageId){
+    const base=window.location.origin+window.location.pathname.replace('birthday-create.html','');
+    window.open(`${base}birthday-view.html?id=${generatedPageId}`,'_blank');
+  }
+}
 
+/* Init */
+updatePreview();
+</script>
 </body>
 </html>
