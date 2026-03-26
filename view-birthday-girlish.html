@@ -741,12 +741,10 @@ const demo = {
   theme: 'girlish'
 };
 
-const d = Object.keys(D).length ? D : demo;
 
 /* ══════════════════════════════════════
    UNLOCK
 ══════════════════════════════════════ */
-document.getElementById('unlockBtn').textContent = d.unlockLabel || demo.unlockLabel;
 
 function tryUnlock() {
   const val = document.getElementById('nameInput').value.trim();
@@ -774,7 +772,8 @@ document.getElementById('nameInput').addEventListener('keydown', e => {
 function launchSurprise(enteredName) {
   const page = document.getElementById('surprise-page');
   page.style.display = 'block';
-  requestAnimationFrame(() => {
+  // Double rAF: ensures display:block is painted before opacity transition starts
+  requestAnimationFrame(() => requestAnimationFrame(() => {
     page.classList.add('visible');
     populatePage(enteredName);
     initPetals();
@@ -784,13 +783,14 @@ function launchSurprise(enteredName) {
       const pageId = urlParams.get('id');
       if(pageId) setupMusicPlayer(pageId, D.audioChunks, D.audioMime);
     }
-  });
+  }));
 }
 
 /* ══════════════════════════════════════
    POPULATE
 ══════════════════════════════════════ */
 function populatePage(enteredName) {
+  const d = Object.keys(D).length ? D : demo;
   const name = d.name || enteredName;
 
   /* Entry */
