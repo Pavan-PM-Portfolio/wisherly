@@ -946,7 +946,6 @@ const demo = {
   unlockLabel:'OPEN YOUR SURPRISE',
   photoCaption:'Our chronicles',photos:[],msgStyle:'typed',theme:'anime'
 };
-const d = Object.keys(D).length ? D : demo;
 
 /* ══════════════════════════════════════
    UNLOCK
@@ -993,7 +992,8 @@ document.getElementById('nameInput').addEventListener('keydown', e => { if(e.key
 function launchSurprise(entered) {
   const pg = document.getElementById('surprise-page');
   pg.style.display = 'block';
-  requestAnimationFrame(() => {
+  // Double rAF: ensures display:block is painted before opacity transition starts
+  requestAnimationFrame(() => requestAnimationFrame(() => {
     pg.classList.add('visible');
     populatePage(entered);
     setupRevealObserver();
@@ -1003,13 +1003,14 @@ function launchSurprise(entered) {
       const pageId = urlParams.get('id');
       if(pageId) setupMusicPlayer(pageId, D.audioChunks, D.audioMime);
     }
-  });
+  }));
 }
 
 /* ══════════════════════════════════════
    POPULATE
 ══════════════════════════════════════ */
 function populatePage(entered) {
+  const d = Object.keys(D).length ? D : demo;
   const name = (d.name || entered).toUpperCase();
   document.getElementById('name-in-entry').textContent = name;
   document.getElementById('name-reveal').textContent = name;
