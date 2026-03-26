@@ -20,6 +20,7 @@
   window._db=firebase.firestore();
 })();
 </script>
+<!-- WISHERLY-GIRLISH-v5 -->
 <title>Wisherly — Happy Birthday 🎂</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nunito:wght@300;400;500;600;700;800&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
@@ -507,7 +508,16 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fs);-webkit-font
     <input type="text" class="unlock-input" id="nameInput" placeholder="Your name…" autocomplete="off">
     <div class="unlock-hint" id="unlock-hint-text">✨ Your surprise is waiting</div>
   </div>
-  <button class="unlock-btn" id="unlockBtn" onclick="tryUnlock()">Open your surprise 🎉</button>
+  <button class="unlock-btn" id="unlockBtn" onclick="(function(){
+  var v=document.getElementById('nameInput').value.trim();
+  if(!v){document.getElementById('nameInput').style.borderColor='var(--hot)';return;}
+  document.getElementById('unlock-screen').style.cssText='display:none!important;';
+  var p=document.getElementById('surprise-page');
+  p.style.cssText='display:block!important;opacity:1!important;';
+  if(typeof populatePage==='function')try{populatePage(v);}catch(e){console.error(e);}
+  if(typeof initPetals==='function')try{initPetals();}catch(e){}
+  if(typeof setupRevealObserver==='function')try{setupRevealObserver();}catch(e){}
+})()">Open your surprise 🎉</button>
 </div>
 
 <!-- ══════════════════════════════
@@ -761,8 +771,8 @@ function tryUnlock() {
   launchSurprise(val);
 }
 
-document.getElementById('nameInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') tryUnlock();
+document.getElementById('nameInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('unlockBtn').click();
 });
 
 /* ══════════════════════════════════════
