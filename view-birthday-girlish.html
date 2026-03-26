@@ -754,12 +754,11 @@ function tryUnlock() {
     document.getElementById('nameInput').focus();
     return;
   }
+  // Hide unlock screen immediately
   const screen = document.getElementById('unlock-screen');
-  screen.classList.add('hiding');
-  setTimeout(() => {
-    screen.style.display = 'none';
-    launchSurprise(val);
-  }, 800);
+  screen.style.display = 'none';
+  // Show surprise page immediately
+  launchSurprise(val);
 }
 
 document.getElementById('nameInput').addEventListener('keydown', e => {
@@ -770,18 +769,32 @@ document.getElementById('nameInput').addEventListener('keydown', e => {
    LAUNCH
 ══════════════════════════════════════ */
 function launchSurprise(enteredName) {
+  // Step 1: Hide unlock screen completely
+  const screen = document.getElementById('unlock-screen');
+  if(screen) { screen.style.cssText = 'display:none!important'; }
+
+  // Step 2: Show surprise page
   const page = document.getElementById('surprise-page');
-  page.style.display = 'block';
-  // Force layout reflow so browser registers display:block before opacity transition
-  void page.offsetHeight;
-  page.classList.add('visible');
-  populatePage(enteredName);
-  initPetals();
-  setupRevealObserver();
+  if(!page) { console.error('surprise-page not found'); return; }
+  page.style.cssText = 'display:block!important;opacity:1!important;';
+
+  // Step 3: Populate content
+  try {
+    populatePage(enteredName);
+  } catch(err) {
+    console.error('populatePage error:', err.message, err.stack);
+  }
+
+  // Step 4: Extras
+  try { initPetals(); } catch(e) { console.warn('initPetals:', e.message); }
+  try { setupRevealObserver(); } catch(e) { console.warn('setupRevealObserver:', e.message); }
+
   if(D.audioChunks) {
     const urlParams = new URLSearchParams(location.search);
     const pageId = urlParams.get('id');
-    if(pageId) setupMusicPlayer(pageId, D.audioChunks, D.audioMime);
+    if(pageId) {
+      try { setupMusicPlayer(pageId, D.audioChunks, D.audioMime); } catch(e) { console.warn('music:', e.message); }
+    }
   }
 }
 
