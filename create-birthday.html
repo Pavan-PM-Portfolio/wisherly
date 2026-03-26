@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wisherly — Create Birthday Surprise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const _cfg={
+    apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",
+    authDomain:"wisherly-d07d7.firebaseapp.com",
+    projectId:"wisherly-d07d7",
+    storageBucket:"wisherly-d07d7.firebasestorage.app",
+    messagingSenderId:"919116839261",
+    appId:"1:919116839261:web:147d6b5924f3cbe35050b4"
+  };
+  if(!firebase.apps.length){firebase.initializeApp(_cfg);}
+  window._db=firebase.firestore();
+})();
+</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --white:#FFFFFF;--snow:#F7F9FF;--frost:#EFF3FF;--mist:#E0E9FF;--pale:#C7D9FF;
+  --navy:#07122A;--cobalt:#0D2260;--royal:#1A3FA6;--blue:#2563EB;--bright:#3B82F6;--sky:#60A5FA;
+  --ink:#0A1628;--muted:#4A6FA5;--muted2:#7A9CC8;
+  --border:rgba(37,99,235,.1);--border2:rgba(37,99,235,.06);
+  --fd:'Cormorant Garamond',serif;--fs:'Outfit',sans-serif;--fb:'Lora',serif;
+  --r-sm:12px;--r-md:20px;--r-lg:28px;
+}
+body{background:var(--white);color:var(--ink);font-family:var(--fs);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 50% at 15% 10%,rgba(37,99,235,.04),transparent 60%),
+             radial-gradient(ellipse 60% 40% at 88% 80%,rgba(59,130,246,.04),transparent 60%);}
+#orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;animation:orb-wander var(--od,30s) ease-in-out infinite alternate;}
+.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(37,99,235,.03),transparent 65%);top:-200px;right:-150px;--od:38s;}
+.o2{width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,.025),transparent 65%);bottom:-100px;left:-100px;--od:45s;}
+@keyframes orb-wander{0%{transform:translate(0,0);}100%{transform:translate(20px,15px);}}
+
+/* NAV */
+#nav{position:sticky;top:0;z-index:900;height:68px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.88);backdrop-filter:blur(28px);border-bottom:1px solid var(--border2);}
+.nav-brand{font-family:var(--fd);font-size:24px;font-weight:500;color:var(--cobalt);text-decoration:none;display:flex;align-items:center;gap:10px;}
+.nav-brand-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--royal),var(--bright));display:flex;align-items:center;justify-content:center;font-size:13px;color:white;box-shadow:0 4px 14px rgba(37,99,235,.28);}
+.nav-brand-name{background:linear-gradient(135deg,var(--cobalt),var(--royal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.btn-ghost-nav{padding:8px 20px;border-radius:10px;border:1px solid rgba(37,99,235,.15);background:transparent;color:var(--muted);font-family:var(--fs);font-size:12px;cursor:pointer;transition:all .25s;text-decoration:none;}
+.btn-ghost-nav:hover{background:var(--frost);color:var(--cobalt);}
+
+/* LAYOUT */
+.wrap{max-width:860px;margin:0 auto;padding:0 40px;position:relative;z-index:2;}
+
+/* PROGRESS */
+.progress-track{display:flex;align-items:center;justify-content:center;padding:48px 0 0;margin-bottom:16px;}
+.prog-step{display:flex;align-items:center;gap:8px;}
+.prog-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;}
+.prog-dot.done{background:var(--frost);color:var(--blue);border:1.5px solid var(--border);}
+.prog-dot.active{background:linear-gradient(135deg,var(--royal),var(--blue));color:white;box-shadow:0 4px 16px rgba(37,99,235,.32);}
+.prog-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;}
+.prog-label.done{color:var(--blue);}
+.prog-label.active{color:var(--cobalt);}
+.prog-label.idle{color:var(--muted2);}
+.prog-dot.idle{background:var(--snow);color:var(--muted2);border:1.5px solid rgba(37,99,235,.08);}
+.prog-line{width:52px;height:1px;margin:0 12px;}
+.prog-line.done{background:linear-gradient(90deg,var(--blue),var(--pale));}
+.prog-line.idle{background:linear-gradient(90deg,var(--pale),transparent);}
+
+/* PAGE HEADER */
+.page-header{text-align:center;padding:44px 0 52px;}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:24px;}
+.eyebrow-line{width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--pale));}
+.eyebrow-line.r{background:linear-gradient(90deg,var(--pale),transparent);}
+.eyebrow-text{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);}
+.page-h1{font-family:var(--fd);font-size:clamp(40px,5.5vw,68px);font-weight:300;line-height:1;letter-spacing:-.02em;color:var(--navy);margin-bottom:.3em;}
+.page-h1 em{font-style:italic;background:linear-gradient(135deg,#be185d,var(--royal),var(--sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:gradshift 6s ease-in-out infinite alternate;}
+@keyframes gradshift{0%{background-position:0%;}100%{background-position:100%;}}
+.page-sub{font-family:var(--fb);font-size:16px;font-style:italic;color:var(--muted);max-width:420px;margin:0 auto;line-height:1.75;}
+
+/* THEME BADGE */
+.theme-badge-bar{display:flex;justify-content:center;margin-bottom:52px;}
+.theme-badge{display:inline-flex;align-items:center;gap:10px;padding:10px 24px;border-radius:999px;border:1.5px solid rgba(37,99,235,.15);background:var(--frost);font-size:13px;font-weight:500;color:var(--royal);}
+.theme-dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#f472b6,var(--blue));}
+#theme-name-display{font-weight:600;}
+
+/* SECTIONS */
+.form-sections{display:flex;flex-direction:column;gap:32px;padding-bottom:120px;}
+
+.form-section{
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  transition:border-color .3s,box-shadow .3s;
+}
+.form-section:focus-within{border-color:rgba(37,99,235,.25);box-shadow:0 8px 32px rgba(37,99,235,.06);}
+
+.sec-header{
+  display:flex;align-items:center;gap:16px;
+  padding:24px 32px;
+  border-bottom:1px solid var(--border2);
+  background:var(--snow);
+}
+.sec-num{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--royal),var(--blue));
+  color:white;font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.sec-title{font-family:var(--fd);font-size:22px;font-weight:400;color:var(--cobalt);}
+.sec-title em{font-style:italic;}
+.sec-sub{font-size:12px;color:var(--muted2);margin-top:2px;}
+.sec-body{padding:32px;}
+
+/* FORM ELEMENTS */
+label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+input[type=text],input[type=url],textarea{
+  width:100%;padding:14px 18px;
+  border:1.5px solid rgba(37,99,235,.12);
+  border-radius:var(--r-sm);
+  background:var(--snow);
+  font-family:var(--fs);font-size:14px;color:var(--ink);
+  transition:border-color .25s,background .25s,box-shadow .25s;
+  outline:none;resize:vertical;
+}
+input[type=text]:focus,input[type=url]:focus,textarea:focus{
+  border-color:rgba(37,99,235,.35);
+  background:var(--white);
+  box-shadow:0 0 0 4px rgba(37,99,235,.06);
+}
+input::placeholder,textarea::placeholder{color:var(--muted2);}
+.field{margin-bottom:24px;}
+.field:last-child{margin-bottom:0;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+
+/* PHOTO UPLOAD */
+.photo-upload-zone{
+  border:2px dashed rgba(37,99,235,.18);border-radius:var(--r-md);
+  background:var(--snow);padding:40px 24px;text-align:center;cursor:pointer;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.photo-upload-zone:hover{border-color:rgba(37,99,235,.35);background:var(--frost);}
+.photo-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-icon{font-size:36px;margin-bottom:12px;}
+.upload-title{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--cobalt);margin-bottom:6px;}
+.upload-hint{font-size:12px;color:var(--muted2);}
+.photo-previews{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+.photo-thumb{
+  width:80px;height:80px;border-radius:10px;object-fit:cover;
+  border:2px solid var(--white);box-shadow:0 4px 12px rgba(13,34,96,.1);
+  position:relative;
+}
+.thumb-wrap{position:relative;width:80px;height:80px;}
+.thumb-wrap img{width:100%;height:100%;border-radius:10px;object-fit:cover;}
+.thumb-remove{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#ef4444;color:white;font-size:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;}
+
+/* DYNAMIC LIST */
+.dynamic-list{display:flex;flex-direction:column;gap:10px;}
+.list-item{display:flex;gap:10px;align-items:center;}
+.list-item input{flex:1;}
+.list-item-num{
+  width:28px;height:28px;border-radius:50%;background:var(--frost);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--blue);font-weight:600;flex-shrink:0;
+}
+.btn-add-item{
+  display:inline-flex;align-items:center;gap:8px;margin-top:12px;
+  padding:9px 18px;border-radius:10px;border:1.5px dashed rgba(37,99,235,.2);
+  background:transparent;color:var(--blue);font-family:var(--fs);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .25s;
+}
+.btn-add-item:hover{background:var(--frost);border-color:rgba(37,99,235,.35);}
+.btn-remove{background:none;border:none;cursor:pointer;color:var(--muted2);font-size:16px;padding:4px;transition:color .2s;}
+.btn-remove:hover{color:#ef4444;}
+
+/* CHAR COUNT */
+.char-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.char-count{font-size:11px;color:var(--muted2);}
+
+/* AUDIO UPLOAD */
+.audio-drop-zone{
+  border:2px dashed rgba(37,99,235,.18);border-radius:var(--r-md);
+  background:var(--snow);padding:32px 24px;text-align:center;cursor:pointer;
+  transition:all .3s;
+}
+.audio-drop-zone:hover{border-color:rgba(37,99,235,.35);background:var(--frost);}
+.audio-preview-card{
+  display:none;margin-top:14px;padding:14px 18px;
+  border-radius:var(--r-sm);
+  background:linear-gradient(135deg,rgba(37,99,235,.04),rgba(59,130,246,.04));
+  border:1px solid var(--border);
+  align-items:center;gap:14px;
+}
+.audio-play-btn{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--royal),var(--blue));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;border:none;color:white;
+  box-shadow:0 4px 14px rgba(37,99,235,.3);
+}
+.audio-meta{flex:1;min-width:0;}
+.audio-filename{font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.audio-filesize{font-size:11px;color:var(--muted2);margin-top:2px;}
+.audio-progress-track{margin-top:8px;height:3px;background:rgba(37,99,235,.1);border-radius:2px;overflow:hidden;}
+.audio-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--royal),var(--blue));border-radius:2px;transition:width .1s linear;}
+.audio-clear-btn{background:none;border:none;color:var(--muted2);font-size:18px;cursor:pointer;padding:4px;line-height:1;}
+.audio-hint{display:none;margin-top:10px;font-size:12px;color:var(--blue);}
+/* SAVE OVERLAY */
+.save-overlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(7,18,42,.88);backdrop-filter:blur(14px);
+  flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  color:white;font-family:var(--fs);text-align:center;padding:40px;
+}
+.save-overlay.active{display:flex;}
+.save-spinner{width:48px;height:48px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--bright);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.save-status{font-size:15px;font-weight:500;color:white;max-width:320px;line-height:1.5;}
+.save-sub{font-size:12px;color:rgba(255,255,255,.5);}
+.gen-error-box{display:none;margin-top:14px;padding:14px 18px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:12px;color:#ef4444;font-size:13px;line-height:1.6;}
+
+/* TOGGLE */
+.toggle-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+.toggle-opt{
+  padding:9px 20px;border-radius:999px;border:1.5px solid rgba(37,99,235,.14);
+  background:var(--snow);font-size:13px;font-weight:500;color:var(--muted);
+  cursor:pointer;transition:all .25s;user-select:none;
+}
+.toggle-opt.selected{background:linear-gradient(135deg,var(--royal),var(--blue));color:white;border-color:transparent;box-shadow:0 4px 14px rgba(37,99,235,.28);}
+
+/* STICKY FOOTER CTA */
+.sticky-cta{
+  position:fixed;bottom:0;left:0;right:0;z-index:800;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(24px);
+  border-top:1px solid var(--border2);
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:20px;
+}
+.sticky-cta-left{font-size:13px;color:var(--muted);}
+.sticky-cta-left strong{color:var(--cobalt);}
+.btn-create{
+  padding:16px 44px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,var(--royal),var(--blue));
+  color:white;font-family:var(--fs);font-size:15px;font-weight:600;
+  letter-spacing:.02em;cursor:pointer;
+  box-shadow:0 8px 32px rgba(37,99,235,.3);
+  transition:all .35s cubic-bezier(.16,1,.3,1);
+  display:flex;align-items:center;gap:10px;
+}
+.btn-create:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(37,99,235,.38);}
+.btn-create:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* VALIDATION */
+.required-star{color:#ef4444;margin-left:3px;}
+.field-error{font-size:12px;color:#ef4444;margin-top:6px;display:none;}
+.field.error input,.field.error textarea{border-color:#ef4444;}
+.field.error .field-error{display:block;}
+
+/* COMPLETION STEPS */
+.steps-done{display:flex;gap:8px;flex-wrap:wrap;}
+.step-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:500;}
+.step-pill.done{background:rgba(16,185,129,.1);color:#065f46;border:1px solid rgba(16,185,129,.2);}
+.step-pill.pending{background:var(--snow);color:var(--muted2);border:1px solid var(--border2);}
+
+/* ANIMATIONS */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+.rv.vi{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.07s;}.d2{transition-delay:.14s;}.d3{transition-delay:.21s;}
+.d4{transition-delay:.28s;}.d5{transition-delay:.35s;}.d6{transition-delay:.42s;}
+.d7{transition-delay:.49s;}.d8{transition-delay:.56s;}
+
+@media(max-width:700px){
+  .wrap{padding:0 20px;}
+  #nav{padding:0 20px;}
+  .field-row{grid-template-columns:1fr;}
+  .sec-body{padding:20px;}
+  .sec-header{padding:18px 20px;}
+  .sticky-cta{padding:12px 20px;}
+  .btn-create{padding:14px 28px;font-size:14px;}
+  .sticky-cta-left{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div id="orbs"><div class="orb o1"></div><div class="orb o2"></div></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-brand-mark">✦</div>
+    <span class="nav-brand-name">Wisherly</span>
+  </a>
+  <a href="theme.html?occasion=birthday" class="btn-ghost-nav">← Change Theme</a>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <!-- PROGRESS -->
+  <div class="progress-track rv vi">
+    <div class="prog-step">
+      <div class="prog-dot done">✓</div>
+      <span class="prog-label done">Occasion</span>
+    </div>
+    <div class="prog-line done"></div>
+    <div class="prog-step">
+      <div class="prog-dot done">✓</div>
+      <span class="prog-label done">Theme</span>
+    </div>
+    <div class="prog-line done"></div>
+    <div class="prog-step">
+      <div class="prog-dot active">3</div>
+      <span class="prog-label active">Create</span>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="page-header rv vi d1">
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <div class="eyebrow-dot"></div>
+      <span class="eyebrow-text">Step 3 of 3 — Birthday Surprise</span>
+      <div class="eyebrow-dot"></div>
+      <div class="eyebrow-line r"></div>
+    </div>
+    <h1 class="page-h1">Make it <em>unforgettable</em></h1>
+    <p class="page-sub">Fill in what you know, skip what you don't. Every detail makes it more magical.</p>
+  </div>
+
+  <!-- THEME BADGE -->
+  <div class="theme-badge-bar rv vi d2">
+    <div class="theme-badge">
+      <div class="theme-dot"></div>
+      🎂 Birthday · Theme: <span id="theme-name-display">Girlish</span>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-sections" id="formSections">
+
+    <!-- 1. RECIPIENT -->
+    <div class="form-section rv vi d2">
+      <div class="sec-header">
+        <div class="sec-num">1</div>
+        <div>
+          <div class="sec-title">Who's the <em>birthday star?</em></div>
+          <div class="sec-sub">Their name will appear on the unlock screen and throughout the page</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="field-row">
+          <div class="field" id="field-name">
+            <label>Their name <span class="required-star">*</span></label>
+            <input type="text" id="recipientName" placeholder="e.g. Priya, Rohan, Amma…" maxlength="40">
+            <div class="field-error">Please enter their name</div>
+          </div>
+          <div class="field">
+            <label>Your name (from)</label>
+            <input type="text" id="senderName" placeholder="e.g. Your secret admirer 😄">
+          </div>
+        </div>
+        <div class="field">
+          <label>Their age <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional — shown on the page)</span></label>
+          <input type="text" id="recipientAge" placeholder="e.g. 25, Twenty-five, ∞…" maxlength="20">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. PHOTOS -->
+    <div class="form-section rv vi d3">
+      <div class="sec-header">
+        <div class="sec-num">2</div>
+        <div>
+          <div class="sec-title"><em>Photos</em> & memories</div>
+          <div class="sec-sub">Up to 12 photos — they become a beautiful slideshow on the surprise page</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="photo-upload-zone" id="uploadZone">
+          <input type="file" id="photoInput" accept="image/*" multiple>
+          <div class="upload-icon">🖼️</div>
+          <div class="upload-title">Drop photos here</div>
+          <div class="upload-hint">or click to browse · JPG, PNG, WEBP · up to 12 photos</div>
+        </div>
+        <div class="photo-previews" id="photoPreviews"></div>
+        <div style="margin-top:16px;">
+          <label>Photo caption / slideshow title <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+          <input type="text" id="photoCaption" placeholder="e.g. Us through the years 📸" maxlength="80">
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. MUSIC -->
+    <div class="form-section rv vi d3">
+      <div class="sec-header">
+        <div class="sec-num">3</div>
+        <div>
+          <div class="sec-title">Background <em>music</em></div>
+          <div class="sec-sub">Upload an MP3 — it autoplays softly when they open the page</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="field">
+          <div class="audio-drop-zone" id="audioDropZone"
+               onclick="document.getElementById('audioInput').click()"
+               ondragover="event.preventDefault();this.style.borderColor='rgba(37,99,235,.4)'"
+               ondragleave="this.style.borderColor=''"
+               ondrop="handleAudioDrop(event)">
+            <div style="font-size:32px;margin-bottom:10px;">🎵</div>
+            <div style="font-family:var(--fd);font-size:18px;color:var(--cobalt);margin-bottom:4px;">Drop your song here</div>
+            <div style="font-size:12px;color:var(--muted2);">or click to browse · MP3, M4A, WAV, OGG · max 10 MB</div>
+          </div>
+          <input type="file" id="audioInput" accept="audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/*" hidden onchange="handleAudioFile(event)">
+          <div class="audio-preview-card" id="audioPreviewCard" style="display:none;flex-direction:row;">
+            <button class="audio-play-btn" id="audioPlayBtn" onclick="toggleAudioPreview()">▶</button>
+            <div class="audio-meta">
+              <div class="audio-filename" id="audioFileName"></div>
+              <div class="audio-filesize" id="audioFileSize"></div>
+              <div class="audio-progress-track"><div class="audio-progress-fill" id="audioProgress"></div></div>
+            </div>
+            <button class="audio-clear-btn" onclick="clearAudio()" title="Remove">✕</button>
+          </div>
+          <audio id="audioPreviewEl" style="display:none;" ontimeupdate="updateAudioProgress()" onended="resetAudioBtn()"></audio>
+          <div class="audio-hint" id="audioHint">✓ Song ready — will autoplay when they open the page.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. PERSONAL MESSAGE -->
+    <div class="form-section rv vi d4">
+      <div class="sec-header">
+        <div class="sec-num">4</div>
+        <div>
+          <div class="sec-title">Your <em>personal message</em></div>
+          <div class="sec-sub">This is the heart of the page — write from the soul</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="field" id="field-message">
+          <div class="char-row">
+            <label>Message <span class="required-star">*</span></label>
+            <span class="char-count" id="msgCount">0 / 800</span>
+          </div>
+          <textarea id="personalMessage" rows="6" maxlength="800" placeholder="Write your heart out… Tell them what they mean to you, your favourite memory together, what you wish for them."></textarea>
+          <div class="field-error">Please write a message</div>
+        </div>
+        <div class="field">
+          <label>Message display style</label>
+          <div class="toggle-group" id="msgStyle">
+            <div class="toggle-opt selected" data-val="typed">✍️ Typing animation</div>
+            <div class="toggle-opt" data-val="reveal">✨ Fade reveal</div>
+            <div class="toggle-opt" data-val="scroll">📜 Scroll appear</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. WHY THEY'RE SPECIAL -->
+    <div class="form-section rv vi d4">
+      <div class="sec-header">
+        <div class="sec-num">5</div>
+        <div>
+          <div class="sec-title">Why they're <em>special</em></div>
+          <div class="sec-sub">These appear as tap-to-reveal cards — deeply personal, always tearful</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="dynamic-list" id="specialsList">
+          <div class="list-item"><div class="list-item-num">1</div><input type="text" placeholder="e.g. You light up every room you walk into" maxlength="100"><button class="btn-remove" onclick="removeItem(this)">×</button></div>
+          <div class="list-item"><div class="list-item-num">2</div><input type="text" placeholder="e.g. You always know exactly what to say" maxlength="100"><button class="btn-remove" onclick="removeItem(this)">×</button></div>
+          <div class="list-item"><div class="list-item-num">3</div><input type="text" placeholder="e.g. You're my safe place, always" maxlength="100"><button class="btn-remove" onclick="removeItem(this)">×</button></div>
+        </div>
+        <button class="btn-add-item" onclick="addItem('specialsList', 'e.g. You make everything better just by being you', 10)">+ Add another reason</button>
+      </div>
+    </div>
+
+    <!-- 6. FUN / INSIDE JOKES -->
+    <div class="form-section rv vi d5">
+      <div class="sec-header">
+        <div class="sec-num">6</div>
+        <div>
+          <div class="sec-title">Fun moments & <em>inside jokes</em></div>
+          <div class="sec-sub">"Remember when…" — the moments that make you both laugh</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="dynamic-list" id="jokesList">
+          <div class="list-item"><div class="list-item-num">1</div><input type="text" placeholder="e.g. Remember when you got us lost in Goa for 3 hours 😂" maxlength="140"><button class="btn-remove" onclick="removeItem(this)">×</button></div>
+          <div class="list-item"><div class="list-item-num">2</div><input type="text" placeholder="e.g. Your face when I surprised you with that cake 🎂" maxlength="140"><button class="btn-remove" onclick="removeItem(this)">×</button></div>
+        </div>
+        <button class="btn-add-item" onclick="addItem('jokesList', 'e.g. That time we stayed up all night talking…', 8)">+ Add a moment</button>
+      </div>
+    </div>
+
+    <!-- 7. BIRTHDAY WISHES -->
+    <div class="form-section rv vi d5">
+      <div class="sec-header">
+        <div class="sec-num">7</div>
+        <div>
+          <div class="sec-title">Birthday <em>wishes wall</em></div>
+          <div class="sec-sub">Add messages from friends & family — or just from you</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="dynamic-list" id="wishesList">
+          <div class="list-item" style="flex-direction:column;align-items:stretch;gap:8px;">
+            <div style="display:flex;gap:10px;align-items:center;">
+              <div class="list-item-num">1</div>
+              <input type="text" placeholder="Name (e.g. Rohan, Amma, Best Friend)" maxlength="40" style="flex:1;">
+              <button class="btn-remove" onclick="removeWish(this)">×</button>
+            </div>
+            <textarea rows="2" placeholder="Their wish or message…" maxlength="200" style="width:100%;margin-left:38px;width:calc(100% - 38px);"></textarea>
+          </div>
+        </div>
+        <button class="btn-add-item" onclick="addWish()">+ Add a wish from someone</button>
+      </div>
+    </div>
+
+    <!-- 8. INTERACTIVE SURPRISE -->
+    <div class="form-section rv vi d6">
+      <div class="sec-header">
+        <div class="sec-num">8</div>
+        <div>
+          <div class="sec-title">Tap-to-open <em>gift surprise</em> 🎁</div>
+          <div class="sec-sub">They tap a gift box and your message appears — a peak moment</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="field">
+          <label>Gift surprise message</label>
+          <textarea id="giftMessage" rows="3" maxlength="300" placeholder="e.g. I've booked us a trip to Coorg for your birthday weekend! Pack your bags 🌿 Or just: a big warm hug and all my love 🫂"></textarea>
+        </div>
+        <div class="field">
+          <label>Gift box emoji / label</label>
+          <input type="text" id="giftLabel" placeholder="e.g. Tap me 🎁 / Open your surprise 💝" maxlength="50" value="Tap to open your surprise 🎁">
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. CLOSING NOTE -->
+    <div class="form-section rv vi d7">
+      <div class="sec-header">
+        <div class="sec-num">9</div>
+        <div>
+          <div class="sec-title">Closing <em>gratitude note</em></div>
+          <div class="sec-sub">The soft emotional landing — what you want them to feel at the end</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="field">
+          <div class="char-row">
+            <label>Closing message</label>
+            <span class="char-count" id="closeCount">0 / 400</span>
+          </div>
+          <textarea id="closingNote" rows="4" maxlength="400" placeholder="e.g. I'm so grateful every single day that you exist. Not just today, but always. Thank you for being you. Happy birthday, love. 💖"></textarea>
+        </div>
+        <div class="field">
+          <label>Sign-off / signature</label>
+          <input type="text" id="signOff" placeholder="e.g. With all my love, forever yours, your person ❤️" maxlength="80">
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. UNLOCK SCREEN -->
+    <div class="form-section rv vi d8">
+      <div class="sec-header">
+        <div class="sec-num">10</div>
+        <div>
+          <div class="sec-title">Unlock screen <em>customisation</em></div>
+          <div class="sec-sub">The teaser screen — before they type their name and the magic begins</div>
+        </div>
+      </div>
+      <div class="sec-body">
+        <div class="field">
+          <label>Unlock screen teaser text</label>
+          <input type="text" id="teaserText" placeholder="e.g. Someone has something very special for you… 🎁" maxlength="100" value="Someone has something very special for you…">
+        </div>
+        <div class="field">
+          <label>Unlock button label</label>
+          <input type="text" id="unlockLabel" placeholder="e.g. Open your surprise 🎉" maxlength="60" value="Open your surprise 🎉">
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /form-sections -->
+</div><!-- /wrap -->
+</main>
+
+<!-- SAVE OVERLAY -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-spinner"></div>
+  <div class="save-status" id="saveStatus">Preparing your surprise…</div>
+  <div class="save-sub" id="saveSub">This may take a moment</div>
+</div>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta">
+  <div class="sticky-cta-left">
+    <strong id="recipientPreview">Your surprise page</strong> is ready to build ✦
+  </div>
+  <button class="btn-create" id="createBtn" onclick="handleCreate()">
+    <span>✦</span> Create Birthday Surprise
+  </button>
+</div>
+<div class="gen-error-box" id="genError"></div>
+
+<script>
+/* ── Theme from URL ── */
+const params = new URLSearchParams(location.search);
+const theme = params.get('theme') || 'girlish';
+document.getElementById('theme-name-display').textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+document.querySelector('.theme-dot').style.background = theme === 'anime'
+  ? 'linear-gradient(135deg,#60A5FA,#1A3FA6)'
+  : 'linear-gradient(135deg,#f472b6,#c4b5fd)';
+
+/* ── Live name preview ── */
+const nameInput = document.getElementById('recipientName');
+nameInput.addEventListener('input', () => {
+  const v = nameInput.value.trim();
+  document.getElementById('recipientPreview').textContent = v ? `${v}'s surprise page` : 'Your surprise page';
+});
+
+/* ── Char counters ── */
+function charCounter(inputId, countId) {
+  const el = document.getElementById(inputId);
+  const cnt = document.getElementById(countId);
+  el.addEventListener('input', () => { cnt.textContent = `${el.value.length} / ${el.maxLength}`; });
+}
+charCounter('personalMessage', 'msgCount');
+charCounter('closingNote', 'closeCount');
+
+/* ── Message style toggle ── */
+document.querySelectorAll('#msgStyle .toggle-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('#msgStyle .toggle-opt').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+  });
+});
+
+/* ── Photo upload ── */
+const photoInput = document.getElementById('photoInput');
+const previews = document.getElementById('photoPreviews');
+let uploadedPhotos = [];
+
+photoInput.addEventListener('change', (e) => {
+  const files = Array.from(e.target.files).slice(0, 12 - uploadedPhotos.length);
+  files.forEach(file => {
+    if(!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      // Compress to max 800px / quality 0.65 to stay well under Firestore 1MB limit
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 800;
+        let {width:w, height:h} = img;
+        if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+        if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
+        canvas.width=w; canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        uploadedPhotos.push(canvas.toDataURL('image/jpeg', 0.65));
+        renderPreviews();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+function renderPreviews() {
+  previews.innerHTML = uploadedPhotos.map((src, i) => `
+    <div class="thumb-wrap">
+      <img src="${src}" class="photo-thumb" alt="Photo ${i+1}">
+      <button class="thumb-remove" onclick="removePhoto(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function removePhoto(i) {
+  uploadedPhotos.splice(i, 1);
+  renderPreviews();
+}
+
+/* ── Dynamic list items ── */
+function addItem(listId, placeholder, max) {
+  const list = document.getElementById(listId);
+  const count = list.querySelectorAll('.list-item').length + 1;
+  if (count > max) return;
+  const div = document.createElement('div');
+  div.className = 'list-item';
+  div.innerHTML = `<div class="list-item-num">${count}</div><input type="text" placeholder="${placeholder}" maxlength="140"><button class="btn-remove" onclick="removeItem(this)">×</button>`;
+  list.appendChild(div);
+}
+
+function removeItem(btn) {
+  const item = btn.closest('.list-item');
+  const list = item.parentElement;
+  item.remove();
+  list.querySelectorAll('.list-item-num').forEach((n, i) => n.textContent = i + 1);
+}
+
+/* ── Wishes ── */
+function addWish() {
+  const list = document.getElementById('wishesList');
+  const count = list.querySelectorAll('.list-item').length + 1;
+  if (count > 12) return;
+  const div = document.createElement('div');
+  div.className = 'list-item';
+  div.style.cssText = 'flex-direction:column;align-items:stretch;gap:8px;';
+  div.innerHTML = `
+    <div style="display:flex;gap:10px;align-items:center;">
+      <div class="list-item-num">${count}</div>
+      <input type="text" placeholder="Name" maxlength="40" style="flex:1;">
+      <button class="btn-remove" onclick="removeWish(this)">×</button>
+    </div>
+    <textarea rows="2" placeholder="Their message…" maxlength="200" style="width:calc(100% - 38px);margin-left:38px;"></textarea>
+  `;
+  list.appendChild(div);
+}
+
+function removeWish(btn) {
+  const item = btn.closest('.list-item');
+  const list = item.parentElement;
+  item.remove();
+  list.querySelectorAll('.list-item-num').forEach((n, i) => n.textContent = i + 1);
+}
+
+/* ── Scroll reveal ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vi'); });
+}, {threshold:.08});
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ══════════════════════════════════════
+   AUDIO UPLOAD
+══════════════════════════════════════ */
+let _audioFile = null;
+
+function handleAudioDrop(e) {
+  e.preventDefault();
+  document.getElementById('audioDropZone').style.borderColor = '';
+  const file = e.dataTransfer.files[0];
+  if(file) loadAudioFile(file);
+}
+function handleAudioFile(e) {
+  const file = e.target.files[0];
+  if(file) loadAudioFile(file);
+  e.target.value = '';
+}
+function loadAudioFile(file) {
+  if(file.size > 10*1024*1024) { alert('Please choose a file under 10 MB.'); return; }
+  _audioFile = file;
+  const url = URL.createObjectURL(file);
+  const audio = document.getElementById('audioPreviewEl');
+  audio.src = url;
+  document.getElementById('audioFileName').textContent = file.name.replace(/\.[^.]+$/, '');
+  document.getElementById('audioFileSize').textContent = (file.size/1024/1024).toFixed(2) + ' MB';
+  const card = document.getElementById('audioPreviewCard');
+  card.style.display = 'flex';
+  document.getElementById('audioDropZone').style.display = 'none';
+  document.getElementById('audioHint').style.display = 'block';
+  document.getElementById('audioProgress').style.width = '0%';
+  document.getElementById('audioPlayBtn').textContent = '▶';
+}
+function toggleAudioPreview() {
+  const audio = document.getElementById('audioPreviewEl');
+  const btn = document.getElementById('audioPlayBtn');
+  if(audio.paused) { audio.play(); btn.textContent = '⏸'; }
+  else { audio.pause(); btn.textContent = '▶'; }
+}
+function updateAudioProgress() {
+  const audio = document.getElementById('audioPreviewEl');
+  if(!audio.duration) return;
+  document.getElementById('audioProgress').style.width = (audio.currentTime/audio.duration*100) + '%';
+}
+function resetAudioBtn() { document.getElementById('audioPlayBtn').textContent = '▶'; }
+function clearAudio() {
+  _audioFile = null;
+  const audio = document.getElementById('audioPreviewEl');
+  audio.pause(); audio.src = '';
+  document.getElementById('audioPreviewCard').style.display = 'none';
+  document.getElementById('audioDropZone').style.display = '';
+  document.getElementById('audioHint').style.display = 'none';
+}
+
+/* ══════════════════════════════════════
+   SAVE TO FIREBASE & NAVIGATE
+══════════════════════════════════════ */
+function setStatus(msg, sub) {
+  document.getElementById('saveStatus').textContent = msg;
+  document.getElementById('saveSub').textContent = sub || '';
+}
+
+async function handleCreate() {
+  const name = document.getElementById('recipientName').value.trim();
+  const msg  = document.getElementById('personalMessage').value.trim();
+  let valid = true;
+
+  document.getElementById('field-name').classList.remove('error');
+  document.getElementById('field-message').classList.remove('error');
+  if(!name) { document.getElementById('field-name').classList.add('error'); valid = false; }
+  if(!msg)  { document.getElementById('field-message').classList.add('error'); valid = false; }
+  if(!valid) { document.querySelector('.field.error').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+
+  /* Disable button, show overlay */
+  document.getElementById('createBtn').disabled = true;
+  document.getElementById('saveOverlay').classList.add('active');
+  document.getElementById('genError').style.display = 'none';
+
+  try {
+    const db = window._db;
+    const pageId = crypto.randomUUID ? crypto.randomUUID().slice(0,8) : Math.random().toString(36).slice(2,10);
+
+    /* Collect form data */
+    const specials = [...document.querySelectorAll('#specialsList input')].map(i => i.value).filter(Boolean);
+    const jokes    = [...document.querySelectorAll('#jokesList input')].map(i => i.value).filter(Boolean);
+    const wishes   = [...document.querySelectorAll('#wishesList .list-item')].map(item => ({
+      name: item.querySelector('input')?.value || '',
+      msg:  item.querySelector('textarea')?.value || ''
+    })).filter(w => w.name || w.msg);
+    const msgStyle = document.querySelector('#msgStyle .toggle-opt.selected')?.dataset.val || 'typed';
+
+    const data = {
+      createdAt: Date.now(),
+      pageType: 'birthday',
+      theme,
+      name,
+      sender:       document.getElementById('senderName').value.trim(),
+      age:          document.getElementById('recipientAge').value.trim(),
+      photoCaption: document.getElementById('photoCaption').value.trim(),
+      message: msg, msgStyle,
+      specials, jokes, wishes,
+      gift:         document.getElementById('giftMessage').value.trim(),
+      giftLabel:    document.getElementById('giftLabel').value.trim(),
+      closing:      document.getElementById('closingNote').value.trim(),
+      signOff:      document.getElementById('signOff').value.trim(),
+      teaser:       document.getElementById('teaserText').value.trim(),
+      unlockLabel:  document.getElementById('unlockLabel').value.trim(),
+    };
+
+    /* Save photos (compressed, one per doc) */
+    setStatus('🌸 Saving photos…', `0 of ${uploadedPhotos.length}`);
+    const photoRefs = [];
+    for(let i = 0; i < uploadedPhotos.length; i++) {
+      setStatus('🌸 Saving photos…', `${i+1} of ${uploadedPhotos.length}`);
+      if(uploadedPhotos[i].length > 750000) { console.warn(`Photo ${i+1} too large, skipping`); continue; }
+      await db.collection('photos').doc(`${pageId}_${i}`).set({ pageId, index:i, data: uploadedPhotos[i] });
+      photoRefs.push(`__photo__${pageId}_${i}`);
+    }
+    data.photos = photoRefs;
+
+    /* Save audio in chunked base64 docs */
+    if(_audioFile) {
+      setStatus('🎵 Reading audio…', 'Processing your song');
+      const arrayBuf = await _audioFile.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuf);
+      const SLICE = 3 * 1024; // multiple of 3 for clean base64 alignment
+      let fullB64 = '';
+      for(let i = 0; i < bytes.length; i += SLICE) {
+        const end = Math.min(i + SLICE, bytes.length);
+        let bin = '';
+        for(let j = i; j < end; j++) bin += String.fromCharCode(bytes[j]);
+        fullB64 += btoa(bin);
+        if((i / SLICE) % 512 === 0) await new Promise(r => setTimeout(r, 0));
+      }
+      const FS_CHUNK = 700000;
+      const chunks = [];
+      for(let i = 0; i < fullB64.length; i += FS_CHUNK) chunks.push(fullB64.slice(i, i + FS_CHUNK));
+
+      setStatus(`🎵 Saving music…`, `0 of ${chunks.length} parts`);
+      for(let i = 0; i < chunks.length; i++) {
+        setStatus('🎵 Saving music…', `Part ${i+1} of ${chunks.length}`);
+        await db.collection('audio').doc(`${pageId}_${i}`).set({
+          pageId, index:i, total: chunks.length,
+          mimeType: _audioFile.type || 'audio/mpeg',
+          data: chunks[i]
+        });
+      }
+      data.audioChunks = chunks.length;
+      data.audioMime   = _audioFile.type || 'audio/mpeg';
+    }
+
+    /* Save main page doc */
+    setStatus('✨ Creating surprise page…', 'Almost there!');
+    await db.collection('pages').doc(pageId).set(data);
+
+    /* Redirect to viewer */
+    window.location.href = `view-birthday-${theme}.html?id=${pageId}`;
+
+  } catch(err) {
+    console.error(err);
+    document.getElementById('saveOverlay').classList.remove('active');
+    document.getElementById('createBtn').disabled = false;
+    const errBox = document.getElementById('genError');
+    errBox.style.display = 'block';
+    errBox.innerHTML = `❌ <strong>Something went wrong.</strong><br>${err.message}`;
+    window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+  }
+}
+</script>
+</body>
+</html>
