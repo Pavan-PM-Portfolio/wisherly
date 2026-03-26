@@ -992,18 +992,17 @@ document.getElementById('nameInput').addEventListener('keydown', e => { if(e.key
 function launchSurprise(entered) {
   const pg = document.getElementById('surprise-page');
   pg.style.display = 'block';
-  // Double rAF: ensures display:block is painted before opacity transition starts
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    pg.classList.add('visible');
-    populatePage(entered);
-    setupRevealObserver();
-    // Start music if available
-    if(D.audioChunks) {
-      const urlParams = new URLSearchParams(location.search);
-      const pageId = urlParams.get('id');
-      if(pageId) setupMusicPlayer(pageId, D.audioChunks, D.audioMime);
-    }
-  }));
+  // Force layout reflow so browser registers display:block before opacity transition
+  void pg.offsetHeight;
+  pg.classList.add('visible');
+  populatePage(entered);
+  setupRevealObserver();
+  // Start music if available
+  if(D.audioChunks) {
+    const urlParams = new URLSearchParams(location.search);
+    const pageId = urlParams.get('id');
+    if(pageId) setupMusicPlayer(pageId, D.audioChunks, D.audioMime);
+  }
 }
 
 /* ══════════════════════════════════════
