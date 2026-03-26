@@ -112,7 +112,7 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fs);-webkit-font
 /* ═══════════════════════════════════════
    MAIN SURPRISE PAGE
 ═══════════════════════════════════════ */
-#surprise-page{display:none;opacity:0;transition:opacity 1s ease;}
+#surprise-page{display:none;opacity:0;transition:opacity 1.2s ease;}
 #surprise-page.visible{display:block;opacity:1;}
 
 /* ═══════════════════════════════════════
@@ -772,18 +772,17 @@ document.getElementById('nameInput').addEventListener('keydown', e => {
 function launchSurprise(enteredName) {
   const page = document.getElementById('surprise-page');
   page.style.display = 'block';
-  // Double rAF: ensures display:block is painted before opacity transition starts
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    page.classList.add('visible');
-    populatePage(enteredName);
-    initPetals();
-    setupRevealObserver();
-    if(D.audioChunks) {
-      const urlParams = new URLSearchParams(location.search);
-      const pageId = urlParams.get('id');
-      if(pageId) setupMusicPlayer(pageId, D.audioChunks, D.audioMime);
-    }
-  }));
+  // Force layout reflow so browser registers display:block before opacity transition
+  void page.offsetHeight;
+  page.classList.add('visible');
+  populatePage(enteredName);
+  initPetals();
+  setupRevealObserver();
+  if(D.audioChunks) {
+    const urlParams = new URLSearchParams(location.search);
+    const pageId = urlParams.get('id');
+    if(pageId) setupMusicPlayer(pageId, D.audioChunks, D.audioMime);
+  }
 }
 
 /* ══════════════════════════════════════
