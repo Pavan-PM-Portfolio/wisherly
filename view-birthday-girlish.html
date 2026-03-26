@@ -1095,12 +1095,9 @@ function setBarsPlaying(playing) {
    INIT
 ══════════════════════════════════════ */
 function initPage() {
-  const demoTeaser  = 'Someone has something very special for you…';
-  const demoUnlock  = 'Open your surprise 🎉';
+  const demoTeaser = 'Someone has something very special for you…';
   document.getElementById('unlock-tagline').textContent = D.teaser || demoTeaser;
-  // Girlish uses id="unlockBtn" with text content directly
-  const unlockBtn = document.getElementById('unlockBtn');
-  if(unlockBtn) unlockBtn.textContent = D.unlockLabel || demoUnlock;
+  // NOTE: do NOT touch unlockBtn - setting textContent would strip its onclick
 }
 
 loadData();
