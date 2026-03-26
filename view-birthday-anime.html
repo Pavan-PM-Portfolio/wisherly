@@ -77,12 +77,13 @@ body{background:var(--void);color:var(--white);font-family:var(--fs);-webkit-fon
     linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);
   background-size:60px 60px;
   mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,black,transparent);
+  pointer-events:none;
 }
-.unlock-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 50%,transparent,rgba(0,0,0,.7));}
+.unlock-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 50%,transparent,rgba(0,0,0,.7));pointer-events:none;}
 
 /* Glow rings */
-.unlock-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
-.urang{position:absolute;border-radius:50%;border:1px solid;animation:urang-pulse 4s ease-in-out infinite;}
+.unlock-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.urang{position:absolute;border-radius:50%;border:1px solid;animation:urang-pulse 4s ease-in-out infinite;pointer-events:none;}
 .urang1{width:200px;height:200px;border-color:rgba(59,130,246,.2);animation-delay:0s;}
 .urang2{width:360px;height:360px;border-color:rgba(59,130,246,.12);animation-delay:.8s;}
 .urang3{width:520px;height:520px;border-color:rgba(59,130,246,.07);animation-delay:1.6s;}
