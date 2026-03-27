@@ -856,6 +856,8 @@ function showMain() {
   document.getElementById('unlockScreen').style.display = 'none';
   document.getElementById('topbar').style.display = 'flex';
   document.getElementById('mainContent').style.display = 'block';
+  // Init scratch card now that section is visible
+  setTimeout(initScratch, 400);
   if (D.audioChunks) {
     document.getElementById('musicPlayer').style.display = 'flex';
     const audio = document.getElementById('bgMusic');
@@ -871,12 +873,14 @@ function showMain() {
 }
 
 /* ═══════════════════════════════
-   DEFAULTS
+   RENDER PAGE
 ═══════════════════════════════ */
-const name = D.name || 'You';
-const sender = D.sender || 'Someone who loves you';
+function renderPage() {
+  // Constants defined INSIDE renderPage so they read D after Firebase loads
+  const name = D.name || 'You';
+  const sender = D.sender || 'Someone who loves you';
 
-const DEF = {
+  const DEF = {
   yearsTogether: D.yearsTogether || D.milestoneYears || '∞',
   tagline: D.heroTagline || D.tagline || 'Every moment with you is a gift I never want to return.',
   beginYear: D.beginYear || '✨',
@@ -926,10 +930,6 @@ const DEF = {
   closing: D.closing || D.closingNote || `Thank you for being my greatest adventure, my softest landing, and my favourite hello. Here's to every chapter still to come — with you.`,
 };
 
-/* ═══════════════════════════════
-   RENDER PAGE
-═══════════════════════════════ */
-function renderPage() {
   // Hero
   document.getElementById('heroName').textContent = name;
   document.getElementById('yearsText').textContent = DEF.yearsTogether + ' years together';
@@ -1020,7 +1020,6 @@ function renderPage() {
 
   // Surprise / scratch
   document.getElementById('surpriseText').textContent = DEF.gift;
-  setTimeout(initScratch, 300);
 
   // Closing
   document.getElementById('closingText').textContent = DEF.closing;
