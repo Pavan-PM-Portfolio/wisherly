@@ -889,13 +889,13 @@ function renderPage() {
   beginYear: D.beginYear || '✦',
   beginWhere: D.beginWhere || D.whereWeMet || '✦',
   beginStory: D.beginningStory || D.beginStory || `The day I met ${name} was the day everything quietly changed. I didn't know it yet — but that was the beginning of the best chapter of my life.`,
-  milestones: D.milestones || D.journey || D.timeline || [
+  milestones: (D.milestones||D.journey||D.timeline||[]).length ? (D.milestones||D.journey||D.timeline) : [
     { emoji:'💙', year:'Day 1',     title:'The Beginning',       desc:`The moment I met ${name} — and felt something shift.` },
     { emoji:'⚡', year:'Chapter 2', title:'First Adventure',      desc:'Side by side, figuring out the world — and each other.' },
     { emoji:'🌟', year:'Chapter 3', title:'When We Became Us',    desc:'Between the laughs and the late nights, two became one story.' },
     { emoji:'✦',  year:'Today',     title:'Still Choosing You',   desc:'Every single day. Today, tomorrow, always.' },
   ],
-  loveReasons: D.loveReasons || D.loves || D.whyILoveYou || [
+  loveReasons: (D.loveReasons||D.loves||D.whyILoveYou||[]).length ? (D.loveReasons||D.loves||D.whyILoveYou) : [
     `The strength ${name} carries — quietly, gracefully`,
     'How you show up, every time, without being asked',
     'The way you make even the hardest days feel manageable',
@@ -903,31 +903,37 @@ function renderPage() {
     'You are my steady ground in every storm',
     'The way you love — completely, fearlessly, without half measures',
   ],
-  struggles: D.struggles || D.hardTimes || [
+  struggles: (D.struggles||D.hardTimes||[]).length ? (D.struggles||D.hardTimes) : [
     'The seasons that tested us — and made us unbreakable',
     'Every hard conversation that brought us closer',
     'The moments we chose each other, even when it was difficult',
   ],
-  growth: D.growth || D.growthMoments || [
+  growth: (D.growth||D.growthMoments||[]).length ? (D.growth||D.growthMoments) : [
     `${name} made me braver than I ever thought I could be`,
     'Because of you, I became a better version of myself',
     'We turned every challenge into a foundation we stand on',
     'You showed me that real strength is choosing to stay',
   ],
-  future: D.future || D.futureDreams || D.bucketList || [
+  future: (D.future||D.futureDreams||D.bucketList||[]).length ? (D.future||D.futureDreams||D.bucketList) : [
     '✦ Wake up next to you, every morning, for the rest of our lives',
     '✈️ See the world together — one city at a time',
     '🏡 Build something real and lasting, just us',
     '🌙 Grow old together and still mean it when we say I love you',
     '☕ A thousand more quiet mornings — that is enough',
   ],
-  promises: D.promises || [
+  promises: (D.promises||[]).length ? D.promises : [
     { icon:'💙', title:'I will always choose you',   desc:'In every version of life, in every timeline, I choose you.' },
     { icon:'✦',  title:'I will keep showing up',     desc:'On the good days, the hard days, and every ordinary day between.' },
     { icon:'⚡', title:'I will fight for us',        desc:'Not against you — always with you, always for us.' },
     { icon:'🌙', title:'I will grow with you',       desc:'Not just alongside you — but because of you, and for you.' },
   ],
-  message: D.message || D.coreMessage || `There are no words that feel big enough for what I want to say to you. But I'll try.\n\nYou are the person I didn't know I was looking for. The one who makes me feel seen, grounded, and endlessly grateful. Every day with you is proof that life is beautiful — not because it's perfect, but because you're in it.\n\nThank you for every moment. For your patience, your strength, your laughter. For being exactly who you are.\n\nI love you. More than yesterday. Less than tomorrow.`,
+  message: D.message || D.coreMessage || `There are no words that feel big enough for what I want to say to you. But I'll try.
+
+You are the person I didn't know I was looking for. The one who makes me feel seen, grounded, and endlessly grateful. Every day with you is proof that life is beautiful — not because it's perfect, but because you're in it.
+
+Thank you for every moment. For your patience, your strength, your laughter. For being exactly who you are.
+
+I love you. More than yesterday. Less than tomorrow.`,
   signOff: D.signOff || D.signoff || `— Yours, always. ${sender}`,
   gift: D.gift || D.surprise || D.surpriseText || `You are my greatest gift. Every single day. 💙`,
   closing: D.closing || D.closingNote || `Thank you for being my greatest adventure, my steadiest anchor, and my favourite person in every room. Here's to every chapter still to come — with you.`,
