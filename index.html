@@ -1226,57 +1226,80 @@ document.getElementById('ptog').addEventListener('click',function(){
 
 
 
-<footer style="background:#07122A;padding:64px 0 0;margin-top:80px;position:relative;z-index:2;">
-<div style="max-width:1200px;margin:0 auto;padding:0 52px;">
-  <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.07);">
-    <div>
-      <div style="display:flex;align-items:center;gap:0;margin-bottom:16px;">
-        <div style="width:64px;height:64px;flex-shrink:0;">
+<footer style="background:linear-gradient(180deg,#020617 0%,#0a0f1e 100%);padding:72px 0 0;margin-top:80px;position:relative;overflow:hidden;">
+  <!-- top glow accent -->
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,0.6),rgba(236,72,153,0.6),transparent);"></div>
+  <!-- ambient blobs -->
+  <div style="position:absolute;width:500px;height:500px;top:-200px;left:-100px;background:radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%);filter:blur(80px);pointer-events:none;"></div>
+  <div style="position:absolute;width:500px;height:500px;bottom:-200px;right:-100px;background:radial-gradient(circle,rgba(236,72,153,0.10),transparent 70%);filter:blur(80px);pointer-events:none;"></div>
+
+  <div style="max-width:1160px;margin:0 auto;padding:0 52px;position:relative;z-index:1;">
+
+    <!-- top grid -->
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:52px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.06);">
+
+      <!-- brand col -->
+      <div>
+        <a href="index.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:18px;">
+          <img src="logo.png" alt="Wisherly" style="height:36px;width:auto;display:block;filter:brightness(1.1);">
+        </a>
+        <p style="font-size:13.5px;color:rgba(255,255,255,.38);line-height:1.85;max-width:230px;margin-bottom:24px;font-family:'Outfit',sans-serif;">
+          Create beautiful digital surprise pages with photos, music and heartfelt messages from everyone they love.
+        </p>
+        <div style="display:flex;gap:10px;">
+          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="Instagram">📸</a>
+          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="Twitter">🐦</a>
+          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="WhatsApp">💬</a>
+        </div>
       </div>
-      <p style="font-size:13px;color:rgba(255,255,255,.42);line-height:1.8;max-width:240px;margin-bottom:20px;font-family:'Outfit',sans-serif;">Create beautiful digital surprise pages with photos, music and heartfelt messages from everyone they love.</p>
-      <div style="display:flex;gap:8px;">
-        <a style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;" href="#">📸</a>
-        <a style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;" href="#">🐦</a>
-        <a style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;" href="#">💬</a>
+
+      <!-- product col -->
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Product</div>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
+          <li><a href="occasion.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Create a Page</a></li>
+          <li><a href="demo.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">See a Demo</a></li>
+          <li><a href="index.html#features" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Features</a></li>
+          <li><a href="index.html#pricing" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Pricing</a></li>
+        </ul>
+      </div>
+
+      <!-- occasions col -->
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Occasions</div>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Birthday Surprises</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Anniversary Pages</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Friendship Pages</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Farewell Pages</a></li>
+        </ul>
+      </div>
+
+      <!-- company col -->
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Company</div>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">About Wisherly</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy Policy</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Terms of Service</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Contact Us</a></li>
+        </ul>
       </div>
     </div>
-    <div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:16px;font-family:'Outfit',sans-serif;">Product</div>
-      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:9px;">
-        <li><a href="occasion.html" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Create a Page</a></li>
-        <li><a href="demo.html" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">See a Demo</a></li>
-        <li><a href="index.html#features" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Features</a></li>
-        <li><a href="index.html#pricing" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Pricing</a></li>
-      </ul>
-    </div>
-    <div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:16px;font-family:'Outfit',sans-serif;">Occasions</div>
-      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:9px;">
-        <li><a href="#" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Birthday Surprises</a></li>
-        <li><a href="#" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Anniversary Pages</a></li>
-        <li><a href="#" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Friendship Pages</a></li>
-        <li><a href="#" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Farewell Pages</a></li>
-      </ul>
-    </div>
-    <div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:16px;font-family:'Outfit',sans-serif;">Company</div>
-      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:9px;">
-        <li><a href="#" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">About Wisherly</a></li>
-        <li><a href="#" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy Policy</a></li>
-        <li><a href="#" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Terms of Service</a></li>
-        <li><a href="#" style="font-size:13px;color:rgba(255,255,255,.42);text-decoration:none;font-family:'Outfit',sans-serif;">Contact Us</a></li>
-      </ul>
+
+    <!-- bottom bar -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:22px 0 28px;flex-wrap:wrap;gap:14px;">
+      <span style="font-size:12px;color:rgba(255,255,255,.22);font-family:'Outfit',sans-serif;">© 2026 Wisherly — Crafted with ❤️ to create unforgettable digital surprises</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.06);font-size:10px;font-weight:600;color:#a78bfa;font-family:'Outfit',sans-serif;">
+        <span style="width:5px;height:5px;border-radius:50%;background:#a78bfa;animation:wly-blink 2.5s ease infinite;display:inline-block;"></span>All systems operational
+      </span>
+      <div style="display:flex;gap:18px;">
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy</a>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;font-family:'Outfit',sans-serif;">Terms</a>
+      </div>
     </div>
   </div>
-  <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 0;flex-wrap:wrap;gap:12px;">
-    <span style="font-size:12px;color:rgba(255,255,255,.28);font-family:'Outfit',sans-serif;">© 2026 Wisherly — Crafted with ❤️ to create unforgettable digital surprises</span>
-    <span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;border:1px solid rgba(147,197,253,.2);background:rgba(147,197,253,.06);font-size:10px;font-weight:600;color:#93C5FD;font-family:'Outfit',sans-serif;">
-      <span style="width:5px;height:5px;border-radius:50%;background:#93C5FD;animation:wfblink 2.5s ease infinite;display:inline-block;"></span>All systems operational
-    </span>
-    <div style="display:flex;gap:16px;"><a href="#" style="font-size:12px;color:rgba(255,255,255,.28);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy</a><a href="#" style="font-size:12px;color:rgba(255,255,255,.28);text-decoration:none;font-family:'Outfit',sans-serif;">Terms</a></div>
-  </div>
-</div>
-<style>@keyframes wfblink{0%,100%{opacity:1;}50%{opacity:.3;}}@media(max-width:768px){footer>div>div:first-child{grid-template-columns:1fr 1fr!important;gap:24px!important;}footer>div{padding:0 18px!important;}}</style>
+  <style>@keyframes wly-blink{0%,100%{opacity:1;}50%{opacity:.3;}}@media(max-width:768px){footer .footer-inner{padding:0 20px!important;}footer .footer-grid{grid-template-columns:1fr 1fr!important;gap:32px!important;}footer .footer-brand-col{grid-column:span 2;}}</style>
 </footer>
 </body>
 </html>
