@@ -105,8 +105,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   padding:10px 14px;
   transition:all .25s;
 }
-.sec-toggle-item.locked{opacity:.6;pointer-events:none;}
-.sec-toggle-item.disabled{opacity:.45;}
+.sec-toggle-item.locked{background:var(--frost);border-color:rgba(37,99,235,.2);}
+.sec-toggle-item.locked .sec-toggle-label{color:var(--cobalt);font-weight:600;}
+.sec-toggle-item.disabled{opacity:.4;}
 .sec-toggle-item.disabled .sec-toggle-label{color:var(--muted2);}
 .sec-toggle-label{font-size:13px;font-weight:500;color:var(--ink);display:flex;align-items:center;gap:8px;}
 .sec-toggle-label-icon{font-size:16px;}
@@ -815,9 +816,13 @@ function buildToggles() {
   const container = document.getElementById('sectionToggles');
   container.innerHTML = SECTIONS.map(s => `
     <div class="sec-toggle-item ${s.locked ? 'locked' : ''}" id="toggle-${s.id}">
-      <span class="sec-toggle-label"><span class="sec-toggle-label-icon">${s.icon}</span>${s.label}</span>
-      <label class="pill-switch" title="${s.locked ? 'Always included' : 'Toggle section'}">
-        <input type="checkbox" ${s.locked ? 'checked disabled' : 'checked'} onchange="toggleSection('${s.id}', this.checked)">
+      <span class="sec-toggle-label">
+        <span class="sec-toggle-label-icon">${s.icon}</span>
+        ${s.label}
+        ${s.locked ? '<span style="font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--blue);background:var(--frost);border:1px solid var(--border);border-radius:4px;padding:1px 6px;margin-left:4px;">ALWAYS ON</span>' : ''}
+      </span>
+      <label class="pill-switch" style="${s.locked ? 'pointer-events:none;' : ''}" title="${s.locked ? 'Always included' : 'Toggle section'}">
+        <input type="checkbox" checked ${s.locked ? 'disabled' : `onchange="toggleSection('${s.id}', this.checked)"`}>
         <div class="pill-track"></div>
         <div class="pill-thumb"></div>
       </label>
@@ -1002,7 +1007,15 @@ function addItem(listId, placeholder, max) {
   if (count > max) return;
   const div = document.createElement('div');
   div.className = 'list-item';
-  div.innerHTML = `<div class="list-item-num">${count}</div><input type="text" placeholder="${placeholder}" maxlength="140" oninput="update${listId.charAt(0).toUpperCase()+listId.slice(1,-4)}Preview()"><button class="btn-remove" onclick="removeItem(this)">×</button>`;
+  // Map listId to its preview updater
+  const previewMap = {
+    loveList: 'updateLovePreview',
+    strugglesList: 'updateStrugglesPreview',
+    growthList: 'updateGrowthPreview',
+    futureList: 'updateFuturePreview',
+  };
+  const updater = previewMap[listId] || '';
+  div.innerHTML = `<div class="list-item-num">${count}</div><input type="text" placeholder="${placeholder}" maxlength="140" oninput="${updater}()"><button class="btn-remove" onclick="removeItem(this);${updater}()">×</button>`;
   list.appendChild(div);
 }
 
