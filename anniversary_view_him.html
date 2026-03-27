@@ -858,7 +858,16 @@ function showMain() {
   document.getElementById('unlockScreen').style.display = 'none';
   document.getElementById('topbar').style.display = 'flex';
   document.getElementById('mainContent').style.display = 'block';
-  if (D.audioChunks) document.getElementById('musicPlayer').style.display = 'flex';
+  if (D.audioChunks) {
+    document.getElementById('musicPlayer').style.display = 'flex';
+    const audio = document.getElementById('bgMusic');
+    audio.volume = 0.5;
+    audio.play().then(() => {
+      musicPlaying = true;
+      document.getElementById('musicPlayer').textContent = '⏸';
+      document.getElementById('musicPlayer').classList.add('playing');
+    }).catch(() => {});
+  }
   burstParticles();
   initReveal();
 }
@@ -868,9 +877,14 @@ function renderPage() {
   const yrs = D.yearsTogether || D.milestoneYears;
   if (yrs) { document.getElementById('yearsText').textContent = yrs + ' Years'; document.getElementById('heroPlayerNum').textContent = String(yrs).padStart(2,'0'); document.getElementById('togetherYears').textContent = yrs; }
   if (D.heroTagline || D.tagline) document.getElementById('heroTagline').textContent = D.heroTagline || D.tagline;
-  if (D.beginYear) document.getElementById('beginYear').textContent = D.beginYear;
-  if (D.beginWhere || D.whereWeMet) document.getElementById('beginWhere').textContent = D.beginWhere || D.whereWeMet || '✦';
-  if (D.beginningStory || D.beginStory) document.getElementById('beginStory').textContent = D.beginningStory || D.beginStory;
+  if (D.beginYear || D.beginningStory || D.beginStory || D.beginWhere) {
+    if (D.beginYear) document.getElementById('beginYear').textContent = D.beginYear;
+    if (D.beginWhere || D.whereWeMet) document.getElementById('beginWhere').textContent = D.beginWhere || D.whereWeMet || '✦';
+    if (yrs) document.getElementById('togetherYears').textContent = yrs;
+    if (D.beginningStory || D.beginStory) document.getElementById('beginStory').textContent = D.beginningStory || D.beginStory;
+  } else {
+    document.getElementById('beginningSection').style.display = 'none';
+  }
 
   // Timeline
   const milestones = D.milestones || D.journey || D.timeline || [];
@@ -880,6 +894,8 @@ function renderPage() {
     tlEl.innerHTML = milestones.map((m,i) => `
       <div class="tl-item rv"><div class="tl-dot">${m.emoji||emojis[i%emojis.length]}</div>
       <div class="tl-content"><div class="tl-year">${m.year||m.date||''}</div><div class="tl-title">${m.title||m.heading||''}</div><div class="tl-desc">${m.desc||m.text||m.description||''}</div></div></div>`).join('');
+  } else {
+    document.getElementById('journeySection').style.display = 'none';
   }
 
   // Photos
@@ -951,12 +967,19 @@ function renderPage() {
   // Surprise
   if (D.gift || D.surprise || D.surpriseText) {
     document.getElementById('surpriseText').textContent = D.gift || D.surprise || D.surpriseText;
-    initScratch();
+    setTimeout(initScratch, 300);
   } else { document.getElementById('surpriseSection').style.display='none'; }
 
   // Closing
   if (D.closing || D.closingNote) document.getElementById('closingText').textContent = D.closing || D.closingNote;
   if (D.signOff || D.signoff) document.getElementById('closingSignoff').textContent = '— ' + (D.signOff || D.signoff);
+
+  // Hide orphaned court dividers between hidden sections
+  document.querySelectorAll('.court-divider').forEach(div => {
+    const prev = div.previousElementSibling;
+    const next = div.nextElementSibling;
+    if ((prev && prev.style.display === 'none') || (next && next.style.display === 'none')) div.style.display = 'none';
+  });
 
   initUnlock();
 }
