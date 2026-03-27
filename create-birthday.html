@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wisherly — Create Birthday Surprise</title>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const _cfg={
+    apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",
+    authDomain:"wisherly-d07d7.firebaseapp.com",
+    projectId:"wisherly-d07d7",
+    storageBucket:"wisherly-d07d7.firebasestorage.app",
+    messagingSenderId:"919116839261",
+    appId:"1:919116839261:web:147d6b5924f3cbe35050b4"
+  };
+  if(!firebase.apps.length){firebase.initializeApp(_cfg);}
+  window._db=firebase.firestore();
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <style>
