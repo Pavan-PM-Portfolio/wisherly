@@ -57,7 +57,9 @@ body::before{
   position:sticky;top:0;z-index:900;
   font-family:var(--fs);
 }
-.nav-logo,.nav-brand{text-decoration:none;display:flex;align-items:center;height:70px;flex-shrink:0;margin-left:28px;}
+.nav-logo,.nav-brand{text-decoration:none;display:flex;align-items:center;flex-shrink:0;margin-left:0;}
+.nav-logo{height:64px;width:64px;display:block;object-fit:contain;}
+.nav-wordmark{font-family:'Outfit',sans-serif;font-size:20px;font-weight:600;color:#0D2260;letter-spacing:-.3px;margin-left:10px;}
 .nav-links{display:flex;gap:28px;list-style:none;align-items:center;}
 .nav-links a,.nav a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .25s;font-weight:400;font-family:var(--fs);}
 .nav-links a:hover,.nav a:hover{color:var(--cobalt);}
