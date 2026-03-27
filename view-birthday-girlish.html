@@ -799,12 +799,12 @@ function launchSurprise(enteredName) {
   try { initPetals(); } catch(e) { console.warn('initPetals:', e.message); }
   try { setupRevealObserver(); } catch(e) { console.warn('setupRevealObserver:', e.message); }
 
-  if(D.audioChunks) {
-    const urlParams = new URLSearchParams(location.search);
-    const pageId = urlParams.get('id');
-    if(pageId) {
-      try { setupMusicPlayer(pageId, D.audioChunks, D.audioMime); } catch(e) { console.warn('music:', e.message); }
-    }
+  const _urlParams = new URLSearchParams(location.search);
+  const _pageId = _urlParams.get('id');
+  if(D.audioChunks && _pageId) {
+    try { setupMusicPlayer(_pageId, D.audioChunks, D.audioMime); } catch(e) { console.warn('music:', e.message); }
+  } else if(D.audioBase64) {
+    setupMusicFromBase64(D.audioBase64, D.audioMime);
   }
 }
 
@@ -1030,15 +1030,37 @@ async function setupMusicPlayer(pageId, totalChunks, mimeType) {
       const snap = await window._db.collection('audio').doc(`${pageId}_${i}`).get();
       if(snap.exists) chunkDocs.push(snap.data().data);
     }
-    if(!chunkDocs.length) { label.textContent = 'No audio found'; icon.textContent = '✕'; return; }
+    if(!chunkDocs.length) { label.textContent='No audio found'; sub.textContent=''; icon.textContent='✕'; return; }
     const fullB64 = chunkDocs.join('');
-    const binaryStr = atob(fullB64);
+    _playFromBase64(fullB64, mimeType);
+  } catch(e) {
+    console.warn('Audio load error:', e);
+    label.textContent = 'Music unavailable';
+    sub.textContent = '';
+    icon.textContent = '✕';
+  }
+}
+
+async function setupMusicFromBase64(base64, mimeType) {
+  if(!base64) return;
+  showMusicBar();
+  setBarsPlaying(false);
+  _playFromBase64(base64, mimeType);
+}
+
+async function _playFromBase64(base64, mimeType) {
+  const label = document.getElementById('musicLabel');
+  const sub   = document.getElementById('musicSub');
+  const icon  = document.getElementById('musicToggleIcon');
+  try {
+    const binaryStr = atob(base64);
     const bytes = new Uint8Array(binaryStr.length);
     for(let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
-    const blob = new Blob([bytes], { type: mimeType || 'audio/mpeg' });
+    const blob = new Blob([bytes], {type: mimeType || 'audio/mpeg'});
     const blobUrl = URL.createObjectURL(blob);
     const audio = document.getElementById('bgAudio');
     audio.src = blobUrl;
+    audio.loop = true;
     try {
       await audio.play();
       _musicPlaying = true;
@@ -1048,11 +1070,7 @@ async function setupMusicPlayer(pageId, totalChunks, mimeType) {
       setBarsPlaying(true);
       audio.volume = 0;
       let vol = 0;
-      const fi = setInterval(() => {
-        vol = Math.min(vol + 0.05, 0.5);
-        audio.volume = vol;
-        if(vol >= 0.5) clearInterval(fi);
-      }, 120);
+      const fi = setInterval(() => { vol = Math.min(vol+0.05, 0.55); audio.volume = vol; if(vol>=0.55) clearInterval(fi); }, 120);
     } catch(e) {
       _musicPlaying = false;
       label.textContent = 'Tap to play music 🎵';
@@ -1067,16 +1085,12 @@ async function setupMusicPlayer(pageId, totalChunks, mimeType) {
           sub.textContent = 'tap to pause';
           icon.textContent = '⏸';
           setBarsPlaying(true);
-          audio.volume = 0.5;
+          audio.volume = 0.55;
         } catch(err) { console.warn('Play failed:', err); }
         document.getElementById('musicBar').onclick = toggleMusic;
       };
     }
-  } catch(e) {
-    console.warn('Audio load error:', e);
-    label.textContent = 'Music unavailable';
-    icon.textContent = '✕';
-  }
+  } catch(e) { console.warn('Base64 audio error:', e); }
 }
 
 function toggleMusic() {
