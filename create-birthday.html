@@ -28,10 +28,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 @keyframes orb-wander{0%{transform:translate(0,0);}100%{transform:translate(20px,15px);}}
 
 /* NAV */
-#nav{position:sticky;top:0;z-index:900;height:90px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,249,255,.6);backdrop-filter:blur(28px);border-bottom:1px solid var(--border2);}
-.nav-brand{text-decoration:none;display:flex;align-items:center;height:70px;flex-shrink:0;margin-left:28px;}
-.nav-brand-mark{display:none;}
-.nav-brand-name{display:none;}
+#nav{position:sticky;top:0;z-index:900;height:68px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.88);backdrop-filter:blur(28px);border-bottom:1px solid var(--border2);}
+.nav-brand{font-family:var(--fd);font-size:24px;font-weight:500;color:var(--cobalt);text-decoration:none;display:flex;align-items:center;gap:10px;}
+.nav-brand-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--royal),var(--bright));display:flex;align-items:center;justify-content:center;font-size:13px;color:white;box-shadow:0 4px 14px rgba(37,99,235,.28);}
+.nav-brand-name{background:linear-gradient(135deg,var(--cobalt),var(--royal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .btn-ghost-nav{padding:8px 20px;border-radius:10px;border:1px solid rgba(37,99,235,.15);background:transparent;color:var(--muted);font-family:var(--fs);font-size:12px;cursor:pointer;transition:all .25s;text-decoration:none;}
 .btn-ghost-nav:hover{background:var(--frost);color:var(--cobalt);}
 
@@ -186,7 +186,7 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
 /* STICKY FOOTER CTA */
 .sticky-cta{
   position:fixed;bottom:0;left:0;right:0;z-index:800;
-  background:rgba(247,249,255,.85);backdrop-filter:blur(24px);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(24px);
   border-top:1px solid var(--border2);
   padding:16px 40px;
   display:flex;align-items:center;justify-content:space-between;
@@ -243,7 +243,8 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
 
 <nav id="nav">
   <a href="index.html" class="nav-brand">
-    <img src="logo.png" alt="Wisherly" style="height:70px;width:auto;display:block;max-height:70px;object-fit:contain;">
+    <div class="nav-brand-mark">✦</div>
+    <span class="nav-brand-name">Wisherly</span>
   </a>
   <a href="theme.html?occasion=birthday" class="btn-ghost-nav">← Change Theme</a>
 </nav>
@@ -641,6 +642,34 @@ function removeWish(btn) {
   list.querySelectorAll('.list-item-num').forEach((n, i) => n.textContent = i + 1);
 }
 
+/* ── Music file upload ── */
+let uploadedAudio = null; // { base64, mime, name }
+
+document.getElementById('musicFile').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) {
+    alert('File too large. Please upload a file under 10MB.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const base64 = ev.target.result.split(',')[1];
+    uploadedAudio = { base64, mime: file.type || 'audio/mpeg', name: file.name };
+    document.getElementById('musicFileName').textContent = file.name;
+    document.getElementById('musicPreview').style.display = 'flex';
+    document.getElementById('musicUploadZone').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+});
+
+function removeMusicFile() {
+  uploadedAudio = null;
+  document.getElementById('musicFile').value = '';
+  document.getElementById('musicPreview').style.display = 'none';
+  document.getElementById('musicUploadZone').style.display = 'block';
+}
+
 /* ── Scroll reveal ── */
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vi'); });
@@ -648,7 +677,7 @@ const io = new IntersectionObserver(entries => {
 document.querySelectorAll('.rv').forEach(el => io.observe(el));
 
 /* ── Gather & navigate ── */
-function handleCreate() {
+async function handleCreate() {
   const name = document.getElementById('recipientName').value.trim();
   const msg = document.getElementById('personalMessage').value.trim();
   let valid = true;
@@ -679,7 +708,6 @@ function handleCreate() {
     sender: document.getElementById('senderName').value.trim(),
     age: document.getElementById('recipientAge').value.trim(),
     photoCaption: document.getElementById('photoCaption').value.trim(),
-    music: document.getElementById('musicUrl').value.trim(),
     message: msg,
     msgStyle,
     specials,
@@ -696,105 +724,42 @@ function handleCreate() {
     occasion: 'birthday'
   };
 
+  // Save audio chunks to Firestore if audio was uploaded
+  if (uploadedAudio && window._db) {
+    const pageId = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    const CHUNK = 900000; // ~900KB per Firestore doc
+    const b64 = uploadedAudio.base64;
+    const totalChunks = Math.ceil(b64.length / CHUNK);
+    const btn = document.getElementById('createBtn');
+    if(btn) { btn.disabled = true; btn.textContent = 'Saving music…'; }
+    try {
+      for (let i = 0; i < totalChunks; i++) {
+        await window._db.collection('audio').doc(`${pageId}_${i}`).set({
+          data: b64.slice(i * CHUNK, (i+1) * CHUNK)
+        });
+      }
+      data.audioChunks = totalChunks;
+      data.audioMime = uploadedAudio.mime;
+      // Save page doc with audio reference
+      await window._db.collection('pages').doc(pageId).set(data);
+      sessionStorage.setItem('wisherly_data', JSON.stringify(data));
+      window.location.href = `view-birthday-${theme}.html?id=${pageId}`;
+    } catch(e) {
+      console.warn('Audio save failed, falling back:', e);
+      sessionStorage.setItem('wisherly_data', JSON.stringify(data));
+      window.location.href = `view-birthday-${theme}.html`;
+    }
+    return;
+  }
+
+  // No Firebase or no audio — store locally with audio if present
+  if(uploadedAudio) {
+    data.audioBase64 = uploadedAudio.base64;
+    data.audioMime = uploadedAudio.mime;
+  }
   sessionStorage.setItem('wisherly_data', JSON.stringify(data));
   window.location.href = `view-birthday-${theme}.html`;
 }
-</script>
-<footer style="background:linear-gradient(180deg,#020617 0%,#0a0f1e 100%);padding:72px 0 0;margin-top:80px;position:relative;overflow:hidden;">
-  <!-- top glow accent -->
-  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,0.6),rgba(236,72,153,0.6),transparent);"></div>
-  <!-- ambient blobs -->
-  <div style="position:absolute;width:500px;height:500px;top:-200px;left:-100px;background:radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%);filter:blur(80px);pointer-events:none;"></div>
-  <div style="position:absolute;width:500px;height:500px;bottom:-200px;right:-100px;background:radial-gradient(circle,rgba(236,72,153,0.10),transparent 70%);filter:blur(80px);pointer-events:none;"></div>
-
-  <div style="max-width:1160px;margin:0 auto;padding:0 52px;position:relative;z-index:1;">
-
-    <!-- top grid -->
-    <div class="wly-footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.06);">
-
-      <!-- brand col -->
-      <div>
-        <a href="index.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:18px;">
-          <span style="font-family:'Outfit',sans-serif;font-size:24px;font-weight:700;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.3px;">✦ Wisherly</span>
-        </a>
-        <p style="font-size:13.5px;color:rgba(255,255,255,.38);line-height:1.85;max-width:230px;margin-bottom:24px;font-family:'Outfit',sans-serif;">
-          Create beautiful digital surprise pages with photos, music and heartfelt messages from everyone they love.
-        </p>
-        <div style="display:flex;gap:10px;">
-          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="Instagram">📸</a>
-          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="Twitter">🐦</a>
-          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="WhatsApp">💬</a>
-        </div>
-      </div>
-
-      <!-- product col -->
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Product</div>
-        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
-          <li><a href="occasion.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Create a Page</a></li>
-          <li><a href="demo.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">See a Demo</a></li>
-          <li><a href="index.html#features" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Features</a></li>
-          <li><a href="index.html#pricing" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Pricing</a></li>
-        </ul>
-      </div>
-
-      <!-- occasions col -->
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Occasions</div>
-        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Birthday Surprises</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Anniversary Pages</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Friendship Pages</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Farewell Pages</a></li>
-        </ul>
-      </div>
-
-      <!-- company col -->
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Company</div>
-        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">About Wisherly</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy Policy</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Terms of Service</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- bottom bar -->
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:22px 0 28px;flex-wrap:wrap;gap:14px;">
-      <span style="font-size:12px;color:rgba(255,255,255,.22);font-family:'Outfit',sans-serif;">© 2026 Wisherly — Crafted with ❤️ to create unforgettable digital surprises</span>
-      <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.06);font-size:10px;font-weight:600;color:#a78bfa;font-family:'Outfit',sans-serif;">
-        <span style="width:5px;height:5px;border-radius:50%;background:#a78bfa;animation:wly-blink 2.5s ease infinite;display:inline-block;"></span>All systems operational
-      </span>
-      <div style="display:flex;gap:18px;">
-        <a href="#" style="font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy</a>
-        <a href="#" style="font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;font-family:'Outfit',sans-serif;">Terms</a>
-      </div>
-    </div>
-  </div>
-  <style>
-@keyframes wly-blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-@media(max-width:768px){
-  footer > div{padding:0 18px!important;}
-  .wly-footer-grid{grid-template-columns:1fr 1fr!important;gap:24px!important;}
-  .wly-footer-brand{grid-column:span 2!important;}
-  footer .wly-footer-grid > div:nth-child(3){grid-column:1;}
-  footer .wly-footer-grid > div:nth-child(4){grid-column:2;}
-}
-</style>
-</footer>
-
-<script>
-(function(){
-  var btn = document.getElementById('nav-hamburger');
-  var menu = document.getElementById('nav-mobile');
-  if(btn && menu){
-    btn.addEventListener('click', function(){
-      menu.classList.toggle('open');
-    });
-  }
-})();
 </script>
 </body>
 </html>
