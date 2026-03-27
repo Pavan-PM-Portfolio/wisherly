@@ -679,28 +679,25 @@ function removeWish(btn) {
 }
 
 /* ── Music file upload ── */
-let uploadedAudio = null; // { base64, mime, name }
+let _audioFile = null; // raw File object — encoded only at save time
 
 document.getElementById('musicFile').addEventListener('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > 10 * 1024 * 1024) {
     alert('File too large. Please upload a file under 10MB.');
+    e.target.value = '';
     return;
   }
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    const base64 = ev.target.result.split(',')[1];
-    uploadedAudio = { base64, mime: file.type || 'audio/mpeg', name: file.name };
-    document.getElementById('musicFileName').textContent = file.name;
-    document.getElementById('musicPreview').style.display = 'flex';
-    document.getElementById('musicUploadZone').style.display = 'none';
-  };
-  reader.readAsDataURL(file);
+  _audioFile = file;
+  document.getElementById('musicFileName').textContent = file.name;
+  document.getElementById('musicPreview').style.display = 'flex';
+  document.getElementById('musicUploadZone').style.display = 'none';
+  e.target.value = '';
 });
 
 function removeMusicFile() {
-  uploadedAudio = null;
+  _audioFile = null;
   document.getElementById('musicFile').value = '';
   document.getElementById('musicPreview').style.display = 'none';
   document.getElementById('musicUploadZone').style.display = 'block';
@@ -729,72 +726,117 @@ async function handleCreate() {
     return;
   }
 
-  /* Collect all data */
-  const specials = [...document.querySelectorAll('#specialsList input')].map(i => i.value).filter(Boolean);
-  const jokes = [...document.querySelectorAll('#jokesList input')].map(i => i.value).filter(Boolean);
-  const wishes = [...document.querySelectorAll('#wishesList .list-item')].map(item => ({
-    name: item.querySelector('input')?.value || '',
-    msg: item.querySelector('textarea')?.value || ''
-  })).filter(w => w.name || w.msg);
+  const btn = document.getElementById('createBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creating…';
 
-  const msgStyle = document.querySelector('#msgStyle .toggle-opt.selected')?.dataset.val || 'typed';
+  try {
+    const db = window._db;
+    const pageId = crypto.randomUUID ? crypto.randomUUID().slice(0,8) : (Date.now().toString(36) + Math.random().toString(36).slice(2,6));
 
-  const data = {
-    name,
-    sender: document.getElementById('senderName').value.trim(),
-    age: document.getElementById('recipientAge').value.trim(),
-    photoCaption: document.getElementById('photoCaption').value.trim(),
-    message: msg,
-    msgStyle,
-    specials,
-    jokes,
-    wishes,
-    gift: document.getElementById('giftMessage').value.trim(),
-    giftLabel: document.getElementById('giftLabel').value.trim(),
-    closing: document.getElementById('closingNote').value.trim(),
-    signOff: document.getElementById('signOff').value.trim(),
-    teaser: document.getElementById('teaserText').value.trim(),
-    unlockLabel: document.getElementById('unlockLabel').value.trim(),
-    photos: uploadedPhotos,
-    theme,
-    occasion: 'birthday'
-  };
+    /* Collect all data */
+    const specials = [...document.querySelectorAll('#specialsList input')].map(i => i.value).filter(Boolean);
+    const jokes = [...document.querySelectorAll('#jokesList input')].map(i => i.value).filter(Boolean);
+    const wishes = [...document.querySelectorAll('#wishesList .list-item')].map(item => ({
+      name: item.querySelector('input')?.value || '',
+      msg: item.querySelector('textarea')?.value || ''
+    })).filter(w => w.name || w.msg);
 
-  // Save audio chunks to Firestore if audio was uploaded
-  if (uploadedAudio && window._db) {
-    const pageId = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-    const CHUNK = 900000; // ~900KB per Firestore doc
-    const b64 = uploadedAudio.base64;
-    const totalChunks = Math.ceil(b64.length / CHUNK);
-    const btn = document.getElementById('createBtn');
-    if(btn) { btn.disabled = true; btn.textContent = 'Saving music…'; }
-    try {
-      for (let i = 0; i < totalChunks; i++) {
-        await window._db.collection('audio').doc(`${pageId}_${i}`).set({
-          data: b64.slice(i * CHUNK, (i+1) * CHUNK)
+    const msgStyle = document.querySelector('#msgStyle .toggle-opt.selected')?.dataset.val || 'typed';
+
+    const data = {
+      name,
+      sender: document.getElementById('senderName').value.trim(),
+      age: document.getElementById('recipientAge').value.trim(),
+      photoCaption: document.getElementById('photoCaption').value.trim(),
+      message: msg,
+      msgStyle,
+      specials,
+      jokes,
+      wishes,
+      gift: document.getElementById('giftMessage').value.trim(),
+      giftLabel: document.getElementById('giftLabel').value.trim(),
+      closing: document.getElementById('closingNote').value.trim(),
+      signOff: document.getElementById('signOff').value.trim(),
+      teaser: document.getElementById('teaserText').value.trim(),
+      unlockLabel: document.getElementById('unlockLabel').value.trim(),
+      theme,
+      occasion: 'birthday',
+      createdAt: Date.now()
+    };
+
+    // ── Save photos ──
+    if (db && uploadedPhotos.length) {
+      btn.textContent = 'Saving photos…';
+      const photoRefs = [];
+      for (let i = 0; i < uploadedPhotos.length; i++) {
+        btn.textContent = `Saving photo ${i+1} of ${uploadedPhotos.length}…`;
+        const photoData = uploadedPhotos[i];
+        if (photoData.length > 750000) { console.warn(`Photo ${i+1} too large, skipping.`); continue; }
+        await db.collection('photos').doc(`${pageId}_${i}`).set({ pageId, index: i, data: photoData });
+        photoRefs.push(`__photo__${pageId}_${i}`);
+      }
+      data.photos = photoRefs;
+    } else {
+      data.photos = uploadedPhotos; // sessionStorage fallback keeps inline
+    }
+
+    // ── Save audio ──
+    // Encode from raw bytes using 3-byte aligned slices (clean base64, no padding issues)
+    if (db && _audioFile) {
+      btn.textContent = '🎵 Reading audio…';
+      const arrayBuf = await _audioFile.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuf);
+
+      const SLICE = 3 * 1024; // must be multiple of 3 for clean base64 alignment
+      let fullB64 = '';
+      for (let i = 0; i < bytes.length; i += SLICE) {
+        const end = Math.min(i + SLICE, bytes.length);
+        let bin = '';
+        for (let j = i; j < end; j++) bin += String.fromCharCode(bytes[j]);
+        fullB64 += btoa(bin);
+        // Yield to browser every 512 slices to keep UI responsive
+        if ((i / SLICE) % 512 === 0) await new Promise(r => setTimeout(r, 0));
+      }
+
+      // Split into ~700KB chunks — safely under Firestore's 1MB doc limit
+      const FS_CHUNK = 700000;
+      const chunks = [];
+      for (let i = 0; i < fullB64.length; i += FS_CHUNK) {
+        chunks.push(fullB64.slice(i, i + FS_CHUNK));
+      }
+
+      btn.textContent = `🎵 Saving music… 0 / ${chunks.length}`;
+      for (let i = 0; i < chunks.length; i++) {
+        btn.textContent = `🎵 Saving music… ${i+1} / ${chunks.length}`;
+        await db.collection('audio').doc(`${pageId}_${i}`).set({
+          pageId, index: i, total: chunks.length,
+          mimeType: _audioFile.type || 'audio/mpeg',
+          data: chunks[i]
         });
       }
-      data.audioChunks = totalChunks;
-      data.audioMime = uploadedAudio.mime;
-      // Save page doc with audio reference
-      await window._db.collection('pages').doc(pageId).set(data);
+      data.audioChunks = chunks.length;
+      data.audioMime = _audioFile.type || 'audio/mpeg';
+    }
+
+    // ── Save page doc ──
+    if (db) {
+      btn.textContent = '💕 Saving page…';
+      await db.collection('pages').doc(pageId).set(data);
       sessionStorage.setItem('wisherly_data', JSON.stringify(data));
       window.location.href = `view-birthday-${theme}.html?id=${pageId}`;
-    } catch(e) {
-      console.warn('Audio save failed, falling back:', e);
+    } else {
+      // No Firebase — store everything in sessionStorage
       sessionStorage.setItem('wisherly_data', JSON.stringify(data));
       window.location.href = `view-birthday-${theme}.html`;
     }
-    return;
-  }
 
-  // No Firebase or no audio — store locally with audio if present
-  if(uploadedAudio) {
-    data.audioBase64 = uploadedAudio.base64;
-    data.audioMime = uploadedAudio.mime;
+  } catch(err) {
+    console.error('Create error:', err);
+    btn.disabled = false;
+    btn.textContent = 'Create Surprise Page ✨';
+    alert('Something went wrong: ' + err.message);
   }
-  sessionStorage.setItem('wisherly_data', JSON.stringify(data));
-  window.location.href = `view-birthday-${theme}.html`;
 }
 </script>
 
