@@ -6,24 +6,6 @@
 <title>Wisherly — Create Birthday Surprise</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script>
-(function(){
-  const _cfg={
-    apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",
-    authDomain:"wisherly-d07d7.firebaseapp.com",
-    projectId:"wisherly-d07d7",
-    storageBucket:"wisherly-d07d7.firebasestorage.app",
-    messagingSenderId:"919116839261",
-    appId:"1:919116839261:web:147d6b5924f3cbe35050b4"
-  };
-  if(!firebase.apps.length){firebase.initializeApp(_cfg);}
-  window._db=firebase.firestore();
-})();
-</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -46,10 +28,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 @keyframes orb-wander{0%{transform:translate(0,0);}100%{transform:translate(20px,15px);}}
 
 /* NAV */
-#nav{position:sticky;top:0;z-index:900;height:68px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.88);backdrop-filter:blur(28px);border-bottom:1px solid var(--border2);}
-.nav-brand{font-family:var(--fd);font-size:24px;font-weight:500;color:var(--cobalt);text-decoration:none;display:flex;align-items:center;gap:10px;}
-.nav-brand-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--royal),var(--bright));display:flex;align-items:center;justify-content:center;font-size:13px;color:white;box-shadow:0 4px 14px rgba(37,99,235,.28);}
-.nav-brand-name{background:linear-gradient(135deg,var(--cobalt),var(--royal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#nav{position:sticky;top:0;z-index:900;height:90px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,249,255,.6);backdrop-filter:blur(28px);border-bottom:1px solid var(--border2);}
+.nav-brand{text-decoration:none;display:flex;align-items:center;height:70px;flex-shrink:0;margin-left:28px;}
+.nav-brand-mark{display:none;}
+.nav-brand-name{display:none;}
 .btn-ghost-nav{padding:8px 20px;border-radius:10px;border:1px solid rgba(37,99,235,.15);background:transparent;color:var(--muted);font-family:var(--fs);font-size:12px;cursor:pointer;transition:all .25s;text-decoration:none;}
 .btn-ghost-nav:hover{background:var(--frost);color:var(--cobalt);}
 
@@ -183,47 +165,14 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
 .char-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .char-count{font-size:11px;color:var(--muted2);}
 
-/* AUDIO UPLOAD */
-.audio-drop-zone{
-  border:2px dashed rgba(37,99,235,.18);border-radius:var(--r-md);
-  background:var(--snow);padding:32px 24px;text-align:center;cursor:pointer;
-  transition:all .3s;
-}
-.audio-drop-zone:hover{border-color:rgba(37,99,235,.35);background:var(--frost);}
-.audio-preview-card{
+/* MUSIC PREVIEW */
+.music-preview{
   display:none;margin-top:14px;padding:14px 18px;
-  border-radius:var(--r-sm);
-  background:linear-gradient(135deg,rgba(37,99,235,.04),rgba(59,130,246,.04));
-  border:1px solid var(--border);
-  align-items:center;gap:14px;
+  border-radius:var(--r-sm);background:linear-gradient(135deg,rgba(37,99,235,.04),rgba(59,130,246,.04));
+  border:1px solid var(--border);display:flex;align-items:center;gap:12px;
 }
-.audio-play-btn{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,var(--royal),var(--blue));
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;cursor:pointer;border:none;color:white;
-  box-shadow:0 4px 14px rgba(37,99,235,.3);
-}
-.audio-meta{flex:1;min-width:0;}
-.audio-filename{font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.audio-filesize{font-size:11px;color:var(--muted2);margin-top:2px;}
-.audio-progress-track{margin-top:8px;height:3px;background:rgba(37,99,235,.1);border-radius:2px;overflow:hidden;}
-.audio-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--royal),var(--blue));border-radius:2px;transition:width .1s linear;}
-.audio-clear-btn{background:none;border:none;color:var(--muted2);font-size:18px;cursor:pointer;padding:4px;line-height:1;}
-.audio-hint{display:none;margin-top:10px;font-size:12px;color:var(--blue);}
-/* SAVE OVERLAY */
-.save-overlay{
-  display:none;position:fixed;inset:0;z-index:9999;
-  background:rgba(7,18,42,.88);backdrop-filter:blur(14px);
-  flex-direction:column;align-items:center;justify-content:center;gap:20px;
-  color:white;font-family:var(--fs);text-align:center;padding:40px;
-}
-.save-overlay.active{display:flex;}
-.save-spinner{width:48px;height:48px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--bright);border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.save-status{font-size:15px;font-weight:500;color:white;max-width:320px;line-height:1.5;}
-.save-sub{font-size:12px;color:rgba(255,255,255,.5);}
-.gen-error-box{display:none;margin-top:14px;padding:14px 18px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:12px;color:#ef4444;font-size:13px;line-height:1.6;}
+.music-preview .music-icon{font-size:22px;}
+.music-url-display{font-size:13px;color:var(--blue);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
 /* TOGGLE */
 .toggle-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
@@ -237,7 +186,7 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
 /* STICKY FOOTER CTA */
 .sticky-cta{
   position:fixed;bottom:0;left:0;right:0;z-index:800;
-  background:rgba(255,255,255,.92);backdrop-filter:blur(24px);
+  background:rgba(247,249,255,.85);backdrop-filter:blur(24px);
   border-top:1px solid var(--border2);
   padding:16px 40px;
   display:flex;align-items:center;justify-content:space-between;
@@ -294,8 +243,7 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
 
 <nav id="nav">
   <a href="index.html" class="nav-brand">
-    <div class="nav-brand-mark">✦</div>
-    <span class="nav-brand-name">Wisherly</span>
+    <img src="logo.png" alt="Wisherly" style="height:70px;width:auto;display:block;max-height:70px;object-fit:contain;">
   </a>
   <a href="theme.html?occasion=birthday" class="btn-ghost-nav">← Change Theme</a>
 </nav>
@@ -403,32 +351,14 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
         <div class="sec-num">3</div>
         <div>
           <div class="sec-title">Background <em>music</em></div>
-          <div class="sec-sub">Upload an MP3 — it autoplays softly when they open the page</div>
+          <div class="sec-sub">Paste a YouTube link — it plays softly as they explore the page</div>
         </div>
       </div>
       <div class="sec-body">
         <div class="field">
-          <div class="audio-drop-zone" id="audioDropZone"
-               onclick="document.getElementById('audioInput').click()"
-               ondragover="event.preventDefault();this.style.borderColor='rgba(37,99,235,.4)'"
-               ondragleave="this.style.borderColor=''"
-               ondrop="handleAudioDrop(event)">
-            <div style="font-size:32px;margin-bottom:10px;">🎵</div>
-            <div style="font-family:var(--fd);font-size:18px;color:var(--cobalt);margin-bottom:4px;">Drop your song here</div>
-            <div style="font-size:12px;color:var(--muted2);">or click to browse · MP3, M4A, WAV, OGG · max 10 MB</div>
-          </div>
-          <input type="file" id="audioInput" accept="audio/mpeg,audio/mp4,audio/wav,audio/ogg,audio/*" hidden onchange="handleAudioFile(event)">
-          <div class="audio-preview-card" id="audioPreviewCard" style="display:none;flex-direction:row;">
-            <button class="audio-play-btn" id="audioPlayBtn" onclick="toggleAudioPreview()">▶</button>
-            <div class="audio-meta">
-              <div class="audio-filename" id="audioFileName"></div>
-              <div class="audio-filesize" id="audioFileSize"></div>
-              <div class="audio-progress-track"><div class="audio-progress-fill" id="audioProgress"></div></div>
-            </div>
-            <button class="audio-clear-btn" onclick="clearAudio()" title="Remove">✕</button>
-          </div>
-          <audio id="audioPreviewEl" style="display:none;" ontimeupdate="updateAudioProgress()" onended="resetAudioBtn()"></audio>
-          <div class="audio-hint" id="audioHint">✓ Song ready — will autoplay when they open the page.</div>
+          <label>YouTube URL</label>
+          <input type="url" id="musicUrl" placeholder="https://youtube.com/watch?v=…">
+          <div style="margin-top:12px;font-size:12px;color:var(--muted2);">💡 Try their favourite song, something that makes them cry, or your inside-joke anthem.</div>
         </div>
       </div>
     </div>
@@ -593,13 +523,6 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
 </div><!-- /wrap -->
 </main>
 
-<!-- SAVE OVERLAY -->
-<div class="save-overlay" id="saveOverlay">
-  <div class="save-spinner"></div>
-  <div class="save-status" id="saveStatus">Preparing your surprise…</div>
-  <div class="save-sub" id="saveSub">This may take a moment</div>
-</div>
-
 <!-- STICKY CTA -->
 <div class="sticky-cta">
   <div class="sticky-cta-left">
@@ -609,7 +532,6 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
     <span>✦</span> Create Birthday Surprise
   </button>
 </div>
-<div class="gen-error-box" id="genError"></div>
 
 <script>
 /* ── Theme from URL ── */
@@ -652,23 +574,10 @@ let uploadedPhotos = [];
 photoInput.addEventListener('change', (e) => {
   const files = Array.from(e.target.files).slice(0, 12 - uploadedPhotos.length);
   files.forEach(file => {
-    if(!file.type.startsWith('image/')) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      // Compress to max 800px / quality 0.65 to stay well under Firestore 1MB limit
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const MAX = 800;
-        let {width:w, height:h} = img;
-        if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
-        if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
-        canvas.width=w; canvas.height=h;
-        canvas.getContext('2d').drawImage(img,0,0,w,h);
-        uploadedPhotos.push(canvas.toDataURL('image/jpeg', 0.65));
-        renderPreviews();
-      };
-      img.src = ev.target.result;
+      uploadedPhotos.push(ev.target.result);
+      renderPreviews();
     };
     reader.readAsDataURL(file);
   });
@@ -738,172 +647,154 @@ const io = new IntersectionObserver(entries => {
 }, {threshold:.08});
 document.querySelectorAll('.rv').forEach(el => io.observe(el));
 
-/* ══════════════════════════════════════
-   AUDIO UPLOAD
-══════════════════════════════════════ */
-let _audioFile = null;
-
-function handleAudioDrop(e) {
-  e.preventDefault();
-  document.getElementById('audioDropZone').style.borderColor = '';
-  const file = e.dataTransfer.files[0];
-  if(file) loadAudioFile(file);
-}
-function handleAudioFile(e) {
-  const file = e.target.files[0];
-  if(file) loadAudioFile(file);
-  e.target.value = '';
-}
-function loadAudioFile(file) {
-  if(file.size > 10*1024*1024) { alert('Please choose a file under 10 MB.'); return; }
-  _audioFile = file;
-  const url = URL.createObjectURL(file);
-  const audio = document.getElementById('audioPreviewEl');
-  audio.src = url;
-  document.getElementById('audioFileName').textContent = file.name.replace(/\.[^.]+$/, '');
-  document.getElementById('audioFileSize').textContent = (file.size/1024/1024).toFixed(2) + ' MB';
-  const card = document.getElementById('audioPreviewCard');
-  card.style.display = 'flex';
-  document.getElementById('audioDropZone').style.display = 'none';
-  document.getElementById('audioHint').style.display = 'block';
-  document.getElementById('audioProgress').style.width = '0%';
-  document.getElementById('audioPlayBtn').textContent = '▶';
-}
-function toggleAudioPreview() {
-  const audio = document.getElementById('audioPreviewEl');
-  const btn = document.getElementById('audioPlayBtn');
-  if(audio.paused) { audio.play(); btn.textContent = '⏸'; }
-  else { audio.pause(); btn.textContent = '▶'; }
-}
-function updateAudioProgress() {
-  const audio = document.getElementById('audioPreviewEl');
-  if(!audio.duration) return;
-  document.getElementById('audioProgress').style.width = (audio.currentTime/audio.duration*100) + '%';
-}
-function resetAudioBtn() { document.getElementById('audioPlayBtn').textContent = '▶'; }
-function clearAudio() {
-  _audioFile = null;
-  const audio = document.getElementById('audioPreviewEl');
-  audio.pause(); audio.src = '';
-  document.getElementById('audioPreviewCard').style.display = 'none';
-  document.getElementById('audioDropZone').style.display = '';
-  document.getElementById('audioHint').style.display = 'none';
-}
-
-/* ══════════════════════════════════════
-   SAVE TO FIREBASE & NAVIGATE
-══════════════════════════════════════ */
-function setStatus(msg, sub) {
-  document.getElementById('saveStatus').textContent = msg;
-  document.getElementById('saveSub').textContent = sub || '';
-}
-
-async function handleCreate() {
+/* ── Gather & navigate ── */
+function handleCreate() {
   const name = document.getElementById('recipientName').value.trim();
-  const msg  = document.getElementById('personalMessage').value.trim();
+  const msg = document.getElementById('personalMessage').value.trim();
   let valid = true;
 
   document.getElementById('field-name').classList.remove('error');
   document.getElementById('field-message').classList.remove('error');
-  if(!name) { document.getElementById('field-name').classList.add('error'); valid = false; }
-  if(!msg)  { document.getElementById('field-message').classList.add('error'); valid = false; }
-  if(!valid) { document.querySelector('.field.error').scrollIntoView({behavior:'smooth',block:'center'}); return; }
 
-  /* Disable button, show overlay */
-  document.getElementById('createBtn').disabled = true;
-  document.getElementById('saveOverlay').classList.add('active');
-  document.getElementById('genError').style.display = 'none';
+  if (!name) { document.getElementById('field-name').classList.add('error'); valid = false; }
+  if (!msg) { document.getElementById('field-message').classList.add('error'); valid = false; }
 
-  try {
-    const db = window._db;
-    const pageId = crypto.randomUUID ? crypto.randomUUID().slice(0,8) : Math.random().toString(36).slice(2,10);
-
-    /* Collect form data */
-    const specials = [...document.querySelectorAll('#specialsList input')].map(i => i.value).filter(Boolean);
-    const jokes    = [...document.querySelectorAll('#jokesList input')].map(i => i.value).filter(Boolean);
-    const wishes   = [...document.querySelectorAll('#wishesList .list-item')].map(item => ({
-      name: item.querySelector('input')?.value || '',
-      msg:  item.querySelector('textarea')?.value || ''
-    })).filter(w => w.name || w.msg);
-    const msgStyle = document.querySelector('#msgStyle .toggle-opt.selected')?.dataset.val || 'typed';
-
-    const data = {
-      createdAt: Date.now(),
-      pageType: 'birthday',
-      theme,
-      name,
-      sender:       document.getElementById('senderName').value.trim(),
-      age:          document.getElementById('recipientAge').value.trim(),
-      photoCaption: document.getElementById('photoCaption').value.trim(),
-      message: msg, msgStyle,
-      specials, jokes, wishes,
-      gift:         document.getElementById('giftMessage').value.trim(),
-      giftLabel:    document.getElementById('giftLabel').value.trim(),
-      closing:      document.getElementById('closingNote').value.trim(),
-      signOff:      document.getElementById('signOff').value.trim(),
-      teaser:       document.getElementById('teaserText').value.trim(),
-      unlockLabel:  document.getElementById('unlockLabel').value.trim(),
-    };
-
-    /* Save photos (compressed, one per doc) */
-    setStatus('🌸 Saving photos…', `0 of ${uploadedPhotos.length}`);
-    const photoRefs = [];
-    for(let i = 0; i < uploadedPhotos.length; i++) {
-      setStatus('🌸 Saving photos…', `${i+1} of ${uploadedPhotos.length}`);
-      if(uploadedPhotos[i].length > 750000) { console.warn(`Photo ${i+1} too large, skipping`); continue; }
-      await db.collection('photos').doc(`${pageId}_${i}`).set({ pageId, index:i, data: uploadedPhotos[i] });
-      photoRefs.push(`__photo__${pageId}_${i}`);
-    }
-    data.photos = photoRefs;
-
-    /* Save audio in chunked base64 docs */
-    if(_audioFile) {
-      setStatus('🎵 Reading audio…', 'Processing your song');
-      const arrayBuf = await _audioFile.arrayBuffer();
-      const bytes = new Uint8Array(arrayBuf);
-      const SLICE = 3 * 1024; // multiple of 3 for clean base64 alignment
-      let fullB64 = '';
-      for(let i = 0; i < bytes.length; i += SLICE) {
-        const end = Math.min(i + SLICE, bytes.length);
-        let bin = '';
-        for(let j = i; j < end; j++) bin += String.fromCharCode(bytes[j]);
-        fullB64 += btoa(bin);
-        if((i / SLICE) % 512 === 0) await new Promise(r => setTimeout(r, 0));
-      }
-      const FS_CHUNK = 700000;
-      const chunks = [];
-      for(let i = 0; i < fullB64.length; i += FS_CHUNK) chunks.push(fullB64.slice(i, i + FS_CHUNK));
-
-      setStatus(`🎵 Saving music…`, `0 of ${chunks.length} parts`);
-      for(let i = 0; i < chunks.length; i++) {
-        setStatus('🎵 Saving music…', `Part ${i+1} of ${chunks.length}`);
-        await db.collection('audio').doc(`${pageId}_${i}`).set({
-          pageId, index:i, total: chunks.length,
-          mimeType: _audioFile.type || 'audio/mpeg',
-          data: chunks[i]
-        });
-      }
-      data.audioChunks = chunks.length;
-      data.audioMime   = _audioFile.type || 'audio/mpeg';
-    }
-
-    /* Save main page doc */
-    setStatus('✨ Creating surprise page…', 'Almost there!');
-    await db.collection('pages').doc(pageId).set(data);
-
-    /* Redirect to viewer */
-    window.location.href = `view-birthday-${theme}.html?id=${pageId}`;
-
-  } catch(err) {
-    console.error(err);
-    document.getElementById('saveOverlay').classList.remove('active');
-    document.getElementById('createBtn').disabled = false;
-    const errBox = document.getElementById('genError');
-    errBox.style.display = 'block';
-    errBox.innerHTML = `❌ <strong>Something went wrong.</strong><br>${err.message}`;
-    window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+  if (!valid) {
+    document.querySelector('.field.error').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
   }
+
+  /* Collect all data */
+  const specials = [...document.querySelectorAll('#specialsList input')].map(i => i.value).filter(Boolean);
+  const jokes = [...document.querySelectorAll('#jokesList input')].map(i => i.value).filter(Boolean);
+  const wishes = [...document.querySelectorAll('#wishesList .list-item')].map(item => ({
+    name: item.querySelector('input')?.value || '',
+    msg: item.querySelector('textarea')?.value || ''
+  })).filter(w => w.name || w.msg);
+
+  const msgStyle = document.querySelector('#msgStyle .toggle-opt.selected')?.dataset.val || 'typed';
+
+  const data = {
+    name,
+    sender: document.getElementById('senderName').value.trim(),
+    age: document.getElementById('recipientAge').value.trim(),
+    photoCaption: document.getElementById('photoCaption').value.trim(),
+    music: document.getElementById('musicUrl').value.trim(),
+    message: msg,
+    msgStyle,
+    specials,
+    jokes,
+    wishes,
+    gift: document.getElementById('giftMessage').value.trim(),
+    giftLabel: document.getElementById('giftLabel').value.trim(),
+    closing: document.getElementById('closingNote').value.trim(),
+    signOff: document.getElementById('signOff').value.trim(),
+    teaser: document.getElementById('teaserText').value.trim(),
+    unlockLabel: document.getElementById('unlockLabel').value.trim(),
+    photos: uploadedPhotos,
+    theme,
+    occasion: 'birthday'
+  };
+
+  sessionStorage.setItem('wisherly_data', JSON.stringify(data));
+  window.location.href = `view-birthday-${theme}.html`;
 }
+</script>
+<footer style="background:linear-gradient(180deg,#020617 0%,#0a0f1e 100%);padding:72px 0 0;margin-top:80px;position:relative;overflow:hidden;">
+  <!-- top glow accent -->
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,0.6),rgba(236,72,153,0.6),transparent);"></div>
+  <!-- ambient blobs -->
+  <div style="position:absolute;width:500px;height:500px;top:-200px;left:-100px;background:radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%);filter:blur(80px);pointer-events:none;"></div>
+  <div style="position:absolute;width:500px;height:500px;bottom:-200px;right:-100px;background:radial-gradient(circle,rgba(236,72,153,0.10),transparent 70%);filter:blur(80px);pointer-events:none;"></div>
+
+  <div style="max-width:1160px;margin:0 auto;padding:0 52px;position:relative;z-index:1;">
+
+    <!-- top grid -->
+    <div class="wly-footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.06);">
+
+      <!-- brand col -->
+      <div>
+        <a href="index.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:18px;">
+          <span style="font-family:'Outfit',sans-serif;font-size:24px;font-weight:700;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.3px;">✦ Wisherly</span>
+        </a>
+        <p style="font-size:13.5px;color:rgba(255,255,255,.38);line-height:1.85;max-width:230px;margin-bottom:24px;font-family:'Outfit',sans-serif;">
+          Create beautiful digital surprise pages with photos, music and heartfelt messages from everyone they love.
+        </p>
+        <div style="display:flex;gap:10px;">
+          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="Instagram">📸</a>
+          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="Twitter">🐦</a>
+          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="WhatsApp">💬</a>
+        </div>
+      </div>
+
+      <!-- product col -->
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Product</div>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
+          <li><a href="occasion.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Create a Page</a></li>
+          <li><a href="demo.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">See a Demo</a></li>
+          <li><a href="index.html#features" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Features</a></li>
+          <li><a href="index.html#pricing" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Pricing</a></li>
+        </ul>
+      </div>
+
+      <!-- occasions col -->
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Occasions</div>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Birthday Surprises</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Anniversary Pages</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Friendship Pages</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Farewell Pages</a></li>
+        </ul>
+      </div>
+
+      <!-- company col -->
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Company</div>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">About Wisherly</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy Policy</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Terms of Service</a></li>
+          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- bottom bar -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:22px 0 28px;flex-wrap:wrap;gap:14px;">
+      <span style="font-size:12px;color:rgba(255,255,255,.22);font-family:'Outfit',sans-serif;">© 2026 Wisherly — Crafted with ❤️ to create unforgettable digital surprises</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.06);font-size:10px;font-weight:600;color:#a78bfa;font-family:'Outfit',sans-serif;">
+        <span style="width:5px;height:5px;border-radius:50%;background:#a78bfa;animation:wly-blink 2.5s ease infinite;display:inline-block;"></span>All systems operational
+      </span>
+      <div style="display:flex;gap:18px;">
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy</a>
+        <a href="#" style="font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;font-family:'Outfit',sans-serif;">Terms</a>
+      </div>
+    </div>
+  </div>
+  <style>
+@keyframes wly-blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+@media(max-width:768px){
+  footer > div{padding:0 18px!important;}
+  .wly-footer-grid{grid-template-columns:1fr 1fr!important;gap:24px!important;}
+  .wly-footer-brand{grid-column:span 2!important;}
+  footer .wly-footer-grid > div:nth-child(3){grid-column:1;}
+  footer .wly-footer-grid > div:nth-child(4){grid-column:2;}
+}
+</style>
+</footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('nav-hamburger');
+  var menu = document.getElementById('nav-mobile');
+  if(btn && menu){
+    btn.addEventListener('click', function(){
+      menu.classList.toggle('open');
+    });
+  }
+})();
 </script>
 </body>
 </html>
