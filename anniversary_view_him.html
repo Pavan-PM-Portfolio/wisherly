@@ -858,6 +858,8 @@ function showMain() {
   document.getElementById('unlockScreen').style.display = 'none';
   document.getElementById('topbar').style.display = 'flex';
   document.getElementById('mainContent').style.display = 'block';
+  // Init scratch card now that section is visible
+  setTimeout(initScratch, 400);
   if (D.audioChunks) {
     document.getElementById('musicPlayer').style.display = 'flex';
     const audio = document.getElementById('bgMusic');
@@ -873,13 +875,15 @@ function showMain() {
 }
 
 /* ═══════════════════════════════
-   DEFAULTS
+   RENDER PAGE
 ═══════════════════════════════ */
-const name = D.name || 'You';
-const sender = D.sender || 'Someone who loves you';
-const yrs = D.yearsTogether || D.milestoneYears || '∞';
+function renderPage() {
+  // Constants defined INSIDE renderPage so they read D after Firebase loads
+  const name = D.name || 'You';
+  const sender = D.sender || 'Someone who loves you';
+  const yrs = D.yearsTogether || D.milestoneYears || '∞';
 
-const DEF = {
+  const DEF = {
   yearsTogether: yrs,
   tagline: D.heroTagline || D.tagline || 'Every chapter with you has been the best one yet.',
   beginYear: D.beginYear || '✦',
@@ -929,7 +933,6 @@ const DEF = {
   closing: D.closing || D.closingNote || `Thank you for being my greatest adventure, my steadiest anchor, and my favourite person in every room. Here's to every chapter still to come — with you.`,
 };
 
-function renderPage() {
   // Hero
   document.getElementById('heroName').textContent = name;
   document.getElementById('topbarTag').textContent = `For ${name} ✦`;
@@ -1004,7 +1007,6 @@ function renderPage() {
 
   // Surprise
   document.getElementById('surpriseText').textContent = DEF.gift;
-  setTimeout(initScratch, 300);
 
   // Closing
   document.getElementById('closingText').textContent = DEF.closing;
