@@ -928,15 +928,6 @@ async function loadData() {
     try { D = JSON.parse(sessionStorage.getItem('wisherly_data') || '{}'); } catch(e) {}
   }
 
-  // Pre-fetch & decode audio in the background NOW (no play yet).
-  // By the time the user clicks unlock, the blob will be ready.
-  const _pId = new URLSearchParams(location.search).get('id');
-  if (D.audioChunks && _pId) {
-    setupMusicPlayer(_pId, D.audioChunks, D.audioMime);
-  } else if (D.audioBase64) {
-    setupMusicFromBase64(D.audioBase64, D.audioMime);
-  }
-
   initPage();
 }
 
@@ -1006,9 +997,14 @@ function launchSurprise(entered) {
   pg.classList.add('visible');
   populatePage(entered);
   setupRevealObserver();
-  // Trigger play — audio blob was pre-fetched during loadData,
-  // so this fires synchronously within the user gesture context.
-  triggerMusicPlay();
+  // Start background music
+  const _urlParams = new URLSearchParams(location.search);
+  const _pageId = _urlParams.get('id');
+  if (D.audioChunks && _pageId) {
+    setupMusicPlayer(_pageId, D.audioChunks, D.audioMime);
+  } else if (D.audioBase64) {
+    setupMusicFromBase64(D.audioBase64, D.audioMime);
+  }
 }
 
 /* ══════════════════════════════════════
@@ -1187,15 +1183,8 @@ function setupRevealObserver() {
 
 /* ══════════════════════════════════════
    BACKGROUND MUSIC
-   Strategy: fetch & decode audio eagerly during loadData (background),
-   cache the blob URL, then play() synchronously on the unlock button
-   click — which IS a user gesture and won't be blocked by browsers.
 ══════════════════════════════════════ */
 let _musicPlaying = false;
-let _audioBlobUrl = null;
-let _audioMime = null;
-let _audioReady = false;
-let _playOnReady = false;
 
 function showMusicBar() {
   const bar = document.getElementById('musicBar');
@@ -1204,90 +1193,104 @@ function showMusicBar() {
   bar.onclick = toggleMusic;
 }
 
-function triggerMusicPlay() {
-  if (!_audioBlobUrl) { _playOnReady = true; return; }
-  _doPlay();
-}
-
-function _onAudioReady(blobUrl, mimeType) {
-  _audioBlobUrl = blobUrl;
-  _audioMime = mimeType;
-  _audioReady = true;
-  const audio = document.getElementById('bgAudio');
-  audio.src = blobUrl;
-  audio.loop = true;
-  if (_playOnReady) _doPlay();
-}
-
-function _doPlay() {
-  const audio = document.getElementById('bgAudio');
+async function setupMusicPlayer(pageId, totalChunks, mimeType) {
+  if (!pageId || !totalChunks) return;
   const label = document.getElementById('musicLabel');
   const sub   = document.getElementById('musicSub');
   const icon  = document.getElementById('musicToggleIcon');
-  showMusicBar();
-  audio.play().then(() => {
-    _musicPlaying = true;
-    label.textContent = 'Playing for you';
-    sub.textContent = 'tap to pause';
-    icon.textContent = '⏸';
-    setBarsPlaying(true);
-    audio.volume = 0;
-    let vol = 0;
-    const fi = setInterval(() => { vol = Math.min(vol + 0.05, 0.55); audio.volume = vol; if (vol >= 0.55) clearInterval(fi); }, 120);
-  }).catch(() => {
-    _musicPlaying = false;
-    label.textContent = 'Tap to play music 🎵';
-    sub.textContent = 'tap here to start';
-    icon.textContent = '▶';
-    setBarsPlaying(false);
-    document.getElementById('musicBar').onclick = function() {
-      audio.play().then(() => {
-        _musicPlaying = true;
-        label.textContent = 'Playing for you';
-        sub.textContent = 'tap to pause';
-        icon.textContent = '⏸';
-        setBarsPlaying(true);
-        audio.volume = 0.55;
-      }).catch(err => console.warn('Play failed:', err));
-      document.getElementById('musicBar').onclick = toggleMusic;
-    };
-  });
-}
 
-async function setupMusicPlayer(pageId, totalChunks, mimeType) {
-  if (!pageId || !totalChunks) return;
+  // Show bar immediately in loading state
+  showMusicBar();
+  setBarsPlaying(false);
+
   try {
     const chunkDocs = [];
     for (let i = 0; i < totalChunks; i++) {
       const snap = await window._db.collection('audio').doc(`${pageId}_${i}`).get();
       if (snap.exists) chunkDocs.push(snap.data().data);
     }
-    if (!chunkDocs.length) return;
-    const blobUrl = _base64ToBlobUrl(chunkDocs.join(''), mimeType);
-    if (blobUrl) _onAudioReady(blobUrl, mimeType);
+    if (!chunkDocs.length) { label.textContent = 'No audio found'; sub.textContent = ''; icon.textContent = '✕'; return; }
+
+    const fullB64 = chunkDocs.join('');
+    const binaryStr = atob(fullB64);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+    const blob = new Blob([bytes], {type: mimeType || 'audio/mpeg'});
+    const blobUrl = URL.createObjectURL(blob);
+
+    const audio = document.getElementById('bgAudio');
+    audio.src = blobUrl;
+    audio.loop = true;
+
+    try {
+      await audio.play();
+      _musicPlaying = true;
+      label.textContent = 'Playing for you';
+      sub.textContent = 'tap to pause';
+      icon.textContent = '⏸';
+      setBarsPlaying(true);
+      audio.volume = 0;
+      let vol = 0;
+      const fi = setInterval(() => { vol = Math.min(vol + 0.05, 0.55); audio.volume = vol; if (vol >= 0.55) clearInterval(fi); }, 120);
+    } catch(e) {
+      _musicPlaying = false;
+      label.textContent = 'Tap to play music 🎵';
+      sub.textContent = 'tap here to start';
+      icon.textContent = '▶';
+      setBarsPlaying(false);
+      document.getElementById('musicBar').onclick = async function() {
+        try {
+          await audio.play();
+          _musicPlaying = true;
+          label.textContent = 'Playing for you';
+          sub.textContent = 'tap to pause';
+          icon.textContent = '⏸';
+          setBarsPlaying(true);
+          audio.volume = 0.55;
+        } catch(err) { console.warn('Play failed:', err); }
+        document.getElementById('musicBar').onclick = toggleMusic;
+      };
+    }
   } catch(e) {
     console.warn('Audio load error:', e);
+    label.textContent = 'Music unavailable';
+    sub.textContent = '';
+    icon.textContent = '✕';
   }
 }
 
 function setupMusicFromBase64(base64, mimeType) {
   if (!base64) return;
-  const blobUrl = _base64ToBlobUrl(base64, mimeType);
-  if (blobUrl) _onAudioReady(blobUrl, mimeType);
-}
-
-function _base64ToBlobUrl(base64, mimeType) {
+  const label = document.getElementById('musicLabel');
+  const sub   = document.getElementById('musicSub');
+  const icon  = document.getElementById('musicToggleIcon');
+  showMusicBar();
+  setBarsPlaying(false);
   try {
-    // Decode byte-by-byte — avoids call stack limits on large strings
     const binaryStr = atob(base64);
     const bytes = new Uint8Array(binaryStr.length);
     for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
     const blob = new Blob([bytes], {type: mimeType || 'audio/mpeg'});
-    return URL.createObjectURL(blob);
-  } catch(e) {
-    console.warn('Base64 decode error:', e);
-    return null;
-  }
+    const blobUrl = URL.createObjectURL(blob);
+    const audio = document.getElementById('bgAudio');
+    audio.src = blobUrl;
+    audio.loop = true;
+    label.textContent = 'Tap to play music 🎵';
+    sub.textContent = 'tap here to start';
+    icon.textContent = '▶';
+    document.getElementById('musicBar').onclick = async function() {
+      try {
+        await audio.play();
+        _musicPlaying = true;
+        label.textContent = 'Playing for you';
+        sub.textContent = 'tap to pause';
+        icon.textContent = '⏸';
+        setBarsPlaying(true);
+        audio.volume = 0.55;
+      } catch(err) { console.warn('Play failed:', err); }
+      document.getElementById('musicBar').onclick = toggleMusic;
+    };
+  } catch(e) { console.warn('Base64 audio error:', e); }
 }
 
 function toggleMusic() {
