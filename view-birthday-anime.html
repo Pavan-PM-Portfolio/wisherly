@@ -1278,6 +1278,7 @@ function setupMusicFromBase64(base64, mimeType) {
 
 function _base64ToBlobUrl(base64, mimeType) {
   try {
+    // Decode byte-by-byte — avoids call stack limits on large strings
     const binaryStr = atob(base64);
     const bytes = new Uint8Array(binaryStr.length);
     for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
