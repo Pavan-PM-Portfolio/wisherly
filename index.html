@@ -110,18 +110,18 @@ section{position:relative;z-index:2;}
   position:fixed;top:0;left:0;right:0;z-index:900;
   height:90px;padding:0 52px;
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(255,255,255,.75);
+  background:rgba(247,249,255,.6);
   backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
-  border-bottom:1px solid rgba(37,99,235,.07);
+  border-bottom:1px solid rgba(37,99,235,.04);
   transition:all .5s;
 }
 #nav.scrolled{
-  background:rgba(255,255,255,.92);
+  background:rgba(247,249,255,.85);
   box-shadow:0 2px 40px rgba(13,34,96,.08);
   border-bottom-color:rgba(37,99,235,.1);
 }
 
-.nav-brand{text-decoration:none;display:flex;align-items:center;height:70px;flex-shrink:0;}
+.nav-brand{text-decoration:none;display:flex;align-items:center;height:70px;flex-shrink:0;margin-left:12px;}
 .nav-brand-mark{ display:none; }
 .nav-brand-name{ display:none; }
 
@@ -761,6 +761,7 @@ section{position:relative;z-index:2;}
   .wrap,.wrap-sm{padding:0 22px;}
   #nav{padding:0 22px;}
   .nav-links,.nav-right{display:none;}
+  .nav-hamburger{display:flex;}
   .hero-h1{font-size:clamp(48px,12vw,72px);}
   .hero-corner{display:none;}
   .hiw-layout,.demo-split,.comp-wrap,.f-mid{grid-template-columns:1fr;}
@@ -775,6 +776,28 @@ section{position:relative;z-index:2;}
   .met-cell{padding:36px 20px;}
   .met-num{font-size:44px;}
 }
+
+.nav-hamburger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;z-index:1000;
+}
+.nav-hamburger span{
+  display:block;width:24px;height:2px;
+  background:var(--cobalt,#0D2260);border-radius:2px;transition:.3s;
+}
+.nav-mobile{
+  display:none;position:fixed;top:90px;left:0;right:0;z-index:899;
+  background:rgba(247,249,255,.97);backdrop-filter:blur(20px);
+  padding:20px 28px;border-bottom:1px solid rgba(37,99,235,.08);
+  flex-direction:column;gap:16px;
+}
+.nav-mobile.open{display:flex;}
+.nav-mobile a{
+  font-family:'Outfit',sans-serif;font-size:15px;color:#4A6FA5;
+  text-decoration:none;padding:8px 0;border-bottom:1px solid rgba(37,99,235,.06);
+}
+.nav-mobile a:last-child{border-bottom:none;}
+@media(max-width:768px){.nav-hamburger{display:flex;}}
 </style>
 <style>
 #wly-nav{position:sticky;top:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:90px;background:rgba(255,255,255,.9);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(37,99,235,.08);}
@@ -806,7 +829,7 @@ section{position:relative;z-index:2;}
   position:sticky;top:0;z-index:900;
   display:flex;align-items:center;justify-content:space-between;
   padding:0 48px;height:90px;
-  background:rgba(255,255,255,.92);
+  background:rgba(247,249,255,.85);
   backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   border-bottom:1px solid rgba(37,99,235,.08);
   transition:box-shadow .3s;
@@ -826,7 +849,7 @@ section{position:relative;z-index:2;}
 
 
 <style id="wly-nav-css">
-#wly-nav{position:sticky;top:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:90px;background:rgba(255,255,255,.92);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(37,99,235,.08);}
+#wly-nav{position:sticky;top:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:90px;background:rgba(247,249,255,.85);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(37,99,235,.08);}
 #wly-nav ul{display:flex;gap:28px;list-style:none;align-items:center;}
 #wly-nav ul a{font-family:'Outfit',sans-serif;font-size:13px;color:#4A6FA5;text-decoration:none;transition:color .2s;font-weight:400;}
 #wly-nav ul a:hover{color:#0D2260;}
@@ -839,7 +862,7 @@ section{position:relative;z-index:2;}
 </style>
 
 <style id="wly-nav-css">
-#wly-nav{position:sticky;top:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:90px;background:rgba(255,255,255,.92);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(37,99,235,.08);}
+#wly-nav{position:sticky;top:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:90px;background:rgba(247,249,255,.85);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(37,99,235,.08);}
 #wly-nav ul{display:flex;gap:28px;list-style:none;align-items:center;}
 #wly-nav ul a{font-family:'Outfit',sans-serif;font-size:13px;color:#4A6FA5;text-decoration:none;transition:color .2s;font-weight:400;}
 #wly-nav ul a:hover{color:#0D2260;}
@@ -869,7 +892,19 @@ section{position:relative;z-index:2;}
     <a href="#" class="btn-ghost-nav">Log in</a>
     <a href="occasion.html" class="btn-cta-nav">Create a Page</a>
   </div>
+  <!-- Hamburger -->
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<!-- Mobile menu -->
+<div class="nav-mobile" id="nav-mobile">
+  <a href="index.html#features">Features</a>
+  <a href="index.html#pricing">Pricing</a>
+  <a href="demo.html">Demo</a>
+  <a href="#">Log in</a>
+  <a href="occasion.html" class="btn-cta-nav" style="text-align:center;">Create a Page</a>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -1288,5 +1323,17 @@ document.getElementById('ptog').addEventListener('click',function(){
   </div>
   <style>@keyframes wly-blink{0%,100%{opacity:1;}50%{opacity:.3;}}@media(max-width:768px){footer .footer-inner{padding:0 20px!important;}footer .footer-grid{grid-template-columns:1fr 1fr!important;gap:32px!important;}footer .footer-brand-col{grid-column:span 2;}}</style>
 </footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('nav-hamburger');
+  var menu = document.getElementById('nav-mobile');
+  if(btn && menu){
+    btn.addEventListener('click', function(){
+      menu.classList.toggle('open');
+    });
+  }
+})();
+</script>
 </body>
 </html>
