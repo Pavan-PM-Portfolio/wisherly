@@ -352,13 +352,23 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
         <div class="sec-num">3</div>
         <div>
           <div class="sec-title">Background <em>music</em></div>
-          <div class="sec-sub">Paste a YouTube link — it plays softly as they explore the page</div>
+          <div class="sec-sub">Upload a song — it plays softly as they explore the page</div>
         </div>
       </div>
       <div class="sec-body">
         <div class="field">
-          <label>YouTube URL</label>
-          <input type="url" id="musicUrl" placeholder="https://youtube.com/watch?v=…">
+          <label>Upload Music File</label>
+          <div class="music-upload-zone" id="musicUploadZone" style="position:relative;border:2px dashed rgba(37,99,235,.2);border-radius:14px;background:var(--snow);padding:32px 20px;text-align:center;cursor:pointer;transition:.25s;">
+            <input type="file" id="musicFile" accept="audio/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;">
+            <div style="font-size:36px;margin-bottom:10px;">🎵</div>
+            <div style="font-family:var(--fd);font-size:18px;color:var(--cobalt);margin-bottom:6px;">Drop your song here</div>
+            <div style="font-size:12px;color:var(--muted2);">or click to browse · MP3, AAC, WAV, M4A · max 10MB</div>
+          </div>
+          <div class="music-preview" id="musicPreview" style="display:none;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:var(--frost);border:1px solid var(--border);margin-top:10px;">
+            <div style="font-size:22px;">🎵</div>
+            <span style="font-size:13px;color:var(--blue);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="musicFileName">No file selected</span>
+            <button type="button" onclick="removeMusicFile()" style="background:none;border:none;cursor:pointer;color:var(--muted2);font-size:18px;padding:0 4px;line-height:1;">×</button>
+          </div>
           <div style="margin-top:12px;font-size:12px;color:var(--muted2);">💡 Try their favourite song, something that makes them cry, or your inside-joke anthem.</div>
         </div>
       </div>
