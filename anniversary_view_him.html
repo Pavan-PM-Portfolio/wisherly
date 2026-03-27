@@ -872,114 +872,143 @@ function showMain() {
   initReveal();
 }
 
+/* ═══════════════════════════════
+   DEFAULTS
+═══════════════════════════════ */
+const name = D.name || 'You';
+const sender = D.sender || 'Someone who loves you';
+const yrs = D.yearsTogether || D.milestoneYears || '∞';
+
+const DEF = {
+  yearsTogether: yrs,
+  tagline: D.heroTagline || D.tagline || 'Every chapter with you has been the best one yet.',
+  beginYear: D.beginYear || '✦',
+  beginWhere: D.beginWhere || D.whereWeMet || '✦',
+  beginStory: D.beginningStory || D.beginStory || `The day I met ${name} was the day everything quietly changed. I didn't know it yet — but that was the beginning of the best chapter of my life.`,
+  milestones: D.milestones || D.journey || D.timeline || [
+    { emoji:'💙', year:'Day 1',     title:'The Beginning',       desc:`The moment I met ${name} — and felt something shift.` },
+    { emoji:'⚡', year:'Chapter 2', title:'First Adventure',      desc:'Side by side, figuring out the world — and each other.' },
+    { emoji:'🌟', year:'Chapter 3', title:'When We Became Us',    desc:'Between the laughs and the late nights, two became one story.' },
+    { emoji:'✦',  year:'Today',     title:'Still Choosing You',   desc:'Every single day. Today, tomorrow, always.' },
+  ],
+  loveReasons: D.loveReasons || D.loves || D.whyILoveYou || [
+    `The strength ${name} carries — quietly, gracefully`,
+    'How you show up, every time, without being asked',
+    'The way you make even the hardest days feel manageable',
+    'Your laugh — it makes everything better',
+    'You are my steady ground in every storm',
+    'The way you love — completely, fearlessly, without half measures',
+  ],
+  struggles: D.struggles || D.hardTimes || [
+    'The seasons that tested us — and made us unbreakable',
+    'Every hard conversation that brought us closer',
+    'The moments we chose each other, even when it was difficult',
+  ],
+  growth: D.growth || D.growthMoments || [
+    `${name} made me braver than I ever thought I could be`,
+    'Because of you, I became a better version of myself',
+    'We turned every challenge into a foundation we stand on',
+    'You showed me that real strength is choosing to stay',
+  ],
+  future: D.future || D.futureDreams || D.bucketList || [
+    '✦ Wake up next to you, every morning, for the rest of our lives',
+    '✈️ See the world together — one city at a time',
+    '🏡 Build something real and lasting, just us',
+    '🌙 Grow old together and still mean it when we say I love you',
+    '☕ A thousand more quiet mornings — that is enough',
+  ],
+  promises: D.promises || [
+    { icon:'💙', title:'I will always choose you',   desc:'In every version of life, in every timeline, I choose you.' },
+    { icon:'✦',  title:'I will keep showing up',     desc:'On the good days, the hard days, and every ordinary day between.' },
+    { icon:'⚡', title:'I will fight for us',        desc:'Not against you — always with you, always for us.' },
+    { icon:'🌙', title:'I will grow with you',       desc:'Not just alongside you — but because of you, and for you.' },
+  ],
+  message: D.message || D.coreMessage || `There are no words that feel big enough for what I want to say to you. But I'll try.\n\nYou are the person I didn't know I was looking for. The one who makes me feel seen, grounded, and endlessly grateful. Every day with you is proof that life is beautiful — not because it's perfect, but because you're in it.\n\nThank you for every moment. For your patience, your strength, your laughter. For being exactly who you are.\n\nI love you. More than yesterday. Less than tomorrow.`,
+  signOff: D.signOff || D.signoff || `— Yours, always. ${sender}`,
+  gift: D.gift || D.surprise || D.surpriseText || `You are my greatest gift. Every single day. 💙`,
+  closing: D.closing || D.closingNote || `Thank you for being my greatest adventure, my steadiest anchor, and my favourite person in every room. Here's to every chapter still to come — with you.`,
+};
+
 function renderPage() {
-  if (D.name) { document.getElementById('heroName').textContent = D.name; document.getElementById('topbarTag').textContent = `For ${D.name} ✦`; }
-  const yrs = D.yearsTogether || D.milestoneYears;
-  if (yrs) { document.getElementById('yearsText').textContent = yrs + ' Years'; document.getElementById('heroPlayerNum').textContent = String(yrs).padStart(2,'0'); document.getElementById('togetherYears').textContent = yrs; }
-  if (D.heroTagline || D.tagline) document.getElementById('heroTagline').textContent = D.heroTagline || D.tagline;
-  if (D.beginYear || D.beginningStory || D.beginStory || D.beginWhere) {
-    if (D.beginYear) document.getElementById('beginYear').textContent = D.beginYear;
-    if (D.beginWhere || D.whereWeMet) document.getElementById('beginWhere').textContent = D.beginWhere || D.whereWeMet || '✦';
-    if (yrs) document.getElementById('togetherYears').textContent = yrs;
-    if (D.beginningStory || D.beginStory) document.getElementById('beginStory').textContent = D.beginningStory || D.beginStory;
-  } else {
-    document.getElementById('beginningSection').style.display = 'none';
-  }
+  // Hero
+  document.getElementById('heroName').textContent = name;
+  document.getElementById('topbarTag').textContent = `For ${name} ✦`;
+  document.getElementById('yearsText').textContent = DEF.yearsTogether + ' Years';
+  document.getElementById('heroPlayerNum').textContent = String(DEF.yearsTogether).padStart(2,'0');
+  document.getElementById('heroTagline').textContent = DEF.tagline;
+
+  // Beginning
+  document.getElementById('beginYear').textContent = DEF.beginYear;
+  document.getElementById('togetherYears').textContent = DEF.yearsTogether;
+  document.getElementById('beginWhere').textContent = DEF.beginWhere;
+  document.getElementById('beginStory').textContent = DEF.beginStory;
 
   // Timeline
-  const milestones = D.milestones || D.journey || D.timeline || [];
   const tlEl = document.getElementById('timelineEl');
-  if (milestones.length) {
-    const emojis = ['💙','⚡','🌟','🏆','✦','🔥','🌙','🎯'];
-    tlEl.innerHTML = milestones.map((m,i) => `
-      <div class="tl-item rv"><div class="tl-dot">${m.emoji||emojis[i%emojis.length]}</div>
-      <div class="tl-content"><div class="tl-year">${m.year||m.date||''}</div><div class="tl-title">${m.title||m.heading||''}</div><div class="tl-desc">${m.desc||m.text||m.description||''}</div></div></div>`).join('');
-  } else {
-    document.getElementById('journeySection').style.display = 'none';
-  }
+  const emojis = ['💙','⚡','🌟','🏆','✦','🔥','🌙','🎯'];
+  tlEl.innerHTML = DEF.milestones.map((m,i) => `
+    <div class="tl-item rv"><div class="tl-dot">${m.emoji||emojis[i%emojis.length]}</div>
+    <div class="tl-content"><div class="tl-year">${m.year||m.date||''}</div><div class="tl-title">${m.title||m.heading||''}</div><div class="tl-desc">${m.desc||m.text||m.description||''}</div></div></div>`).join('');
 
   // Photos
   const photos = D._photos || D.photos || [];
   if (photos.length) {
-    if (D.photoCaption) document.getElementById('photosCaption').textContent = D.photoCaption;
+    document.getElementById('photosCaption').textContent = D.photoCaption || `${name} & me — captured.`;
     document.getElementById('photosGrid').innerHTML = photos.map((src,i) => `
       <div class="photo-frame rv" style="transition-delay:${i*.07}s;">
         <img src="${src}" alt="Memory ${i+1}" loading="lazy">
         <div class="photo-num">${String(i+1).padStart(2,'0')}</div>
       </div>`).join('');
-  } else { document.getElementById('memoriesSection').style.display='none'; }
+  } else {
+    document.getElementById('memoriesSection').style.display = 'none';
+  }
 
   // Love
-  const loves = D.loveReasons || D.loves || D.whyILoveYou || [];
-  if (loves.length) {
-    const emojis2 = ['💙','⚡','🌟','✦','🔥','🎯','🏆','💎'];
-    document.getElementById('loveGrid').innerHTML = loves.map((item,i) => `
-      <div class="love-card rv" style="transition-delay:${i*.08}s;" onclick="flipLove(this)">
-        <div class="love-num">${String(i+1).padStart(2,'0')}</div>
-        <span class="love-icon">${emojis2[i%emojis2.length]}</span>
-        <div class="love-text">${typeof item==='string'?item:(item.text||item.title||item)}</div>
-        <div class="love-tap">Tap to reveal ✦</div>
-      </div>`).join('');
-  } else { document.getElementById('loveSection').style.display='none'; }
+  const emojis2 = ['💙','⚡','🌟','✦','🔥','🎯','🏆','💎'];
+  document.getElementById('loveGrid').innerHTML = DEF.loveReasons.map((item,i) => `
+    <div class="love-card rv" style="transition-delay:${i*.08}s;" onclick="flipLove(this)">
+      <div class="love-num">${String(i+1).padStart(2,'0')}</div>
+      <span class="love-icon">${emojis2[i%emojis2.length]}</span>
+      <div class="love-text">${typeof item==='string'?item:(item.text||item.title||item)}</div>
+      <div class="love-tap">Tap to reveal ✦</div>
+    </div>`).join('');
 
   // Struggles
-  const struggles = D.struggles || D.hardTimes || [];
-  if (struggles.length) {
-    document.getElementById('struggleItems').innerHTML = struggles.map(s => `
-      <div class="struggle-item rv"><span class="struggle-icon">⚡</span>
-      <p class="struggle-text">${typeof s==='string'?s:(s.text||s.title||s)}</p></div>`).join('');
-  } else { document.getElementById('strugglesSection').style.display='none'; }
+  document.getElementById('struggleItems').innerHTML = DEF.struggles.map(s => `
+    <div class="struggle-item rv"><span class="struggle-icon">⚡</span>
+    <p class="struggle-text">${typeof s==='string'?s:(s.text||s.title||s)}</p></div>`).join('');
 
   // Growth
-  const growthItems = D.growth || D.growthMoments || [];
-  if (growthItems.length) {
-    document.getElementById('growthCards').innerHTML = growthItems.map(g => `
-      <div class="growth-card rv"><div class="growth-label">Growth</div>
-      <div class="growth-text">${typeof g==='string'?g:(g.text||g.title||g)}</div></div>`).join('');
-  } else { document.getElementById('growthSection').style.display='none'; }
+  document.getElementById('growthCards').innerHTML = DEF.growth.map(g => `
+    <div class="growth-card rv"><div class="growth-label">Growth</div>
+    <div class="growth-text">${typeof g==='string'?g:(g.text||g.title||g)}</div></div>`).join('');
 
   // Future
-  const futureItems = D.future || D.futureDreams || D.bucketList || [];
-  if (futureItems.length) {
-    document.getElementById('futureList').innerHTML = futureItems.map(f => `
-      <div class="future-item rv"><div class="future-check">✦</div>
-      ${typeof f==='string'?f:(f.text||f.title||f)}</div>`).join('');
-  } else { document.getElementById('futureSection').style.display='none'; }
+  document.getElementById('futureList').innerHTML = DEF.future.map(f => `
+    <div class="future-item rv"><div class="future-check">✦</div>
+    ${typeof f==='string'?f:(f.text||f.title||f)}</div>`).join('');
 
   // Promises
-  const promises = D.promises || [];
-  if (promises.length) {
-    document.getElementById('promisesGrid').innerHTML = promises.map(p => `
-      <div class="promise-card rv"><span class="promise-icon">${p.icon||'✦'}</span>
-      <div class="promise-title">${p.title||p.text||p}</div>
-      <div class="promise-desc">${p.desc||p.description||''}</div></div>`).join('');
-  } else { document.getElementById('promisesSection').style.display='none'; }
+  document.getElementById('promisesGrid').innerHTML = DEF.promises.map(p => `
+    <div class="promise-card rv"><span class="promise-icon">${p.icon||'✦'}</span>
+    <div class="promise-title">${p.title||p.text||p}</div>
+    <div class="promise-desc">${p.desc||p.description||''}</div></div>`).join('');
 
   // Message
-  if (D.message || D.coreMessage) {
-    document.getElementById('msgText').textContent = D.message || D.coreMessage;
-    if (D.sender) document.getElementById('msgFrom').textContent = `— From ${D.sender}`;
-    if (D.signOff || D.signoff) document.getElementById('msgSignoff').textContent = D.signOff || D.signoff;
-  } else { document.getElementById('messageSection').style.display='none'; }
+  document.getElementById('msgText').textContent = DEF.message;
+  document.getElementById('msgFrom').textContent = `— From ${sender}`;
+  document.getElementById('msgSignoff').textContent = DEF.signOff;
 
-  if (!D.videoChunks) document.getElementById('videoSection').style.display='none';
+  // Video
+  if (!D.videoChunks) document.getElementById('videoSection').style.display = 'none';
 
   // Surprise
-  if (D.gift || D.surprise || D.surpriseText) {
-    document.getElementById('surpriseText').textContent = D.gift || D.surprise || D.surpriseText;
-    setTimeout(initScratch, 300);
-  } else { document.getElementById('surpriseSection').style.display='none'; }
+  document.getElementById('surpriseText').textContent = DEF.gift;
+  setTimeout(initScratch, 300);
 
   // Closing
-  if (D.closing || D.closingNote) document.getElementById('closingText').textContent = D.closing || D.closingNote;
-  if (D.signOff || D.signoff) document.getElementById('closingSignoff').textContent = '— ' + (D.signOff || D.signoff);
-
-  // Hide orphaned court dividers between hidden sections
-  document.querySelectorAll('.court-divider').forEach(div => {
-    const prev = div.previousElementSibling;
-    const next = div.nextElementSibling;
-    if ((prev && prev.style.display === 'none') || (next && next.style.display === 'none')) div.style.display = 'none';
-  });
+  document.getElementById('closingText').textContent = DEF.closing;
+  document.getElementById('closingSignoff').textContent = DEF.signOff;
 
   initUnlock();
 }
