@@ -114,6 +114,7 @@ section{position:relative;z-index:2;}
   backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
   border-bottom:1px solid rgba(37,99,235,.04);
   transition:all .5s;
+  overflow:visible;
 }
 #nav.scrolled{
   background:rgba(247,249,255,.85);
@@ -121,7 +122,7 @@ section{position:relative;z-index:2;}
   border-bottom-color:rgba(37,99,235,.1);
 }
 
-.nav-brand{text-decoration:none;display:flex;align-items:center;height:90px;flex-shrink:0;margin-left:0;}
+.nav-brand{text-decoration:none;display:flex;align-items:center;flex-shrink:0;margin-left:0;}
 .nav-brand-mark{ display:none; }
 .nav-brand-name{ display:none; }
 
@@ -884,7 +885,7 @@ section{position:relative;z-index:2;}
 <!-- NAV -->
 <nav id="nav">
   <a href="index.html" class="nav-brand">
-    <img src="logo.png" alt="Wisherly" style="height:100px;width:auto;display:block;max-height:100px;object-fit:contain;">
+    <img src="logo.png" alt="Wisherly" style="height:75px;width:auto;display:block;object-fit:contain;padding:5px 0;">
   </a>
   <ul class="nav-links">
     <li><a href="index.html#features">Features</a></li>
