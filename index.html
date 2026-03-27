@@ -166,7 +166,7 @@ section{position:relative;z-index:2;}
    HERO
 ───────────────────────────────────────────────────────── */
 #hero{
-  min-height:100vh;
+  min-height:0;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   text-align:center;
@@ -762,17 +762,22 @@ section{position:relative;z-index:2;}
   /* Nav */
   #nav{height:64px!important;padding:0 18px!important;}
   .nav-brand{margin-left:0!important;}
-  .nav-logo{height:40px!important;max-width:140px!important;width:auto!important;}
-  .nav-brand{flex-shrink:1;min-width:0;}
+  .nav-logo{height:40px!important;}
   .nav-links,.nav-right{display:none;}
   .nav-hamburger{display:flex;}
   .nav-mobile{top:64px;}
   /* Layout */
   .wrap,.wrap-sm{padding:0 20px;}
   /* Hero */
-  #hero{padding:90px 20px 50px;min-height:auto;}
+  #hero{padding:76px 20px 0;justify-content:flex-start;}
   .hero-h1{font-size:clamp(36px,10vw,56px);}
   .hero-corner{display:none;}
+  .hero-chips{display:none;}
+  .scroll-hint{display:none;}
+  .eyebrow{margin-bottom:20px;}
+  .hero-sub{font-size:15px;margin:16px auto 24px;}
+  .hero-btns{margin-bottom:24px;flex-direction:column;gap:10px;}
+  .btn-hero-p,.btn-hero-o{width:100%;justify-content:center;padding:14px 24px;}
   /* Sections */
   .hiw-layout,.demo-split,.comp-wrap,.f-mid{grid-template-columns:1fr;}
   .occ-grid,.testi-grid,.price-grid{grid-template-columns:1fr;}
@@ -782,7 +787,8 @@ section{position:relative;z-index:2;}
   #cta{padding:60px 20px;}
   .ft{grid-template-columns:1fr 1fr;gap:24px;}
   .f-brand{grid-column:span 2;}
-  .sp{padding:60px 0;}
+  .sp{padding:40px 0;}
+  .marquee-wrap{margin-top:0;}
   .met-cell{padding:28px 16px;}
   .met-num{font-size:40px;}
 }
