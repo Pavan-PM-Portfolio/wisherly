@@ -871,53 +871,94 @@ function showMain() {
 }
 
 /* ═══════════════════════════════
+   DEFAULTS
+═══════════════════════════════ */
+const name = D.name || 'You';
+const sender = D.sender || 'Someone who loves you';
+
+const DEF = {
+  yearsTogether: D.yearsTogether || D.milestoneYears || '∞',
+  tagline: D.heroTagline || D.tagline || 'Every moment with you is a gift I never want to return.',
+  beginYear: D.beginYear || '✨',
+  togetherYrs: (D.yearsTogether || D.milestoneYears || '∞') + ' yrs',
+  beginStory: D.beginningStory || D.beginStory || `The day I met ${name} was the day everything quietly changed. I didn't know it yet — but that was the beginning of the best chapter of my life.`,
+  milestones: D.milestones || D.journey || D.timeline || [
+    { emoji:'💗', year:'Day 1',    title:'The Beginning',      desc:`The moment I met ${name} and felt something shift inside me.` },
+    { emoji:'✈️', year:'Chapter 2', title:'Our First Adventure', desc:'Side by side, figuring out the world — and each other — one step at a time.' },
+    { emoji:'🌟', year:'Chapter 3', title:'When We Became Us',   desc:'Somewhere between the laughs and the late nights, we stopped being two people and became one story.' },
+    { emoji:'💍', year:'Today',     title:'Still Choosing You',  desc:`Every single day, I choose you. Today, tomorrow, always.` },
+  ],
+  loveReasons: D.loveReasons || D.loves || D.whyILoveYou || [
+    `The way ${name} laughs — it fills up every room`,
+    `How you always know exactly what I need, even before I do`,
+    `You make the ordinary feel extraordinary`,
+    `The warmth in your eyes when you look at me`,
+    `You're my safe place in every storm`,
+    `The way you love — completely, fearlessly, beautifully`,
+  ],
+  struggles: D.struggles || D.hardTimes || [
+    'The hard seasons that tested us — and proved we were unbreakable',
+    'Every argument that ended with us understanding each other better',
+    'The moments we chose us, even when it was difficult',
+  ],
+  growth: D.growth || D.growthMoments || [
+    `You taught me how to love without holding back`,
+    `Because of you, I became a better version of myself`,
+    `We learned that vulnerability isn't weakness — it's our superpower`,
+    `Together, we turned every challenge into a foundation`,
+  ],
+  future: D.future || D.futureDreams || D.bucketList || [
+    '🌸 Wake up next to you, every morning, for the rest of our lives',
+    '✈️ Travel the world together — one adventure at a time',
+    '🏡 Build a home filled with laughter, love, and us',
+    '🌙 Grow old together and still hold hands',
+    '☕ Share a thousand more quiet mornings over coffee',
+  ],
+  promises: D.promises || [
+    { icon:'💗', title:'I will always choose you', desc:'In every version of life, in every timeline, I choose you.' },
+    { icon:'🌸', title:'I will listen — really listen', desc:'Not just to your words, but to everything you don\'t say.' },
+    { icon:'✨', title:'I will keep showing up', desc:'On the good days, the hard days, and every ordinary day in between.' },
+    { icon:'🤝', title:'I will grow with you', desc:'Not just alongside you — but because of you, and for you.' },
+  ],
+  message: D.message || D.coreMessage || `There are no words that feel big enough for what I want to say. But I'll try.\n\nYou are the person I didn't know I was looking for. The one who makes me feel seen, safe, and endlessly grateful. Every day with you is a reminder that life is beautiful — not because it's perfect, but because you're in it.\n\nThank you for every moment. For your patience, your love, your laughter. For being exactly who you are.\n\nI love you. More than yesterday. Less than tomorrow.`,
+  signOff: D.signOff || D.signoff || `Forever yours, ${sender} 💕`,
+  gift: D.gift || D.surprise || D.surpriseText || `You are my greatest gift. Every single day. 💝`,
+  closing: D.closing || D.closingNote || `Thank you for being my greatest adventure, my softest landing, and my favourite hello. Here's to every chapter still to come — with you.`,
+};
+
+/* ═══════════════════════════════
    RENDER PAGE
 ═══════════════════════════════ */
 function renderPage() {
   // Hero
-  if (D.name) document.getElementById('heroName').textContent = D.name;
-  if (D.yearsTogethertogether || D.yearsTogether) {
-    document.getElementById('yearsText').textContent = (D.yearsTogether || D.yearsTogethertogether) + ' years together';
-  } else if (D.milestoneYears) {
-    document.getElementById('yearsText').textContent = D.milestoneYears + ' years together';
-  }
-  if (D.heroTagline || D.tagline) document.getElementById('heroTagline').textContent = D.heroTagline || D.tagline;
-
-  // Topbar
-  if (D.name) document.getElementById('topbarTag').textContent = `For ${D.name} 💕`;
+  document.getElementById('heroName').textContent = name;
+  document.getElementById('yearsText').textContent = DEF.yearsTogether + ' years together';
+  document.getElementById('heroTagline').textContent = DEF.tagline;
+  document.getElementById('topbarTag').textContent = `For ${name} 💕`;
 
   // Beginning
-  if (D.beginYear || D.beginningStory || D.beginStory || D.beginWhere) {
-    if (D.beginYear) document.getElementById('beginYear').textContent = D.beginYear;
-    if (D.yearsTogether || D.milestoneYears) document.getElementById('togetherYears').textContent = (D.yearsTogether || D.milestoneYears) + ' yrs';
-    if (D.beginningStory || D.beginStory) document.getElementById('beginStory').textContent = D.beginningStory || D.beginStory;
-  } else {
-    document.getElementById('beginningSection').style.display = 'none';
-  }
+  document.getElementById('beginYear').textContent = DEF.beginYear;
+  document.getElementById('togetherYears').textContent = DEF.togetherYrs;
+  document.getElementById('beginStory').textContent = DEF.beginStory;
 
   // Journey / Timeline
   const tlEl = document.getElementById('timelineEl');
-  const milestones = D.milestones || D.journey || D.timeline || [];
-  if (milestones.length) {
-    const emojis = ['💗','✈️','🌟','🏠','💍','🎉','🌙','☀️'];
-    tlEl.innerHTML = milestones.map((m,i) => `
-      <div class="tl-item rv">
-        <div class="tl-dot">${m.emoji || emojis[i%emojis.length]}</div>
-        <div class="tl-content">
-          <div class="tl-year">${m.year || m.date || ''}</div>
-          <div class="tl-title">${m.title || m.heading || ''}</div>
-          <div class="tl-desc">${m.desc || m.text || m.description || ''}</div>
-        </div>
-      </div>`).join('');
-  } else {
-    document.getElementById('journeySection').style.display = 'none';
-  }
+  const emojis = ['💗','✈️','🌟','🏠','💍','🎉','🌙','☀️'];
+  tlEl.innerHTML = DEF.milestones.map((m,i) => `
+    <div class="tl-item rv">
+      <div class="tl-dot">${m.emoji || emojis[i%emojis.length]}</div>
+      <div class="tl-content">
+        <div class="tl-year">${m.year || m.date || ''}</div>
+        <div class="tl-title">${m.title || m.heading || ''}</div>
+        <div class="tl-desc">${m.desc || m.text || m.description || ''}</div>
+      </div>
+    </div>`).join('');
 
   // Photos
   const pg = document.getElementById('photosGrid');
   const photos = D._photos || D.photos || [];
   if (photos.length) {
-    if (D.photoCaption) document.getElementById('photosCaption').textContent = D.photoCaption;
+    document.getElementById('photosCaption').textContent = D.photoCaption || `${name} & me — through the years 💕`;
     pg.innerHTML = photos.map((src,i) => `
       <div class="photo-frame rv" style="transition-delay:${i*.07}s;">
         <img src="${src}" alt="Memory ${i+1}" loading="lazy">
@@ -928,115 +969,62 @@ function renderPage() {
   }
 
   // Love cards
-  const loveItems = D.loveReasons || D.loves || D.whyILoveYou || [];
-  const lg = document.getElementById('loveGrid');
   const loveEmojis = ['💗','🌸','✨','💫','🎀','🌷','💝','🦋'];
-  if (loveItems.length) {
-    lg.innerHTML = loveItems.map((item,i) => `
-      <div class="love-card rv" style="transition-delay:${i*.08}s;" onclick="flipLove(this)">
-        <div class="love-num">${String(i+1).padStart(2,'0')}</div>
-        <div class="love-card-front">
-          <span class="love-icon">${loveEmojis[i%loveEmojis.length]}</span>
-          <div class="love-text">${typeof item === 'string' ? item : (item.text || item.title || item)}</div>
-          <div class="love-tap">Tap to feel the love 💗</div>
-        </div>
-        <div class="love-reveal">💗</div>
-      </div>`).join('');
-  } else {
-    document.getElementById('loveSection').style.display = 'none';
-  }
+  document.getElementById('loveGrid').innerHTML = DEF.loveReasons.map((item,i) => `
+    <div class="love-card rv" style="transition-delay:${i*.08}s;" onclick="flipLove(this)">
+      <div class="love-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="love-card-front">
+        <span class="love-icon">${loveEmojis[i%loveEmojis.length]}</span>
+        <div class="love-text">${typeof item === 'string' ? item : (item.text || item.title || item)}</div>
+        <div class="love-tap">Tap to feel the love 💗</div>
+      </div>
+      <div class="love-reveal">💗</div>
+    </div>`).join('');
 
   // Struggles
-  const struggles = D.struggles || D.hardTimes || [];
-  const si = document.getElementById('struggleItems');
-  if (struggles.length) {
-    si.innerHTML = struggles.map(s => `
-      <div class="struggle-item rv">
-        <span class="struggle-icon">💙</span>
-        <p class="struggle-text">${typeof s === 'string' ? s : (s.text || s.title || s)}</p>
-      </div>`).join('');
-  } else {
-    document.getElementById('strugglesSection').style.display = 'none';
-  }
+  document.getElementById('struggleItems').innerHTML = DEF.struggles.map(s => `
+    <div class="struggle-item rv">
+      <span class="struggle-icon">💙</span>
+      <p class="struggle-text">${typeof s === 'string' ? s : (s.text || s.title || s)}</p>
+    </div>`).join('');
 
   // Growth
-  const growthItems = D.growth || D.growthMoments || [];
-  const gc = document.getElementById('growthCards');
-  if (growthItems.length) {
-    gc.innerHTML = growthItems.map(g => `
-      <div class="growth-card rv">
-        <div class="growth-label">Growth</div>
-        <div class="growth-text">${typeof g === 'string' ? g : (g.text || g.title || g)}</div>
-      </div>`).join('');
-  } else {
-    document.getElementById('growthSection').style.display = 'none';
-  }
+  document.getElementById('growthCards').innerHTML = DEF.growth.map(g => `
+    <div class="growth-card rv">
+      <div class="growth-label">Growth</div>
+      <div class="growth-text">${typeof g === 'string' ? g : (g.text || g.title || g)}</div>
+    </div>`).join('');
 
   // Future
-  const futureItems = D.future || D.futureDreams || D.bucketList || [];
-  const fl = document.getElementById('futureList');
-  if (futureItems.length) {
-    fl.innerHTML = futureItems.map(f => `
-      <div class="future-item rv">
-        <div class="future-check">✦</div>
-        ${typeof f === 'string' ? f : (f.text || f.title || f)}
-      </div>`).join('');
-  } else {
-    document.getElementById('futureSection').style.display = 'none';
-  }
+  document.getElementById('futureList').innerHTML = DEF.future.map(f => `
+    <div class="future-item rv">
+      <div class="future-check">✦</div>
+      ${typeof f === 'string' ? f : (f.text || f.title || f)}
+    </div>`).join('');
 
   // Promises
-  const promises = D.promises || [];
-  const promGrid = document.getElementById('promisesGrid');
-  if (promises.length) {
-    promGrid.innerHTML = promises.map(p => `
-      <div class="promise-card rv">
-        <span class="promise-icon">${p.icon || '🕯️'}</span>
-        <div class="promise-title">${p.title || p.text || p}</div>
-        <div class="promise-desc">${p.desc || p.description || ''}</div>
-      </div>`).join('');
-  } else {
-    document.getElementById('promisesSection').style.display = 'none';
-  }
+  document.getElementById('promisesGrid').innerHTML = DEF.promises.map(p => `
+    <div class="promise-card rv">
+      <span class="promise-icon">${p.icon || '🕯️'}</span>
+      <div class="promise-title">${p.title || p.text || p}</div>
+      <div class="promise-desc">${p.desc || p.description || ''}</div>
+    </div>`).join('');
 
   // Core message
-  if (D.message || D.coreMessage) {
-    document.getElementById('msgText').textContent = D.message || D.coreMessage;
-    if (D.sender) document.getElementById('msgFrom').textContent = `A love letter from ${D.sender}`;
-    if (D.signOff || D.signoff) document.getElementById('msgSignoff').textContent = D.signOff || D.signoff;
-  } else {
-    document.getElementById('messageSection').style.display = 'none';
-  }
+  document.getElementById('msgText').textContent = DEF.message;
+  document.getElementById('msgFrom').textContent = `A love letter from ${sender}`;
+  document.getElementById('msgSignoff').textContent = DEF.signOff;
 
-  // Video placeholder — loaded async above
+  // Video
   if (!D.videoChunks) document.getElementById('videoSection').style.display = 'none';
 
   // Surprise / scratch
-  if (D.gift || D.surprise || D.surpriseText) {
-    document.getElementById('surpriseText').textContent = D.gift || D.surprise || D.surpriseText;
-    if (D.surprisePhoto) {
-      document.getElementById('scratchReveal').style.backgroundImage = `url(${D.surprisePhoto})`;
-      document.getElementById('scratchReveal').style.backgroundSize = 'cover';
-    }
-    // Defer initScratch until section is visible and has dimensions
-    setTimeout(initScratch, 300);
-  } else {
-    document.getElementById('surpriseSection').style.display = 'none';
-  }
+  document.getElementById('surpriseText').textContent = DEF.gift;
+  setTimeout(initScratch, 300);
 
   // Closing
-  if (D.closing || D.closingNote) document.getElementById('closingText').textContent = D.closing || D.closingNote;
-  if (D.signOff || D.signoff) document.getElementById('closingSignoff').textContent = D.signOff || D.signoff;
-
-  // Hide comic dividers that sit between two hidden sections
-  const allDividers = document.querySelectorAll('.comic-divider');
-  allDividers.forEach(div => {
-    const prev = div.previousElementSibling;
-    const next = div.nextElementSibling;
-    const prevHidden = prev && (prev.style.display === 'none' || window.getComputedStyle(prev).display === 'none');
-    const nextHidden = next && (next.style.display === 'none' || window.getComputedStyle(next).display === 'none');
-    if (prevHidden || nextHidden) div.style.display = 'none';
-  });
+  document.getElementById('closingText').textContent = DEF.closing;
+  document.getElementById('closingSignoff').textContent = DEF.signOff;
 
   initUnlock();
 }
