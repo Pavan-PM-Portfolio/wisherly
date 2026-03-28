@@ -954,7 +954,7 @@ to{width:60%;}}
           <!-- memories -->
           <div style="padding:18px 16px 14px;background:#FAFBFF;">
             <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A9CC8;margin-bottom:8px;font-family:var(--fs);">Memories shared</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;font-weight:400;color:#07122A;line-height:1;letter-spacing:-.8px;margin-bottom:3px;"><span id="metMemoriesCount">0</span><span style="color:#7C3AED;font-style:normal;">+</span></div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;font-weight:400;color:#07122A;line-height:1;letter-spacing:-.8px;margin-bottom:3px;"><span id="heroMemoriesCount">0</span><span style="color:#7C3AED;font-style:normal;">+</span></div>
             <div style="font-size:11px;color:#7A9CC8;font-family:var(--fs);">photos, notes &amp; messages</div>
             <div style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:#F3F0FF;border-radius:6px;padding:3px 8px;font-size:9px;color:#7C3AED;font-weight:600;font-family:var(--fs);">&#10022; auto-calculated</div>
           </div>
@@ -1853,22 +1853,20 @@ document.getElementById('ptog').addEventListener('click',function(){
       metEl.setAttribute('data-t', count);
       metEl.textContent = count.toLocaleString();
     }
-    // Strip count
-    var stripEl = document.getElementById('stripCount');
+    // Footer pages count
     var footerPages = document.getElementById('footerPagesCount');
     if (footerPages) footerPages.textContent = count.toLocaleString();
-    var footerMem = document.getElementById('footerMemoriesCount');
-    if (footerMem) footerMem.textContent = (count * 5).toLocaleString();
-    if (stripEl) {
-      stripEl.textContent = count > 0 ? count.toLocaleString() + '+' : '0+';
-    }
     // Memories shared = pageCount x 5 (avg memories per page)
-    var memEl = document.getElementById('metMemoriesCount');
-    if (memEl) {
-      var memories = count * 5;
-      memEl.setAttribute('data-t', memories);
-      memEl.textContent = memories.toLocaleString();
+    var memories = count * 5;
+    var heroMemEl = document.getElementById('heroMemoriesCount');
+    if (heroMemEl) heroMemEl.textContent = memories.toLocaleString();
+    var metMemEl = document.getElementById('metMemoriesCount');
+    if (metMemEl) {
+      metMemEl.setAttribute('data-t', memories);
+      metMemEl.textContent = memories.toLocaleString();
     }
+    var footerMemEl2 = document.getElementById('footerMemoriesCount');
+    if (footerMemEl2) footerMemEl2.textContent = memories.toLocaleString();
   }
 
   function timeAgo(ts) {
@@ -1888,9 +1886,9 @@ document.getElementById('ptog').addEventListener('click',function(){
           var data = doc.data();
           var count = data.pageCount || 0;
           updateCounters(count);
-          var lc = document.getElementById('lastCreated');
-          if (lc && data.lastCreatedAt) {
-            lc.textContent = 'Last page: ' + timeAgo(data.lastCreatedAt);
+          var lcEl = document.getElementById('lastCreated');
+          if (lcEl && data.lastCreatedAt) {
+            lcEl.textContent = 'Last page: ' + timeAgo(data.lastCreatedAt);
           }
         }
       }, function(err) {
