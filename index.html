@@ -431,23 +431,39 @@ to{width:60%;}}
 /* ─────────────────────────────────────────────────────────
    HOW IT WORKS
 ───────────────────────────────────────────────────────── */
-#hiw{background:var(--white);}
-.hiw-layout{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;}
-.steps{display:flex;flex-direction:column;}
-.step{
-  display:flex;gap:28px;padding:30px 0;
-  border-bottom:1px solid var(--border2);
-  transition:all .3s;
+#hiw{background:var(--snow);}
+/* HIW header */
+.hiw-header{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:48px;}
+.hiw-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.hiw-eyebrow-line{width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--mist));}
+.hiw-h1{font-family:var(--fd);font-size:clamp(36px,3.8vw,50px);font-weight:400;color:var(--navy);line-height:1.0;letter-spacing:-.8px;}
+.hiw-h1 em{font-style:italic;color:var(--blue);display:block;font-size:clamp(40px,4.2vw,56px);}
+.hiw-sub{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:24px;}
+.hiw-stats{display:flex;background:var(--white);border-radius:14px;border:1px solid rgba(37,99,235,.08);overflow:hidden;margin-bottom:24px;}
+.hiw-stat{padding:14px 22px;flex:1;text-align:center;border-right:1px solid rgba(37,99,235,.06);}
+.hiw-stat:last-child{border-right:none;}
+.hiw-stat-n{font-family:var(--fd);font-style:italic;font-size:24px;color:var(--navy);line-height:1;margin-bottom:3px;}
+.hiw-stat-n span{color:var(--blue);}
+.hiw-stat-l{font-family:var(--fs);font-size:10px;color:var(--muted2);}
+/* HIW step cards */
+.hiw-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.hiw-step{background:var(--white);border-radius:18px;overflow:hidden;border:1px solid rgba(37,99,235,.07);transition:transform .25s,box-shadow .25s;}
+.hiw-step:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(7,18,42,.1);}
+.hiw-step-img{height:140px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.hiw-step-img::after{content:attr(data-n);position:absolute;bottom:-8px;right:8px;font-family:var(--fd);font-style:italic;font-size:80px;font-weight:400;line-height:1;opacity:.08;color:var(--navy);}
+.hiw-step-body{padding:18px 18px 20px;}
+.hiw-step-num{font-family:var(--fs);font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);margin-bottom:7px;}
+.hiw-step-title{font-family:var(--fd);font-style:italic;font-size:17px;color:var(--navy);margin-bottom:7px;line-height:1.3;}
+.hiw-step-desc{font-family:var(--fs);font-size:12px;color:var(--muted);line-height:1.75;margin-bottom:12px;}
+.hiw-step-tag{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-family:var(--fs);font-size:10px;font-weight:600;}
+@keyframes hiw-eq{0%{transform:scaleY(.3);transform-origin:bottom;}100%{transform:scaleY(1);transform-origin:bottom;}}
+@keyframes hiw-fall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(6px) rotate(15deg);}}
+@keyframes hiw-pulse{0%,100%{opacity:.6;}50%{opacity:1;}}
+@media(max-width:768px){
+  .hiw-header{grid-template-columns:1fr;}
+  .hiw-steps{grid-template-columns:1fr 1fr;}
+  .hiw-stat{padding:10px 14px;}
 }
-.step:last-child{border-bottom:none;}
-.step:hover .step-n{color:var(--blue);}
-.step-n{
-  font-family:var(--fd);font-size:14px;font-weight:400;font-style:italic;
-  color:var(--muted2);padding-top:4px;flex-shrink:0;width:28px;
-  transition:.3s;
-}
-.step h3{font-family:var(--fs);font-size:17px;font-weight:600;color:var(--cobalt);margin-bottom:6px;}
-.step p{font-size:14px;color:var(--muted);line-height:1.7;}
 
 /* Elegant phone */
 .phone-wrap{display:flex;justify-content:center;align-items:center;position:relative;}
@@ -893,102 +909,179 @@ to{width:60%;}}
         <a href="#" class="hero-soc" title="Facebook" id="soc-facebook">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.5h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
         </a>
-        <a href="#" class="hero-soc" title="LinkedIn" id="soc-linkedin">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.35-1.85 3.58 0 4.25 2.36 4.25 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM3.56 20.45h3.55V9H3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
-        </a>
         <a href="#" class="hero-soc" title="WhatsApp" id="soc-whatsapp">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.47 14.38c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.87 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.19-.57-.34z"/><path d="M12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.11 1.52 5.84L.06 23.27l5.57-1.46A11.93 11.93 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0zm0 21.82a9.79 9.79 0 0 1-5.13-1.44l-.37-.22-3.8 1 1.01-3.7-.24-.38A9.82 9.82 0 0 1 2.18 12C2.18 6.57 6.57 2.18 12 2.18S21.82 6.57 21.82 12 17.43 21.82 12 21.82z"/></svg>
         </a>
         <a href="#" class="hero-soc" title="LinkedIn" id="soc-linkedin">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.35-1.85 3.58 0 4.25 2.36 4.25 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM3.56 20.45h3.55V9H3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
         </a>
       </div>
     </div>
 
     <!-- RIGHT -->
-    <div class="hero-right" style="padding:32px 36px;flex-direction:column;gap:10px;align-items:stretch;justify-content:center;">
+    <div class="hero-right" style="padding:28px 28px;flex-direction:column;gap:10px;align-items:stretch;justify-content:center;">
 
       <!-- sparkles -->
-      <div class="h-spark" style="top:20px;right:24px;"><svg class="h-spark-svg" style="--sd:2.5s;width:12px;height:12px;" viewBox="0 0 14 14" fill="none"><path d="M7 0v14M0 7h14M2 2l10 10M12 2L2 12" stroke="#2563EB" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-      <div class="h-spark" style="bottom:28px;left:24px;"><svg class="h-spark-svg" style="--sd:3s;width:10px;height:10px;" viewBox="0 0 14 14" fill="none"><path d="M7 0v14M0 7h14M2 2l10 10M12 2L2 12" stroke="#7C3AED" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+      <div class="h-spark" style="top:18px;right:22px;"><svg class="h-spark-svg" style="--sd:2.5s;width:12px;height:12px;" viewBox="0 0 14 14" fill="none"><path d="M7 0v14M0 7h14M2 2l10 10M12 2L2 12" stroke="#2563EB" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+      <div class="h-spark" style="bottom:90px;left:18px;"><svg class="h-spark-svg" style="--sd:3.2s;width:10px;height:10px;" viewBox="0 0 14 14" fill="none"><path d="M7 0v14M0 7h14M2 2l10 10M12 2L2 12" stroke="#7C3AED" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+      <div class="h-cdot" style="width:5px;height:5px;background:#BFDBFE;top:20%;left:8%;animation-duration:3.2s;"></div>
+      <div class="h-cdot" style="width:4px;height:4px;background:#FCA5A5;top:75%;left:6%;animation-duration:4s;animation-delay:.6s;"></div>
+      <div class="h-cdot" style="width:4px;height:4px;background:#6EE7B7;top:30%;right:6%;animation-duration:3.5s;animation-delay:1s;"></div>
 
-      <!-- LIVE COUNTER -->
-      <div style="background:linear-gradient(135deg,#07122A,#1A3FA6);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
-        <div>
-          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px;">Surprise pages created</div>
-          <div style="display:flex;align-items:baseline;gap:4px;">
-            <span id="liveCounter" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:36px;font-weight:400;color:white;line-height:1;letter-spacing:-.5px;">12,000+</span>
+      <!-- COUNTER CARD -->
+      <div style="background:white;border-radius:18px;border:1px solid rgba(37,99,235,.1);overflow:hidden;box-shadow:0 6px 28px rgba(7,18,42,.07);">
+
+        <!-- top split -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(37,99,235,.06);">
+
+          <!-- pages count -->
+          <div style="padding:18px 18px 14px;border-right:1px solid rgba(37,99,235,.06);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A9CC8;font-family:var(--fs);">Pages created</span>
+              <div style="display:flex;align-items:center;gap:4px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:999px;padding:2px 7px;">
+                <div style="width:5px;height:5px;border-radius:50%;background:#10B981;animation:livepulse 1.5s ease infinite;"></div>
+                <span style="font-size:9px;font-weight:700;color:#059669;font-family:var(--fs);">Live</span>
+              </div>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:42px;font-weight:400;color:#07122A;line-height:1;letter-spacing:-1.5px;margin-bottom:3px;"><span id="liveCounter">0</span><span style="color:#2563EB;font-style:normal;font-size:22px;vertical-align:super;">+</span></div>
+            <div style="font-size:11px;color:#7A9CC8;font-family:var(--fs);">and counting — every page matters</div>
+            <div style="display:flex;align-items:center;gap:4px;margin-top:8px;font-size:9px;color:#BFDBFE;font-family:var(--fs);">
+              <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="3.5" stroke="#BFDBFE" stroke-width="1"/><path d="M4.5 2.5v2l1.3 1.3" stroke="#BFDBFE" stroke-width="1" stroke-linecap="round"/></svg>
+              Updates the moment a page is created
+            </div>
           </div>
-          <div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:4px;">and counting&hellip;</div>
+
+          <!-- memories -->
+          <div style="padding:18px 16px 14px;background:#FAFBFF;">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A9CC8;margin-bottom:8px;font-family:var(--fs);">Memories shared</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;font-weight:400;color:#07122A;line-height:1;letter-spacing:-.8px;margin-bottom:3px;"><span id="metMemoriesCount">0</span><span style="color:#7C3AED;font-style:normal;">+</span></div>
+            <div style="font-size:11px;color:#7A9CC8;font-family:var(--fs);">photos, notes &amp; messages</div>
+            <div style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:#F3F0FF;border-radius:6px;padding:3px 8px;font-size:9px;color:#7C3AED;font-weight:600;font-family:var(--fs);">&#10022; auto-calculated</div>
+          </div>
         </div>
-        <div style="text-align:right;">
-          <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;margin-bottom:6px;">
-            <div style="width:6px;height:6px;border-radius:50%;background:#10B981;animation:livepulse 1.5s ease infinite;"></div>
-            <span style="font-size:11px;color:#6EE7B7;font-weight:600;">Live</span>
+
+        <!-- mini stats row — animated SVG icons -->
+        <style>
+          .stat-icon-wrap{width:28px;height:28px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;}
+          /* cake candle flicker */
+          @keyframes flicker{0%,100%{opacity:1;transform:scaleY(1);}50%{opacity:.7;transform:scaleY(.85);}}
+          .candle-flame{animation:flicker 1.2s ease-in-out infinite;}
+          /* tear drop */
+          @keyframes teardrop{0%,60%{transform:translateY(0);opacity:1;}100%{transform:translateY(5px);opacity:0;}}
+          .tear{animation:teardrop 2s ease-in-out infinite;}
+          .tear2{animation:teardrop 2s ease-in-out infinite;animation-delay:.6s;}
+          /* globe spin */
+          @keyframes globespin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+          .globe-lines{animation:globespin 8s linear infinite;transform-origin:12px 12px;}
+          /* stat cell hover */
+          .stat-cell{padding:12px 14px;position:relative;overflow:hidden;cursor:default;transition:background .2s;}
+          .stat-cell:hover{background:#F7F9FF;}
+          .stat-top-bar{position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transition:transform .4s;transform-origin:left;}
+          .stat-cell:hover .stat-top-bar{transform:scaleX(1);}
+        </style>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid rgba(37,99,235,.06);">
+          <div class="stat-cell" style="border-right:1px solid rgba(37,99,235,.06);">
+            <div class="stat-top-bar" style="background:linear-gradient(90deg,#2563EB,#60A5FA);"></div>
+            <div class="stat-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <!-- cake base -->
+                <rect x="3" y="12" width="18" height="9" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/>
+                <rect x="6" y="9" width="12" height="4" rx="1" fill="#EFF6FF" stroke="#2563EB" stroke-width="1"/>
+                <!-- candles -->
+                <rect x="8" y="5" width="2" height="4" rx="1" fill="#BFDBFE"/>
+                <rect x="14" y="5" width="2" height="4" rx="1" fill="#BFDBFE"/>
+                <!-- flames -->
+                <ellipse class="candle-flame" cx="9" cy="4.5" rx="1.2" ry="1.8" fill="#F59E0B"/>
+                <ellipse class="candle-flame" cx="15" cy="4.5" rx="1.2" ry="1.8" fill="#F59E0B" style="animation-delay:.3s;"/>
+                <!-- frosting waves -->
+                <path d="M3 13 Q6 11 9 13 Q12 15 15 13 Q18 11 21 13" stroke="#93C5FD" stroke-width="1" fill="none"/>
+              </svg>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#07122A;line-height:1;margin-bottom:2px;">8</div>
+            <div style="font-size:9.5px;color:#7A9CC8;font-family:var(--fs);">Occasions available</div>
           </div>
-          <div style="font-size:11px;color:rgba(255,255,255,.35);">Real&#8209;time count</div>
-          <div id="lastCreated" style="font-size:10px;color:rgba(255,255,255,.25);margin-top:3px;"></div>
+          <div class="stat-cell" style="border-right:1px solid rgba(37,99,235,.06);">
+            <div class="stat-top-bar" style="background:linear-gradient(90deg,#EC4899,#F9A8D4);"></div>
+            <div class="stat-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <!-- smiling face -->
+                <circle cx="12" cy="12" r="9" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2"/>
+                <!-- eyes with tears -->
+                <circle cx="9" cy="10" r="1.2" fill="#92400E"/>
+                <circle cx="15" cy="10" r="1.2" fill="#92400E"/>
+                <!-- happy mouth -->
+                <path d="M8.5 14.5 Q12 17.5 15.5 14.5" stroke="#92400E" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                <!-- tears dropping -->
+                <path class="tear" d="M8 12 Q7.5 13.5 8 14.5" stroke="#60A5FA" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <ellipse class="tear" cx="8" cy="14.8" rx=".8" ry="1" fill="#93C5FD"/>
+                <path class="tear2" d="M16 12 Q16.5 13.5 16 14.5" stroke="#60A5FA" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <ellipse class="tear2" cx="16" cy="14.8" rx=".8" ry="1" fill="#93C5FD"/>
+              </svg>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#07122A;line-height:1;margin-bottom:2px;">98%</div>
+            <div style="font-size:9.5px;color:#7A9CC8;font-family:var(--fs);">People cried, happily!</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-top-bar" style="background:linear-gradient(90deg,#059669,#6EE7B7);"></div>
+            <div class="stat-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/>
+                <!-- spinning globe lines -->
+                <g class="globe-lines">
+                  <ellipse cx="12" cy="12" rx="4" ry="9" stroke="#93C5FD" stroke-width="1" fill="none"/>
+                  <line x1="3" y1="12" x2="21" y2="12" stroke="#93C5FD" stroke-width="1"/>
+                  <line x1="5" y1="7" x2="19" y2="7" stroke="#BFDBFE" stroke-width=".8"/>
+                  <line x1="5" y1="17" x2="19" y2="17" stroke="#BFDBFE" stroke-width=".8"/>
+                </g>
+                <circle cx="12" cy="12" r="9" stroke="#2563EB" stroke-width="1.2" fill="none"/>
+              </svg>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#07122A;line-height:1;margin-bottom:2px;">100+</div>
+            <div style="font-size:9.5px;color:#7A9CC8;font-family:var(--fs);">Countries reached</div>
+          </div>
+        </div>
+
+        <!-- footer -->
+        <div style="padding:8px 16px;background:#F7F9FF;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#7A9CC8;font-family:var(--fs);">
+            <div style="width:4px;height:4px;border-radius:50%;background:#10B981;animation:livepulse 2s ease infinite;"></div>
+            Real data &middot; Firestore powered &middot; No estimates
+          </div>
+          <div style="font-size:9.5px;color:#2563EB;font-weight:600;font-family:var(--fs);">&#10022; Free during launch</div>
         </div>
       </div>
-      <style>@keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5);}50%{box-shadow:0 0 0 5px rgba(16,185,129,0);}}</style>
+      <style>@keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5);}50%{box-shadow:0 0 0 4px rgba(16,185,129,0);}}</style>
 
-      <!-- top label -->
-      <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A9CC8;margin-bottom:4px;">Choose your occasion</div>
+      <!-- OCCASION LABEL -->
+      <div style="font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A9CC8;font-family:var(--fs);">Choose your occasion</div>
 
-      <!-- occasions grid — 2 cols -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-
-        <a href="gender.html?occasion=birthday" style="background:white;border-radius:14px;padding:16px;border:1.5px solid rgba(37,99,235,.1);text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .25s;position:relative;overflow:hidden;">
-          <div style="font-size:26px;">&#127874;</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#07122A;font-weight:400;">Birthday</div>
-          <div style="font-size:11px;color:#7A9CC8;">Photos &middot; Music &middot; Contributors</div>
-          <div style="position:absolute;top:10px;right:10px;background:#EFF6FF;border-radius:999px;padding:2px 8px;font-size:9px;font-weight:700;color:#1D4ED8;">Popular</div>
+      <!-- OCCASION GRID -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <a href="gender.html?occasion=birthday" style="background:white;border-radius:12px;padding:12px 14px;border:1.5px solid rgba(37,99,235,.12);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;position:relative;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><rect x="2" y="10" width="16" height="8" rx="2" fill="#DBEAFE"/><rect x="5" y="7" width="10" height="4" rx="1" fill="#EFF6FF" stroke="#93C5FD" stroke-width=".8"/><ellipse cx="8" cy="6" rx="1" ry="1.5" fill="#FCD34D" style="animation:flicker 1.2s ease infinite;"/><ellipse cx="12" cy="6" rx="1" ry="1.5" fill="#FCD34D" style="animation:flicker 1.2s .3s ease infinite;"/></svg>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Birthday</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Photos &middot; Music</div></div>
+          <span style="position:absolute;top:6px;right:8px;background:#EFF6FF;border-radius:999px;padding:1px 6px;font-size:8px;font-weight:700;color:#1D4ED8;font-family:var(--fs);">Popular</span>
         </a>
-
-        <a href="gender.html?occasion=anniversary" style="background:white;border-radius:14px;padding:16px;border:1.5px solid rgba(37,99,235,.1);text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .25s;">
-          <div style="font-size:26px;">&#128141;</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#07122A;font-weight:400;">Anniversary</div>
-          <div style="font-size:11px;color:#7A9CC8;">Timeline &middot; Love letters</div>
+        <a href="gender.html?occasion=anniversary" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#FDF2F8" stroke="#F9A8D4" stroke-width="1"/><path d="M6.5 10 Q10 6 13.5 10 Q10 14 6.5 10Z" fill="#EC4899" opacity=".8"/></svg>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Anniversary</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Timeline &middot; Love</div></div>
         </a>
-
-        <a href="gender.html?occasion=farewell" style="background:white;border-radius:14px;padding:16px;border:1.5px solid rgba(37,99,235,.1);text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .25s;">
-          <div style="font-size:26px;">&#127807;</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#07122A;font-weight:400;">Farewell</div>
-          <div style="font-size:11px;color:#7A9CC8;">Messages &middot; Group wishes</div>
+        <a href="gender.html?occasion=farewell" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#F0FDF4"/><path d="M10 4 C7 6 5 9 8 11 C6 13 7 16 10 16 C13 16 14 13 12 11 C15 9 13 6 10 4Z" fill="#6EE7B7" stroke="#059669" stroke-width=".8"/></svg>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Farewell</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Group wishes</div></div>
         </a>
-
-        <a href="gender.html?occasion=friendship" style="background:white;border-radius:14px;padding:16px;border:1.5px solid rgba(37,99,235,.1);text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .25s;">
-          <div style="font-size:26px;">&#128155;</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#07122A;font-weight:400;">Friendship</div>
-          <div style="font-size:11px;color:#7A9CC8;">Memories &middot; Inside jokes</div>
+        <a href="gender.html?occasion=friendship" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#FFFBEB"/><path d="M10 14 L6 10 Q5 7 8 7 Q9.5 7 10 9 Q10.5 7 12 7 Q15 7 14 10Z" fill="#FCD34D"/></svg>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Friendship</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Memories</div></div>
         </a>
-
-        <a href="gender.html?occasion=love" style="background:white;border-radius:14px;padding:16px;border:1.5px solid rgba(37,99,235,.1);text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .25s;">
-          <div style="font-size:26px;">&#128140;</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#07122A;font-weight:400;">Love Notes</div>
-          <div style="font-size:11px;color:#7A9CC8;">Letters &middot; Music &middot; Countdown</div>
+        <a href="gender.html?occasion=love" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#FDF2F8"/><rect x="5" y="7" width="10" height="7" rx="1.5" fill="#FBCFE8" stroke="#EC4899" stroke-width=".8"/><path d="M5 8 L10 11.5 L15 8" stroke="#EC4899" stroke-width=".8" fill="none"/></svg>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Love Notes</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Letters &middot; Music</div></div>
         </a>
-
-        <a href="gender.html?occasion=apology" style="background:white;border-radius:14px;padding:16px;border:1.5px solid rgba(37,99,235,.1);text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .25s;">
-          <div style="font-size:26px;">&#128374;</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:#07122A;font-weight:400;">Apology</div>
-          <div style="font-size:11px;color:#7A9CC8;">Heartfelt &middot; Sincere</div>
+        <a href="gender.html?occasion=apology" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#F0F9FF"/><path d="M10 5 L10.8 9 L15 9.5 L11.5 12.5 L13 17 L10 14.5 L7 17 L8.5 12.5 L5 9.5 L9.2 9Z" fill="#93C5FD" stroke="#2563EB" stroke-width=".6"/></svg>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Apology</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Heartfelt</div></div>
         </a>
-
-      </div>
-
-      <!-- bottom mini strip -->
-      <div style="display:flex;align-items:center;justify-content:space-between;background:white;border-radius:12px;padding:12px 16px;border:1px solid rgba(37,99,235,.08);margin-top:4px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div style="display:flex;">
-            <div style="width:22px;height:22px;border-radius:50%;background:#DBEAFE;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#1D4ED8;margin-left:-5px;">R</div>
-            <div style="width:22px;height:22px;border-radius:50%;background:#FCE7F3;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#BE185D;margin-left:-5px;">S</div>
-            <div style="width:22px;height:22px;border-radius:50%;background:#D1FAE5;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#065F46;margin-left:-5px;">A</div>
-            <div style="width:22px;height:22px;border-radius:50%;background:#FEF3C7;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#92400E;margin-left:-5px;">K</div>
-          </div>
-          <span style="font-size:12px;color:#4A6FA5;"><strong style="color:#07122A;">12,000+</strong> pages created</span>
-        </div>
-        <div style="font-size:11px;color:#2563EB;font-weight:600;">Free &#10022;</div>
       </div>
 
     </div>
@@ -999,22 +1092,22 @@ to{width:60%;}}
 <!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <div class="m-item">🎂 Birthday Surprises<div class="m-sep"></div></div>
-    <div class="m-item">💍 Anniversary Pages<div class="m-sep"></div></div>
-    <div class="m-item">💌 Love Letters<div class="m-sep"></div></div>
-    <div class="m-item">🤝 Friendship Dedications<div class="m-sep"></div></div>
-    <div class="m-item">🎓 Graduation Gifts<div class="m-sep"></div></div>
-    <div class="m-item">✈️ Farewell Pages<div class="m-sep"></div></div>
-    <div class="m-item">🙏 Thank You Pages<div class="m-sep"></div></div>
-    <div class="m-item">💼 Retirement Tributes<div class="m-sep"></div></div>
-    <div class="m-item">🎂 Birthday Surprises<div class="m-sep"></div></div>
-    <div class="m-item">💍 Anniversary Pages<div class="m-sep"></div></div>
-    <div class="m-item">💌 Love Letters<div class="m-sep"></div></div>
-    <div class="m-item">🤝 Friendship Dedications<div class="m-sep"></div></div>
-    <div class="m-item">🎓 Graduation Gifts<div class="m-sep"></div></div>
-    <div class="m-item">✈️ Farewell Pages<div class="m-sep"></div></div>
-    <div class="m-item">🙏 Thank You Pages<div class="m-sep"></div></div>
-    <div class="m-item">💼 Retirement Tributes<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><rect x="1" y="8" width="14" height="7" rx="2" fill="#DBEAFE"/><rect x="4" y="5" width="8" height="3" rx="1" fill="#EFF6FF" stroke="#93C5FD" stroke-width=".7"/><ellipse cx="6" cy="4" rx=".8" ry="1.2" fill="#F59E0B" style="animation:flicker 1.2s ease-in-out infinite;"/><ellipse cx="10" cy="3.5" rx=".8" ry="1.2" fill="#EF4444" style="animation:flicker 1.2s .3s ease-in-out infinite;"/></svg>Birthday Surprises<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M8 13 L3 8 Q1.5 5.5 4 4 Q6 3 8 6 Q10 3 12 4 Q14.5 5.5 13 8Z" fill="#FCE7F3" stroke="#EC4899" stroke-width=".9"/></svg>Anniversary Pages<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><rect x="2" y="4" width="12" height="8" rx="1.5" fill="#FDF2F8" stroke="#EC4899" stroke-width=".8"/><path d="M2 5.5 L8 9 L14 5.5" stroke="#F9A8D4" stroke-width=".8" fill="none"/></svg>Love Letters<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><circle cx="6" cy="6" r="3" fill="#FEF3C7" stroke="#D97706" stroke-width=".8"/><circle cx="11" cy="6" r="3" fill="#DBEAFE" stroke="#2563EB" stroke-width=".8"/></svg>Friendship Dedications<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M8 3 L15 6 L8 9 L1 6Z" fill="#DBEAFE" stroke="#2563EB" stroke-width=".9"/><path d="M4 7.5 L4 11 Q8 13 12 11 L12 7.5" fill="#EFF6FF" stroke="#2563EB" stroke-width=".8"/></svg>Graduation Gifts<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M14 5 L8 8 L4 12 L6 12 L8 10 L10 14 L11 14 L10 9 L14 7Z" fill="#DBEAFE" stroke="#2563EB" stroke-width=".8"/></svg>Farewell Pages<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M8 3 C6 3 4 4.5 4 6.5 C4 9.5 8 13 8 13 C8 13 12 9.5 12 6.5 C12 4.5 10 3 8 3Z" fill="#FDF2F8" stroke="#EC4899" stroke-width=".9"/></svg>Thank You Pages<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><circle cx="8" cy="8" r="5" fill="#F0FDF4" stroke="#059669" stroke-width=".9"/><path d="M8 5 L8 8 L10.5 10.5" stroke="#059669" stroke-width="1" stroke-linecap="round"/><circle cx="8" cy="8" r="1" fill="#059669"/></svg>Retirement Tributes<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><rect x="1" y="8" width="14" height="7" rx="2" fill="#DBEAFE"/><rect x="4" y="5" width="8" height="3" rx="1" fill="#EFF6FF" stroke="#93C5FD" stroke-width=".7"/><ellipse cx="6" cy="4" rx=".8" ry="1.2" fill="#F59E0B" style="animation:flicker 1.2s ease-in-out infinite;"/><ellipse cx="10" cy="3.5" rx=".8" ry="1.2" fill="#EF4444" style="animation:flicker 1.2s .3s ease-in-out infinite;"/></svg>Birthday Surprises<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M8 13 L3 8 Q1.5 5.5 4 4 Q6 3 8 6 Q10 3 12 4 Q14.5 5.5 13 8Z" fill="#FCE7F3" stroke="#EC4899" stroke-width=".9"/></svg>Anniversary Pages<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><rect x="2" y="4" width="12" height="8" rx="1.5" fill="#FDF2F8" stroke="#EC4899" stroke-width=".8"/><path d="M2 5.5 L8 9 L14 5.5" stroke="#F9A8D4" stroke-width=".8" fill="none"/></svg>Love Letters<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><circle cx="6" cy="6" r="3" fill="#FEF3C7" stroke="#D97706" stroke-width=".8"/><circle cx="11" cy="6" r="3" fill="#DBEAFE" stroke="#2563EB" stroke-width=".8"/></svg>Friendship Dedications<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M8 3 L15 6 L8 9 L1 6Z" fill="#DBEAFE" stroke="#2563EB" stroke-width=".9"/><path d="M4 7.5 L4 11 Q8 13 12 11 L12 7.5" fill="#EFF6FF" stroke="#2563EB" stroke-width=".8"/></svg>Graduation Gifts<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M14 5 L8 8 L4 12 L6 12 L8 10 L10 14 L11 14 L10 9 L14 7Z" fill="#DBEAFE" stroke="#2563EB" stroke-width=".8"/></svg>Farewell Pages<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M8 3 C6 3 4 4.5 4 6.5 C4 9.5 8 13 8 13 C8 13 12 9.5 12 6.5 C12 4.5 10 3 8 3Z" fill="#FDF2F8" stroke="#EC4899" stroke-width=".9"/></svg>Thank You Pages<div class="m-sep"></div></div>
+    <div class="m-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:inline-block;vertical-align:middle;margin-right:4px;"><circle cx="8" cy="8" r="5" fill="#F0FDF4" stroke="#059669" stroke-width=".9"/><path d="M8 5 L8 8 L10.5 10.5" stroke="#059669" stroke-width="1" stroke-linecap="round"/><circle cx="8" cy="8" r="1" fill="#059669"/></svg>Retirement Tributes<div class="m-sep"></div></div>
   </div>
 </div>
 
@@ -1022,7 +1115,7 @@ to{width:60%;}}
 <section id="metrics" class="sp-sm"><div class="wrap">
   <div class="met-row rv">
     <div class="met-cell"><div class="met-num"><span class="cnt" id="metPagesCount" data-t="10000">0</span>+</div><div class="met-lbl">Surprise pages created</div></div>
-    <div class="met-cell"><div class="met-num"><span class="cnt" data-t="50000">0</span>+</div><div class="met-lbl">Memories shared</div></div>
+    <div class="met-cell"><div class="met-num"><span class="cnt" id="metMemoriesCount" data-t="50000">0</span>+</div><div class="met-lbl">Memories shared</div></div>
     <div class="met-cell"><div class="met-num"><span class="cnt" data-t="98">0</span>%</div><div class="met-lbl">Said it made them cry (happy tears)</div></div>
     <div class="met-cell"><div class="met-num"><span class="cnt" data-t="100">0</span>+</div><div class="met-lbl">Countries reached</div></div>
   </div>
@@ -1030,34 +1123,155 @@ to{width:60%;}}
 
 <!-- HOW IT WORKS -->
 <section id="hiw" class="sp"><div class="wrap">
-  <div class="sh">
-    <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-    <div class="s-tag rv d1">How it works</div>
-    <h2 class="s-h2 rv d2">From idea to <em>magic</em><br>in four simple steps</h2>
-    <p class="s-sub rv d3">No design skills needed. Just love, memories, and a few minutes.</p>
-  </div>
-  <div class="hiw-layout">
-    <div class="steps">
-      <div class="step rv"><div class="step-n">01</div><div><h3>Pick your occasion & theme</h3><p>Choose from Birthday, Anniversary, Friendship, or Celebration. Every theme sets the perfect emotional mood.</p></div></div>
-      <div class="step rv d1"><div class="step-n">02</div><div><h3>Add photos, music & memories</h3><p>Upload your favourite photos, drop in an MP3 for background music, and add heartfelt memories and inside jokes.</p></div></div>
-      <div class="step rv d2"><div class="step-n">03</div><div><h3>Invite friends to add wishes</h3><p>Send the contributor link. They add their own heartfelt messages before the reveal.</p></div></div>
-      <div class="step rv d3"><div class="step-n">04</div><div><h3>Share the surprise — watch them smile</h3><p>They type their name to unlock. The countdown begins. Confetti falls. Magic happens.</p></div></div>
+
+  <!-- header -->
+  <div class="hiw-header rv">
+    <div>
+      <div class="hiw-eyebrow">
+        <div class="hiw-eyebrow-line"></div>
+        <div class="s-tag" style="margin:0;">How it works</div>
+      </div>
+      <h2 class="hiw-h1">From your heart<br>to <em>their smile.</em></h2>
     </div>
-    <div class="phone-wrap rv d2">
-      <div class="phone-aura"></div>
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="ps-occ">Happy Birthday ✦</div>
-          <div class="ps-name">Sarah</div>
-          <div class="ps-hr"></div>
-          <div class="ps-photos">🌸 📸 ✨ 🎂</div>
-          <div class="ps-wish"><div class="ps-av"></div><div class="ps-txt">So proud of the person you've become. Every day with you is a gift. 💙</div></div>
-          <div class="ps-wish"><div class="ps-av" style="background:linear-gradient(135deg,#1D4ED8,#7C3AED)"></div><div class="ps-txt">Best friend forever, no matter where life takes us 🌟</div></div>
-          <div class="ps-wish"><div class="ps-av" style="background:linear-gradient(135deg,#0EA5E9,#2563EB)"></div><div class="ps-txt">Remember when we stayed up all night talking? ✨</div></div>
-        </div>
+    <div>
+      <p class="hiw-sub">No design skills. No tech. Pick an occasion, personalise with photos and music, invite friends to contribute &mdash; and share the surprise. Five minutes. Lifetime of memories.</p>
+      <div class="hiw-stats">
+        <div class="hiw-stat"><div class="hiw-stat-n"><span>5</span> min</div><div class="hiw-stat-l">To create</div></div>
+        <div class="hiw-stat"><div class="hiw-stat-n"><span>8</span></div><div class="hiw-stat-l">Occasions</div></div>
+        <div class="hiw-stat"><div class="hiw-stat-n"><span>&#8734;</span></div><div class="hiw-stat-l">Memories</div></div>
+      </div>
+      <a href="occasion.html" class="btn-hero-p" style="display:inline-flex;align-items:center;gap:8px;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" fill="rgba(255,255,255,.2)"/><path d="M5.5 8 L7.5 10 L10.5 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Start for free &mdash; it takes 5 minutes
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7 L11 7 M8 4 L11 7 L8 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- step cards -->
+  <div class="hiw-steps">
+
+    <!-- STEP 1 -->
+    <div class="hiw-step rv">
+      <div class="hiw-step-img" data-n="1" style="background:linear-gradient(145deg,#EFF6FF,#DBEAFE);">
+        <svg width="120" height="110" viewBox="0 0 120 110" fill="none">
+          <rect x="10" y="10" width="100" height="90" rx="12" fill="white" opacity=".7"/>
+          <text x="20" y="30" font-family="Outfit,sans-serif" font-size="7" fill="#7A9CC8" font-weight="600" letter-spacing="1">CHOOSE OCCASION</text>
+          <rect x="14" y="36" width="42" height="18" rx="9" fill="#07122A"/>
+          <text x="22" y="48.5" font-family="Cormorant Garamond,serif" font-style="italic" font-size="9" fill="white">Birthday</text>
+          <rect x="60" y="36" width="46" height="18" rx="9" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+          <text x="67" y="48.5" font-family="Cormorant Garamond,serif" font-style="italic" font-size="9" fill="#4A6FA5">Anniversary</text>
+          <rect x="14" y="59" width="36" height="18" rx="9" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+          <text x="21" y="71.5" font-family="Cormorant Garamond,serif" font-style="italic" font-size="9" fill="#4A6FA5">Farewell</text>
+          <rect x="54" y="59" width="38" height="18" rx="9" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+          <text x="60" y="71.5" font-family="Cormorant Garamond,serif" font-style="italic" font-size="9" fill="#4A6FA5">Friendship</text>
+          <rect x="14" y="82" width="32" height="14" rx="7" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+          <text x="20" y="92" font-family="Cormorant Garamond,serif" font-style="italic" font-size="8" fill="#4A6FA5">Love</text>
+          <rect x="50" y="82" width="34" height="14" rx="7" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+          <text x="56" y="92" font-family="Cormorant Garamond,serif" font-style="italic" font-size="8" fill="#4A6FA5">Apology</text>
+        </svg>
+      </div>
+      <div class="hiw-step-body">
+        <div class="hiw-step-num">Step 01</div>
+        <div class="hiw-step-title">Pick your occasion &amp; theme</div>
+        <div class="hiw-step-desc">Choose from 8 beautifully designed occasions. Each one sets a unique emotional atmosphere and visual world.</div>
+        <span class="hiw-step-tag" style="background:#EFF6FF;color:#1D4ED8;">8 occasions available</span>
       </div>
     </div>
+
+    <!-- STEP 2 -->
+    <div class="hiw-step rv d1">
+      <div class="hiw-step-img" data-n="2" style="background:linear-gradient(145deg,#FDF2F8,#FCE7F3);">
+        <svg width="120" height="110" viewBox="0 0 120 110" fill="none">
+          <rect x="10" y="12" width="44" height="34" rx="6" fill="white" opacity=".8" stroke="#F9A8D4" stroke-width=".8"/>
+          <rect x="12" y="14" width="40" height="20" rx="4" fill="#FBCFE8"/>
+          <circle cx="18" cy="22" r="3" fill="#F9A8D4"/>
+          <path d="M12 32 L18 26 L24 32 L30 27 L50 35" stroke="#EC4899" stroke-width="1" fill="none" stroke-linecap="round"/>
+          <text x="13" y="44" font-family="Outfit,sans-serif" font-size="6" fill="#7A9CC8">Beach trip 2023</text>
+          <rect x="58" y="12" width="44" height="34" rx="6" fill="white" opacity=".8" stroke="#F9A8D4" stroke-width=".8"/>
+          <rect x="60" y="14" width="40" height="20" rx="4" fill="#EDE9FE"/>
+          <circle cx="80" cy="24" r="5" fill="#DDD6FE"/>
+          <text x="61" y="44" font-family="Outfit,sans-serif" font-size="6" fill="#7A9CC8">Her birthday 2022</text>
+          <rect x="10" y="54" width="92" height="22" rx="6" fill="white" opacity=".85" stroke="#F9A8D4" stroke-width=".8"/>
+          <rect x="16" y="59" width="3" height="10" rx="1.5" fill="#EC4899" style="animation:hiw-eq .7s ease-in-out infinite alternate;transform-origin:bottom center;"/>
+          <rect x="21" y="57" width="3" height="14" rx="1.5" fill="#EC4899" style="animation:hiw-eq .5s .1s ease-in-out infinite alternate;transform-origin:bottom center;"/>
+          <rect x="26" y="60" width="3" height="9" rx="1.5" fill="#F9A8D4" style="animation:hiw-eq .9s .05s ease-in-out infinite alternate;transform-origin:bottom center;"/>
+          <rect x="31" y="58" width="3" height="12" rx="1.5" fill="#EC4899" style="animation:hiw-eq .6s .2s ease-in-out infinite alternate;transform-origin:bottom center;"/>
+          <text x="40" y="67" font-family="Cormorant Garamond,serif" font-style="italic" font-size="8" fill="#4A6FA5">Perfect by Ed Sheeran</text>
+          <rect x="10" y="80" width="92" height="22" rx="6" fill="white" opacity=".75"/>
+          <text x="16" y="91" font-family="Cormorant Garamond,serif" font-style="italic" font-size="7.5" fill="#4A6FA5">&ldquo;Remember our first road trip...&rdquo;</text>
+        </svg>
+      </div>
+      <div class="hiw-step-body">
+        <div class="hiw-step-num">Step 02</div>
+        <div class="hiw-step-title">Add photos, music &amp; memories</div>
+        <div class="hiw-step-desc">Upload your favourite photos, drop in their song as background music, and write heartfelt memories only you two share.</div>
+        <span class="hiw-step-tag" style="background:#FDF2F8;color:#BE185D;">~3 minutes total</span>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="hiw-step rv d2">
+      <div class="hiw-step-img" data-n="3" style="background:linear-gradient(145deg,#F0FDF4,#DCFCE7);">
+        <svg width="120" height="110" viewBox="0 0 120 110" fill="none">
+          <rect x="10" y="10" width="100" height="22" rx="6" fill="white" opacity=".85"/>
+          <text x="16" y="22" font-family="Outfit,sans-serif" font-size="7" fill="#4A6FA5">wisherly.co/c/sarah-birthday</text>
+          <rect x="88" y="13" width="18" height="16" rx="4" fill="#059669"/>
+          <text x="91" y="24" font-family="Outfit,sans-serif" font-size="7" fill="white" font-weight="600">Copy</text>
+          <rect x="10" y="38" width="46" height="30" rx="6" fill="white" opacity=".85"/>
+          <circle cx="20" cy="49" r="5" fill="#DBEAFE"/>
+          <text x="28" y="47" font-family="Outfit,sans-serif" font-size="6.5" fill="#07122A" font-weight="500">Rohit</text>
+          <text x="28" y="57" font-family="Cormorant Garamond,serif" font-style="italic" font-size="6" fill="#4A6FA5">Added a wish &#10022;</text>
+          <rect x="62" y="38" width="48" height="30" rx="6" fill="white" opacity=".85"/>
+          <circle cx="72" cy="49" r="5" fill="#FCE7F3"/>
+          <text x="80" y="47" font-family="Outfit,sans-serif" font-size="6.5" fill="#07122A" font-weight="500">Sneha</text>
+          <text x="80" y="57" font-family="Cormorant Garamond,serif" font-style="italic" font-size="6" fill="#4A6FA5">Added photo &#10022;</text>
+          <rect x="10" y="74" width="100" height="22" rx="6" fill="white" opacity=".7"/>
+          <circle cx="22" cy="85" r="5" fill="#D1FAE5" stroke="white" stroke-width="1"/>
+          <circle cx="31" cy="85" r="5" fill="#DBEAFE" stroke="white" stroke-width="1"/>
+          <circle cx="40" cy="85" r="5" fill="#FCE7F3" stroke="white" stroke-width="1"/>
+          <circle cx="49" cy="85" r="5" fill="#FEF3C7" stroke="white" stroke-width="1"/>
+          <text x="58" y="88" font-family="Outfit,sans-serif" font-size="7" fill="#059669" font-weight="600">6 people contributed</text>
+        </svg>
+      </div>
+      <div class="hiw-step-body">
+        <div class="hiw-step-num">Step 03</div>
+        <div class="hiw-step-title">Invite friends to add wishes</div>
+        <div class="hiw-step-desc">Share a magic contributor link. Friends and family add their own heartfelt messages &mdash; no account needed for them.</div>
+        <span class="hiw-step-tag" style="background:#F0FDF4;color:#065F46;">No signup for contributors</span>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="hiw-step rv d3">
+      <div class="hiw-step-img" data-n="4" style="background:linear-gradient(145deg,#EEF3FF,#DBEAFE);">
+        <svg width="120" height="110" viewBox="0 0 120 110" fill="none">
+          <rect x="22" y="8" width="76" height="94" rx="12" fill="white" opacity=".75" stroke="rgba(37,99,235,.15)" stroke-width=".8"/>
+          <text x="60" y="26" font-family="Cormorant Garamond,serif" font-style="italic" font-size="8.5" fill="#4A6FA5" text-anchor="middle">A surprise for you</text>
+          <text x="60" y="44" font-family="Cormorant Garamond,serif" font-style="italic" font-size="20" fill="#07122A" text-anchor="middle">Sarah</text>
+          <rect x="30" y="50" width="60" height="14" rx="5" fill="#F7F9FF" stroke="rgba(37,99,235,.2)" stroke-width="1"/>
+          <text x="60" y="60" font-family="Outfit,sans-serif" font-size="6.5" fill="#7A9CC8" text-anchor="middle">Type your name to open</text>
+          <rect x="30" y="70" width="60" height="15" rx="7.5" fill="#2563EB"/>
+          <text x="60" y="80" font-family="Outfit,sans-serif" font-size="7" fill="white" text-anchor="middle" font-weight="600">Open with love</text>
+          <rect x="26" y="66" width="68" height="23" rx="11.5" fill="none" stroke="rgba(37,99,235,.2)" stroke-width="1" style="animation:hiw-pulse 2s ease-in-out infinite;"/>
+          <rect x="14" y="18" width="5" height="5" rx="1.2" fill="#BFDBFE" transform="rotate(20 16 20)" style="animation:hiw-fall 1.2s ease-in-out infinite alternate;"/>
+          <rect x="100" y="14" width="5" height="5" rx="1.2" fill="#FCA5A5" transform="rotate(-15 102 16)" style="animation:hiw-fall 1.5s .3s ease-in-out infinite alternate;"/>
+          <rect x="10" y="60" width="4" height="4" rx="1" fill="#6EE7B7" transform="rotate(30 12 62)" style="animation:hiw-fall 1.8s .6s ease-in-out infinite alternate;"/>
+          <rect x="104" y="55" width="5" height="5" rx="1.2" fill="#C4B5FD" transform="rotate(-25 106 57)" style="animation:hiw-fall 1.3s .2s ease-in-out infinite alternate;"/>
+          <rect x="18" y="88" width="4" height="4" rx="1" fill="#FDE68A" transform="rotate(15 20 90)" style="animation:hiw-fall 1.6s .4s ease-in-out infinite alternate;"/>
+          <rect x="100" y="84" width="5" height="5" rx="1.2" fill="#BFDBFE" transform="rotate(-10 102 86)" style="animation:hiw-fall 1.1s .5s ease-in-out infinite alternate;"/>
+        </svg>
+      </div>
+      <div class="hiw-step-body">
+        <div class="hiw-step-num">Step 04</div>
+        <div class="hiw-step-title">Share the surprise &mdash; watch them smile</div>
+        <div class="hiw-step-desc">They type their name to unlock. A 3-2-1 countdown begins. Confetti falls. Happy tears follow. Every single time.</div>
+        <span class="hiw-step-tag" style="background:#EFF6FF;color:#1D4ED8;">Name-unlock reveal</span>
+      </div>
+    </div>
+
   </div>
+
 </div></section>
 
 <!-- FEATURES -->
@@ -1069,13 +1283,67 @@ to{width:60%;}}
     <p class="s-sub rv d3">A complete toolkit for emotional, beautiful surprises.</p>
   </div>
   <div class="bento">
-    <div class="bc b1 rv" data-mouse><div class="f-orb" style="width:220px;height:220px;background:radial-gradient(circle,rgba(37,99,235,.08),transparent);top:-80px;right:-60px;"></div><div class="f-ico">📸</div><h3>Photo Slideshow & Polaroid Wall</h3><p>Upload unlimited photos. They become a cinematic slideshow and a beautiful tiltable polaroid wall — complete with hover effects and a lightbox viewer.</p><div class="ftags"><span class="ftag">Auto slideshow</span><span class="ftag">Polaroid tilt</span><span class="ftag">Lightbox zoom</span><span class="ftag">Captions</span></div></div>
-    <div class="bc b2 rv d1" data-mouse><div class="f-big">🎵</div><h3>Emotional Background Music</h3><p>Upload an MP3 and it autoplays softly when they open the page — no tapping needed.</p><div class="f-bar"><div class="f-fill" style="--w:74%"></div></div></div>
-    <div class="bc b3 rv d1" data-mouse><div class="f-ico" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.12);">🎯</div><h3>Guess the Memory Game</h3><p>A blurred-photo quiz they must solve before the reveal. Interactive and deeply personal.</p></div>
-    <div class="bc b4 rv d2" data-mouse><div class="f-ico" style="background:rgba(6,182,212,.06);border-color:rgba(6,182,212,.12);">📅</div><h3>Timeline of Memories</h3><p>Tell your story through a beautiful alternating timeline with years, titles, and descriptions.</p></div>
-    <div class="bc b5 rv d3" data-mouse><div class="f-ico" style="background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.12);">🌍</div><h3>Memory Map</h3><p>Pin the places that hold your most special memories. Each pin has an emoji, place name, and your story.</p></div>
-    <div class="bc b6 rv" data-mouse><div class="f-orb" style="width:160px;height:160px;background:radial-gradient(circle,rgba(37,99,235,.07),transparent);bottom:-40px;left:-30px;"></div><div class="f-ico">💌</div><h3>Group Wishes from Friends & Family</h3><p>Send a unique link to friends and family. Each person adds their own heartfelt message. They all appear as beautiful wish cards during the surprise reveal.</p><div class="ftags"><span class="ftag">Collaborative</span><span class="ftag">No account needed</span><span class="ftag">Instant preview</span></div></div>
-    <div class="bc b7 rv d1" data-mouse><div class="f-ico" style="background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.12);">🎉</div><h3>Confetti, Animations & Unlock Screen</h3><p>A name-unlock screen, a 3-2-1 countdown, confetti explosions, floating petals, scroll-triggered reveals. Every interaction crafted to create delight.</p><div class="ftags"><span class="ftag">Name unlock</span><span class="ftag">Countdown</span><span class="ftag">Confetti</span><span class="ftag">Floating petals</span></div></div>
+    <div class="bc b1 rv" data-mouse><div class="f-orb" style="width:220px;height:220px;background:radial-gradient(circle,rgba(37,99,235,.08),transparent);top:-80px;right:-60px;"></div><div class="f-ico"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="5" width="24" height="18" rx="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/>
+  <circle cx="9" cy="11" r="2.5" fill="#93C5FD"/>
+  <path d="M2 19 L8 13 L13 18 L17 14 L26 21" stroke="#2563EB" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="18" y="3" width="8" height="6" rx="1.5" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+  <line x1="19.5" y1="6" x2="24.5" y2="6" stroke="#93C5FD" stroke-width=".8"/>
+  <line x1="19.5" y1="7.5" x2="23" y2="7.5" stroke="#BFDBFE" stroke-width=".8"/>
+</svg></div><h3>Photo Slideshow & Polaroid Wall</h3><p>Upload unlimited photos. They become a cinematic slideshow and a beautiful tiltable polaroid wall — complete with hover effects and a lightbox viewer.</p><div class="ftags"><span class="ftag">Auto slideshow</span><span class="ftag">Polaroid tilt</span><span class="ftag">Lightbox zoom</span><span class="ftag">Captions</span></div></div>
+    <div class="bc b2 rv d1" data-mouse><div class="f-big"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>.mbar1{animation:mb1 .8s ease-in-out infinite alternate;}.mbar2{animation:mb1 .6s .15s ease-in-out infinite alternate;}.mbar3{animation:mb1 .9s .05s ease-in-out infinite alternate;}.mbar4{animation:mb1 .7s .25s ease-in-out infinite alternate;}.mbar5{animation:mb1 .5s .1s ease-in-out infinite alternate;}@keyframes mb1{0%{transform:scaleY(.3);transform-origin:bottom;}100%{transform:scaleY(1);transform-origin:bottom;}}</style>
+  <rect class="mbar1" x="3" y="10" width="3" height="12" rx="1.5" fill="#2563EB" opacity=".7"/>
+  <rect class="mbar2" x="8" y="6" width="3" height="16" rx="1.5" fill="#2563EB"/>
+  <rect class="mbar3" x="13" y="8" width="3" height="14" rx="1.5" fill="#3B82F6" opacity=".8"/>
+  <rect class="mbar4" x="18" y="4" width="3" height="18" rx="1.5" fill="#2563EB"/>
+  <rect class="mbar5" x="23" y="11" width="3" height="11" rx="1.5" fill="#2563EB" opacity=".6"/>
+</svg></div><h3>Emotional Background Music</h3><p>Upload an MP3 and it autoplays softly when they open the page — no tapping needed.</p><div class="f-bar"><div class="f-fill" style="--w:74%"></div></div></div>
+    <div class="bc b3 rv d1" data-mouse><div class="f-ico" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.12);"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="3" y="3" width="10" height="10" rx="2" fill="#FEE2E2" stroke="#EF4444" stroke-width="1"/>
+  <rect x="15" y="3" width="10" height="10" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/>
+  <rect x="3" y="15" width="10" height="10" rx="2" fill="#D1FAE5" stroke="#059669" stroke-width="1"/>
+  <rect x="15" y="15" width="10" height="10" rx="2" fill="#FEF3C7" stroke="#D97706" stroke-width="1"/>
+  <circle cx="8" cy="8" r="2" fill="#EF4444" opacity=".6"/>
+  <path d="M17 6 L19 8 L23 4" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5 18 L7.5 20.5 L11 17" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="17.5" y="22" font-size="7" fill="#D97706" font-weight="bold">?</text>
+</svg></div><h3>Guess the Memory Game</h3><p>A blurred-photo quiz they must solve before the reveal. Interactive and deeply personal.</p></div>
+    <div class="bc b4 rv d2" data-mouse><div class="f-ico" style="background:rgba(6,182,212,.06);border-color:rgba(6,182,212,.12);"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <line x1="14" y1="2" x2="14" y2="26" stroke="#BAE6FD" stroke-width="2"/>
+  <circle cx="14" cy="6" r="3" fill="#0EA5E9" stroke="white" stroke-width="1.5"/>
+  <circle cx="14" cy="14" r="3" fill="#2563EB" stroke="white" stroke-width="1.5"/>
+  <circle cx="14" cy="22" r="3" fill="#7C3AED" stroke="white" stroke-width="1.5"/>
+  <rect x="17" y="4" width="8" height="4" rx="1" fill="#E0F2FE"/>
+  <rect x="3" y="12" width="8" height="4" rx="1" fill="#DBEAFE"/>
+  <rect x="17" y="20" width="8" height="4" rx="1" fill="#EDE9FE"/>
+</svg></div><h3>Timeline of Memories</h3><p>Tell your story through a beautiful alternating timeline with years, titles, and descriptions.</p></div>
+    <div class="bc b5 rv d3" data-mouse><div class="f-ico" style="background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.12);"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="14" cy="15" rx="11" ry="7" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/>
+  <path d="M7 19 L4 22 M14 15 L17 20 M21 19 L24 22" stroke="#93C5FD" stroke-width="1" stroke-linecap="round"/>
+  <path d="M14 4 C11 4 9 6.5 9 9 C9 12.5 14 18 14 18 C14 18 19 12.5 19 9 C19 6.5 17 4 14 4Z" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/>
+  <circle cx="14" cy="9" r="2" fill="#2563EB"/>
+</svg></div><h3>Memory Map</h3><p>Pin the places that hold your most special memories. Each pin has an emoji, place name, and your story.</p></div>
+    <div class="bc b6 rv" data-mouse><div class="f-orb" style="width:160px;height:160px;background:radial-gradient(circle,rgba(37,99,235,.07),transparent);bottom:-40px;left:-30px;"></div><div class="f-ico"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="6" width="16" height="11" rx="2" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/>
+  <path d="M2 8 L10 12 L18 8" stroke="#93C5FD" stroke-width="1" fill="none"/>
+  <rect x="10" y="12" width="16" height="11" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/>
+  <path d="M10 14 L18 18 L26 14" stroke="#BFDBFE" stroke-width="1" fill="none"/>
+  <circle cx="6" cy="4" r="2" fill="#F0FDF4" stroke="#059669" stroke-width="1"/>
+  <circle cx="22" cy="4" r="2" fill="#FDF2F8" stroke="#EC4899" stroke-width="1"/>
+  <circle cx="14" cy="2" r="1.5" fill="#FFFBEB" stroke="#D97706" stroke-width="1"/>
+</svg></div><h3>Group Wishes from Friends & Family</h3><p>Send a unique link to friends and family. Each person adds their own heartfelt message. They all appear as beautiful wish cards during the surprise reveal.</p><div class="ftags"><span class="ftag">Collaborative</span><span class="ftag">No account needed</span><span class="ftag">Instant preview</span></div></div>
+    <div class="bc b7 rv d1" data-mouse><div class="f-ico" style="background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.12);"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>.cf1{animation:cfall 1.5s ease-in-out infinite alternate;}.cf2{animation:cfall 1.8s .3s ease-in-out infinite alternate;}.cf3{animation:cfall 1.3s .6s ease-in-out infinite alternate;}@keyframes cfall{0%{transform:translateY(0) rotate(0deg);}100%{transform:translateY(4px) rotate(20deg);}}</style>
+  <rect class="cf1" x="4" y="3" width="4" height="4" rx="1" fill="#EF4444" transform="rotate(15 6 5)"/>
+  <rect class="cf2" x="20" y="5" width="4" height="4" rx="1" fill="#F59E0B" transform="rotate(-10 22 7)"/>
+  <rect class="cf3" x="12" y="2" width="3" height="3" rx=".8" fill="#8B5CF6" transform="rotate(25 13.5 3.5)"/>
+  <circle class="cf1" cx="23" cy="14" r="2" fill="#10B981"/>
+  <circle class="cf2" cx="5" cy="15" r="1.5" fill="#EC4899"/>
+  <rect class="cf3" x="10" y="8" width="3" height="3" rx=".8" fill="#2563EB" transform="rotate(-20 11.5 9.5)"/>
+  <path d="M8 20 Q14 16 20 20 Q14 24 8 20Z" fill="#FCD34D" stroke="#D97706" stroke-width=".8"/>
+  <path d="M14 22 L14 26 M11 23 L10 26 M17 23 L18 26" stroke="#FCD34D" stroke-width="1.2" stroke-linecap="round"/>
+</svg></div><h3>Confetti, Animations & Unlock Screen</h3><p>A name-unlock screen, a 3-2-1 countdown, confetti explosions, floating petals, scroll-triggered reveals. Every interaction crafted to create delight.</p><div class="ftags"><span class="ftag">Name unlock</span><span class="ftag">Countdown</span><span class="ftag">Confetti</span><span class="ftag">Floating petals</span></div></div>
   </div>
 </div></section>
 
@@ -1088,12 +1356,64 @@ to{width:60%;}}
     <p class="s-sub rv d3">Whatever the occasion, Wisherly makes it unforgettable.</p>
   </div>
   <div class="occ-grid">
-    <a class="occ-card rv" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(239,68,68,.18);"></div><span class="occ-emoji">🎂</span><div class="occ-title">Birthday Surprises</div><div class="occ-desc">Make their birthday the one they talk about for years. Photos, music, wishes from everyone they love.</div><div class="occ-link">Create birthday page →</div></a>
-    <a class="occ-card rv d1" href="theme.html?occasion=anniversary"><div class="occ-glow" style="background:rgba(236,72,153,.16);"></div><span class="occ-emoji">💍</span><div class="occ-title">Anniversary & Romance</div><div class="occ-desc">Relive every chapter of your love story through photos, a memory timeline, and a secret letter.</div><div class="occ-link">Create love page →</div></a>
-    <a class="occ-card rv d2" href="theme.html?occasion=friendship"><div class="occ-glow" style="background:rgba(37,99,235,.18);"></div><span class="occ-emoji">🤝</span><div class="occ-title">Friendship Dedications</div><div class="occ-desc">Celebrate the friend who always shows up. Let their whole squad contribute wishes.</div><div class="occ-link">Create friendship page →</div></a>
-    <a class="occ-card rv d1" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(245,158,11,.15);"></div><span class="occ-emoji">🎓</span><div class="occ-title">Graduations</div><div class="occ-desc">Mark the milestone with a page full of proud memories, encouragement, and love.</div><div class="occ-link">Create graduation page →</div></a>
-    <a class="occ-card rv d2" href="theme.html?occasion=farewell"><div class="occ-glow" style="background:rgba(6,182,212,.15);"></div><span class="occ-emoji">✈️</span><div class="occ-title">Farewells & Goodbyes</div><div class="occ-desc">Send someone off with a digital scrapbook of every amazing memory you've shared.</div><div class="occ-link">Create farewell page →</div></a>
-    <a class="occ-card rv d3" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(16,185,129,.13);"></div><span class="occ-emoji">🙏</span><div class="occ-title">Thank You Pages</div><div class="occ-desc">A heartfelt thank-you that goes far beyond a card. Show them exactly how much they mean.</div><div class="occ-link">Create thank you page →</div></a>
+    <a class="occ-card rv" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(239,68,68,.18);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <style>.fl{animation:flicker 1.2s ease-in-out infinite;}.fl2{animation:flicker 1.2s .3s ease-in-out infinite;}@keyframes flicker{0%,100%{opacity:1;transform:scaleY(1);}50%{opacity:.7;transform:scaleY(.8);}}</style>
+  <rect x="4" y="16" width="24" height="13" rx="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.4"/>
+  <rect x="8" y="12" width="16" height="6" rx="1.5" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.1"/>
+  <path d="M4 18 Q8 15 12 18 Q16 21 20 18 Q24 15 28 18" stroke="#93C5FD" stroke-width="1.2" fill="none"/>
+  <rect x="10" y="6" width="2.5" height="6" rx="1.25" fill="#BFDBFE"/>
+  <rect x="16" y="5" width="2.5" height="7" rx="1.25" fill="#BFDBFE"/>
+  <rect x="22" y="7" width="2" height="5" rx="1" fill="#BFDBFE"/>
+  <ellipse class="fl" cx="11.25" cy="5" rx="1.5" ry="2.2" fill="#F59E0B"/>
+  <ellipse class="fl2" cx="17.25" cy="4" rx="1.5" ry="2.2" fill="#EF4444"/>
+  <ellipse class="fl" cx="23" cy="6" rx="1.2" ry="1.8" fill="#F59E0B" style="animation-delay:.5s;"/>
+</svg></span><div class="occ-title">Birthday Surprises</div><div class="occ-desc">Make their birthday the one they talk about for years. Photos, music, wishes from everyone they love.</div><div class="occ-link">Create birthday page →</div></a>
+    <a class="occ-card rv d1" href="theme.html?occasion=anniversary"><div class="occ-glow" style="background:rgba(236,72,153,.16);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <style>.hbeat{animation:hb 1.2s ease-in-out infinite;}@keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}</style>
+  <g class="hbeat" style="transform-origin:16px 16px;">
+    <path d="M16 26 L6 16 Q3 11 8 8 Q12 6 16 12 Q20 6 24 8 Q29 11 26 16Z" fill="#FCE7F3" stroke="#EC4899" stroke-width="1.4"/>
+    <path d="M16 23 L9 15 Q7.5 12 10 10.5" stroke="#F9A8D4" stroke-width="1" fill="none" stroke-linecap="round"/>
+  </g>
+  <circle cx="22" cy="10" r="3" fill="#FDF2F8" stroke="#F9A8D4" stroke-width="1"/>
+  <path d="M21 10 L22 11 L24 9" stroke="#EC4899" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span><div class="occ-title">Anniversary & Romance</div><div class="occ-desc">Relive every chapter of your love story through photos, a memory timeline, and a secret letter.</div><div class="occ-link">Create love page →</div></a>
+    <a class="occ-card rv d2" href="theme.html?occasion=friendship"><div class="occ-glow" style="background:rgba(37,99,235,.18);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="11" cy="10" r="4" fill="#FEF3C7" stroke="#D97706" stroke-width="1.2"/>
+  <circle cx="21" cy="10" r="4" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/>
+  <path d="M7 28 C7 22 15 20 16 20 C17 20 25 22 25 28" fill="#FEF3C7" stroke="#D97706" stroke-width="1.2"/>
+  <path d="M14 28 C14 23 18 21 18 21" stroke="#DBEAFE" stroke-width="1" fill="none"/>
+  <path d="M13 16 Q16 19 19 16" stroke="#D97706" stroke-width="1" fill="none" stroke-linecap="round"/>
+</svg></span><div class="occ-title">Friendship Dedications</div><div class="occ-desc">Celebrate the friend who always shows up. Let their whole squad contribute wishes.</div><div class="occ-link">Create friendship page →</div></a>
+    <a class="occ-card rv d1" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(245,158,11,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <style>.tassel{animation:sway 2s ease-in-out infinite;}@keyframes sway{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}</style>
+  <path d="M16 6 L30 12 L16 18 L2 12Z" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.4"/>
+  <path d="M8 15 L8 23 Q16 27 24 23 L24 15" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/>
+  <line x1="28" y1="12" x2="28" y2="19" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+  <g class="tassel" style="transform-origin:28px 19px;">
+    <line x1="28" y1="19" x2="26" y2="25" stroke="#F59E0B" stroke-width="1.2" stroke-linecap="round"/>
+    <circle cx="26" cy="25" r="1.5" fill="#F59E0B"/>
+  </g>
+  <circle cx="16" cy="12" r="2" fill="#2563EB"/>
+</svg></span><div class="occ-title">Graduations</div><div class="occ-desc">Mark the milestone with a page full of proud memories, encouragement, and love.</div><div class="occ-link">Create graduation page →</div></a>
+    <a class="occ-card rv d2" href="theme.html?occasion=farewell"><div class="occ-glow" style="background:rgba(6,182,212,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <style>.plane{animation:fly 3s ease-in-out infinite;}@keyframes fly{0%,100%{transform:translate(0,0);}50%{transform:translate(3px,-3px);}}</style>
+  <g class="plane">
+    <path d="M28 12 L16 16 L8 24 L12 24 L16 20 L20 28 L22 28 L20 18 L28 14Z" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/>
+  </g>
+  <path d="M4 22 Q8 20 12 22" stroke="#BAE6FD" stroke-width="1" fill="none" stroke-linecap="round" stroke-dasharray="2 2"/>
+  <path d="M4 25 Q8 23 12 25" stroke="#BAE6FD" stroke-width="1" fill="none" stroke-linecap="round" stroke-dasharray="2 2"/>
+  <path d="M4 19 Q7 17 10 19" stroke="#BAE6FD" stroke-width="1" fill="none" stroke-linecap="round" stroke-dasharray="2 2"/>
+  <circle cx="7" cy="10" r="2" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <circle cx="13" cy="7" r="1.5" fill="#FCE7F3" stroke="#EC4899" stroke-width=".8"/>
+</svg></span><div class="occ-title">Farewells & Goodbyes</div><div class="occ-desc">Send someone off with a digital scrapbook of every amazing memory you've shared.</div><div class="occ-link">Create farewell page →</div></a>
+    <a class="occ-card rv d3" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(16,185,129,.13);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <style>.sparkle{animation:spk 1.5s ease-in-out infinite;}@keyframes spk{0%,100%{opacity:.3;transform:scale(.8);}50%{opacity:1;transform:scale(1.2);}}</style>
+  <path d="M16 6 C12 6 8 9 8 13 C8 19 16 26 16 26 C16 26 24 19 24 13 C24 9 20 6 16 6Z" fill="#FDF2F8" stroke="#EC4899" stroke-width="1.4"/>
+  <path d="M11 13 Q16 10 21 13" stroke="#F9A8D4" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <path d="M11 11 Q12 9 14 10 Q14 13 12 14 Q10 13 10 10 Q12 9 13 11" stroke="#EC4899" stroke-width=".8" fill="#FDF2F8"/>
+  <g class="sparkle" style="transform-origin:6px 8px;"><path d="M6 5 L6 11 M3 8 L9 8" stroke="#F59E0B" stroke-width="1" stroke-linecap="round"/></g>
+  <g class="sparkle" style="transform-origin:26px 7px;animation-delay:.5s;"><path d="M26 4 L26 10 M23 7 L29 7" stroke="#FCA5A5" stroke-width="1" stroke-linecap="round"/></g>
+</svg></span><div class="occ-title">Thank You Pages</div><div class="occ-desc">A heartfelt thank-you that goes far beyond a card. Show them exactly how much they mean.</div><div class="occ-link">Create thank you page →</div></a>
   </div>
 </div></section>
 
@@ -1104,8 +1424,8 @@ to{width:60%;}}
     <h2 class="s-h2 rv d1">Gifts that are forgotten<br>vs gifts that are <em>felt</em></h2>
   </div>
   <div class="comp-wrap">
-    <div class="comp-card before rv"><span class="comp-lbl">Traditional gifts</span><div class="comp-h">Forgotten in a week</div><ul class="comp-list"><li><div class="comp-ico">☕</div>Printed mugs that sit on a shelf</li><li><div class="comp-ico">👕</div>Generic clothing they may never wear</li><li><div class="comp-ico">🌸</div>Last-minute perfumes and flowers</li><li><div class="comp-ico">💌</div>Greeting cards stored in a drawer</li><li><div class="comp-ico">🎁</div>Amazon gifts with no personal touch</li></ul></div>
-    <div class="comp-card after rv d1"><span class="comp-lbl">Wisherly surprises</span><div class="comp-h">Remembered forever</div><ul class="comp-list"><li><div class="comp-ico">📸</div>A cinematic photo journey of shared memories</li><li><div class="comp-ico">🎵</div>The song that makes them cry (happily)</li><li><div class="comp-ico">💌</div>Messages from everyone who loves them</li><li><div class="comp-ico">📅</div>A timeline of your story together</li><li><div class="comp-ico">🎉</div>An experience they'll replay and share</li></ul></div>
+    <div class="comp-card before rv"><span class="comp-lbl">Traditional gifts</span><div class="comp-h">Forgotten in a week</div><ul class="comp-list"><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="6" width="12" height="10" rx="2" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/><path d="M14 8 Q17 8 17 11 Q17 14 14 14" stroke="#CBD5E1" stroke-width="1" fill="none"/><rect x="5" y="3" width="2" height="3" rx="1" fill="#E2E8F0"/><rect x="9" y="3" width="2" height="3" rx="1" fill="#E2E8F0"/></svg></div>Printed mugs that sit on a shelf</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 3 L3 6 L5 8 L5 17 L15 17 L15 8 L17 6 L13 3 Q12 5 10 5 Q8 5 7 3Z" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/></svg></div>Generic clothing they may never wear</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="2" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/><ellipse cx="10" cy="5" rx="2.5" ry="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width=".8"/><ellipse cx="10" cy="15" rx="2.5" ry="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width=".8"/><ellipse cx="5" cy="10" rx="3" ry="2.5" fill="#F1F5F9" stroke="#CBD5E1" stroke-width=".8"/><ellipse cx="15" cy="10" rx="3" ry="2.5" fill="#F1F5F9" stroke="#CBD5E1" stroke-width=".8"/></svg></div>Last-minute perfumes and flowers</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="11" rx="2" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/><path d="M2 7 L10 12 L18 7" stroke="#CBD5E1" stroke-width=".9" fill="none"/></svg></div>Greeting cards stored in a drawer</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="9" width="14" height="9" rx="1.5" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/><rect x="2" y="6" width="16" height="4" rx="1" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/><line x1="10" y1="6" x2="10" y2="18" stroke="#CBD5E1" stroke-width=".9"/><path d="M10 6 Q7 4 7 2 Q10 1 10 4" stroke="#CBD5E1" stroke-width=".8" fill="none"/><path d="M10 6 Q13 4 13 2 Q10 1 10 4" stroke="#CBD5E1" stroke-width=".8" fill="none"/></svg></div>Amazon gifts with no personal touch</li></ul></div>
+    <div class="comp-card after rv d1"><span class="comp-lbl">Wisherly surprises</span><div class="comp-h">Remembered forever</div><ul class="comp-list"><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="1" y="4" width="18" height="13" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/><circle cx="7" cy="10" r="3" fill="#93C5FD"/><path d="M1 14 L5 10 L9 14 L12 11 L19 16" stroke="#2563EB" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="16" cy="7" r="1.5" fill="#2563EB" opacity=".4"/></svg></div>A cinematic photo journey of shared memories</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><style>.cb1{animation:cb 0.7s ease-in-out infinite alternate;}.cb2{animation:cb 0.5s .1s ease-in-out infinite alternate;}.cb3{animation:cb 0.9s .05s ease-in-out infinite alternate;}@keyframes cb{0%{transform:scaleY(.4);transform-origin:bottom;}100%{transform:scaleY(1);transform-origin:bottom;}}</style><rect class="cb1" x="2" y="8" width="3" height="10" rx="1.5" fill="#2563EB" opacity=".7"/><rect class="cb2" x="7" y="5" width="3" height="13" rx="1.5" fill="#2563EB"/><rect class="cb3" x="12" y="7" width="3" height="11" rx="1.5" fill="#3B82F6" opacity=".8"/><rect class="cb1" x="17" y="9" width="2" height="9" rx="1" fill="#2563EB" opacity=".5"/></svg></div>The song that makes them cry (happily)</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="11" rx="2" fill="#FDF2F8" stroke="#EC4899" stroke-width="1"/><path d="M2 7 L10 12 L18 7" stroke="#F9A8D4" stroke-width=".9" fill="none"/><circle cx="5" cy="4" r="1.5" fill="#FCE7F3" stroke="#EC4899" stroke-width=".7"/><circle cx="15" cy="4" r="1.5" fill="#FCE7F3" stroke="#EC4899" stroke-width=".7"/></svg></div>Messages from everyone who loves them</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke="#BAE6FD" stroke-width="1.5"/><circle cx="10" cy="5" r="2.5" fill="#0EA5E9" stroke="white" stroke-width="1"/><circle cx="10" cy="10" r="2.5" fill="#2563EB" stroke="white" stroke-width="1"/><circle cx="10" cy="15" r="2.5" fill="#7C3AED" stroke="white" stroke-width="1"/><rect x="13" y="3.5" width="6" height="3" rx="1" fill="#E0F2FE"/><rect x="1" y="8.5" width="6" height="3" rx="1" fill="#DBEAFE"/><rect x="13" y="13.5" width="6" height="3" rx="1" fill="#EDE9FE"/></svg></div>A timeline of your story together</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><style>.ccf{animation:ccfl .9s ease-in-out infinite alternate;}@keyframes ccfl{0%{transform:translateY(0);}100%{transform:translateY(3px);}}</style><rect class="ccf" x="3" y="2" width="3.5" height="3.5" rx=".8" fill="#EF4444" transform="rotate(12 4.75 3.75)"/><rect class="ccf" x="13" y="3" width="3" height="3" rx=".8" fill="#F59E0B" transform="rotate(-8 14.5 4.5)" style="animation-delay:.3s;"/><rect class="ccf" x="8" y="1" width="2.5" height="2.5" rx=".6" fill="#8B5CF6" transform="rotate(20 9.25 2.25)" style="animation-delay:.15s;"/><circle cx="16" cy="10" r="1.8" fill="#10B981"/><circle cx="4" cy="11" r="1.4" fill="#EC4899"/><path d="M6 16 Q10 12 14 16 Q10 20 6 16Z" fill="#FCD34D" stroke="#D97706" stroke-width=".8"/></svg></div>An experience they'll replay and share</li></ul></div>
   </div>
 </div></section>
 
@@ -1153,20 +1473,38 @@ to{width:60%;}}
         <div class="dc-screen">
           <div style="padding:14px 12px;text-align:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:10px;font-style:italic;color:#1A3FA6;margin-bottom:2px;letter-spacing:.08em;">Happy Birthday ✦</div><div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:#07122A;font-style:italic;line-height:1;">Sarah</div><div style="font-size:8px;color:#4A6FA5;margin-top:2px;font-style:italic;">A surprise made just for you</div></div>
           <div style="height:1px;background:rgba(37,99,235,.1);margin:0 12px;"></div>
-          <div style="height:54px;background:linear-gradient(135deg,#BFDBFE,#DDD6FE,#EDE9FE);display:flex;align-items:center;justify-content:center;font-size:20px;gap:6px;">🌸 📸 ✨</div>
+          <div style="height:54px;background:linear-gradient(135deg,#BFDBFE,#DDD6FE,#EDE9FE);display:flex;align-items:center;justify-content:center;gap:8px;">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" fill="rgba(255,255,255,.3)" stroke="rgba(255,255,255,.6)" stroke-width="1"/><path d="M6 9.5 L8 11.5 L12 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="12" rx="2" fill="rgba(255,255,255,.3)" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle cx="6" cy="8" r="2" fill="rgba(255,255,255,.5)"/><path d="M1 12 L5 9 L8 12 L11 9.5 L17 13" stroke="rgba(255,255,255,.7)" stroke-width="1" fill="none" stroke-linecap="round"/></svg>
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2 L9.7 5.5 L13.5 6 L10.5 8.8 L11.5 13 L9 11 L6.5 13 L7.5 8.8 L4.5 6 L8.3 5.5Z" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.7)" stroke-width=".8"/></svg>
+    </div>
           <div style="padding:10px 12px;">
-            <div class="ps-wish"><div class="ps-av"></div><div class="ps-txt">So proud of the person you've become. Every day with you is a gift. 💙</div></div>
-            <div class="ps-wish"><div class="ps-av" style="background:linear-gradient(135deg,#1D4ED8,#7C3AED)"></div><div class="ps-txt">Best friend forever, no matter where life takes us 🌟</div></div>
+            <div class="ps-wish"><div class="ps-av"></div><div class="ps-txt">So proud of the person you've become. Every day with you is a gift. ✦</div></div>
+            <div class="ps-wish"><div class="ps-av" style="background:linear-gradient(135deg,#1D4ED8,#7C3AED)"></div><div class="ps-txt">Best friend forever, no matter where life takes us ✦</div></div>
             <div class="ps-wish"><div class="ps-av" style="background:linear-gradient(135deg,#0EA5E9,#2563EB)"></div><div class="ps-txt">Remember when we stayed up all night? ✨</div></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="dc rv d2"><div class="dc-stat"><span class="dc-stat-ico">😭</span><div><div class="dc-stat-num">98%</div><div class="dc-stat-lbl">of recipients said it made them emotional on first open</div></div></div></div>
-    <div class="dc rv d3"><div class="dc-stat"><span class="dc-stat-ico">⚡</span><div><div class="dc-stat-num">&lt;&nbsp;5<span style="font-size:.45em">min</span></div><div class="dc-stat-lbl">average time to build a full surprise page from scratch</div></div></div></div>
+    <div class="dc rv d2"><div class="dc-stat"><span class="dc-stat-ico"><svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <style>.dtear{animation:dt 2s ease-in-out infinite;}.dtear2{animation:dt 2s .6s ease-in-out infinite;}@keyframes dt{0%,60%{transform:translateY(0);opacity:1;}100%{transform:translateY(7px);opacity:0;}}</style>
+      <circle cx="18" cy="18" r="14" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+      <circle cx="13" cy="15" r="2" fill="#92400E"/>
+      <circle cx="23" cy="15" r="2" fill="#92400E"/>
+      <path d="M12 23 Q18 27 24 23" stroke="#92400E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path class="dtear" d="M12 17.5 Q11 20 12 22" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <ellipse class="dtear" cx="12" cy="22.5" rx="1.2" ry="1.5" fill="#93C5FD"/>
+      <path class="dtear2" d="M24 17.5 Q25 20 24 22" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <ellipse class="dtear2" cx="24" cy="22.5" rx="1.2" ry="1.5" fill="#93C5FD"/>
+    </svg></span><div><div class="dc-stat-num">98%</div><div class="dc-stat-lbl">of recipients said it made them emotional on first open</div></div></div></div>
+    <div class="dc rv d3"><div class="dc-stat"><span class="dc-stat-ico"><svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <style>.bolt{animation:boltpulse 1.5s ease-in-out infinite;}@keyframes boltpulse{0%,100%{opacity:1;filter:drop-shadow(0 0 2px #F59E0B);}50%{opacity:.7;filter:drop-shadow(0 0 6px #F59E0B);}}</style>
+      <circle cx="18" cy="18" r="14" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+      <path class="bolt" d="M21 6 L12 19 L17 19 L15 30 L24 17 L19 17Z" fill="#F59E0B"/>
+    </svg></span><div><div class="dc-stat-num">&lt;&nbsp;5<span style="font-size:.45em">min</span></div><div class="dc-stat-lbl">average time to build a full surprise page from scratch</div></div></div></div>
   </div>
   <div class="demo-cta rv d2">
-    <a href="demo.html" class="btn-hero-p">Open Live Demo ✨</a>
+    <a href="demo.html" class="btn-hero-p">Open Live Demo <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:inline;vertical-align:middle;margin-left:3px;"><path d="M7 1 L7.7 4.5 L11 5 L8 7.5 L9 11 L7 9 L5 11 L6 7.5 L3 5 L6.3 4.5Z" fill="white" opacity=".8"/></svg></a>
     <a href="occasion.html" class="btn-hero-o">Create Yours →</a>
   </div>
 </div></section>
@@ -1217,8 +1555,17 @@ to{width:60%;}}
       <h2>Make someone feel<br><em>deeply loved</em> today.</h2>
       <p>It takes 5 minutes to build.<br>It'll be remembered for a lifetime.</p>
       <div class="cta-btns">
-        <a href="occasion.html" class="btn-cta-w">✨ Create Your Surprise Page</a>
-        <a href="demo.html" class="btn-cta-ghost">▶ See a Live Demo</a>
+        <a href="occasion.html" class="btn-cta-w" style="display:inline-flex;align-items:center;gap:10px;padding:16px 36px;font-size:15px;font-weight:600;letter-spacing:.01em;border-radius:14px;position:relative;overflow:hidden;">
+          <span style="position:relative;z-index:1;display:flex;align-items:center;gap:10px;">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" fill="rgba(255,255,255,.2)"/><path d="M6 9 L8 11 L12 7" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Create Your Surprise Page
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8 L13 8 M9 4 L13 8 L9 12" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a href="demo.html" class="btn-cta-ghost" style="display:inline-flex;align-items:center;gap:8px;padding:16px 32px;font-size:15px;border-radius:14px;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/><path d="M6.5 5.5 L11.5 8 L6.5 10.5Z" fill="rgba(255,255,255,.6)"/></svg>
+          See a Live Demo
+        </a>
       </div>
     </div>
   </div>
@@ -1331,7 +1678,7 @@ document.getElementById('ptog').addEventListener('click',function(){
     <div style="font-size:14px;color:rgba(255,255,255,.4);line-height:1.75;max-width:360px;margin-bottom:28px;">Create stunning digital surprise pages — with photos, music, and heartfelt messages from everyone they love. Free during launch, forever meaningful.</div>
     <div style="display:flex;gap:10px;align-items:center;">
       <a href="occasion.html" style="padding:13px 28px;border-radius:10px;background:#2563EB;color:white;border:none;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;font-family:'Outfit',sans-serif;">Create your page — it&#39;s free &#8594;</a>
-      <a href="demo.html" style="padding:13px 22px;border-radius:10px;background:transparent;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:14px;cursor:pointer;text-decoration:none;font-family:'Outfit',sans-serif;">Watch demo</a>
+      <a href="demo.html" style="padding:14px 24px;border-radius:12px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.12);font-size:14px;cursor:pointer;text-decoration:none;font-family:'Outfit',sans-serif;display:inline-flex;align-items:center;gap:8px;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/><path d="M5.5 4.5 L10 7 L5.5 9.5Z" fill="rgba(255,255,255,.6)"/></svg>Watch demo</a>
     </div>
   </div>
   <div style="display:flex;flex-direction:column;gap:28px;">
@@ -1345,10 +1692,10 @@ document.getElementById('ptog').addEventListener('click',function(){
         <span style="width:5px;height:5px;border-radius:50%;background:#60A5FA;display:inline-block;animation:wfp 2s ease infinite;"></span>Free during launch &middot; No signup needed
       </div>
       <div style="display:flex;gap:8px;">
-        <a href="#" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;">📸</a>
-        <a href="#" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:12px;text-decoration:none;color:rgba(255,255,255,.5);font-weight:600;">&#120143;</a>
-        <a href="#" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;">💬</a>
-        <a href="#" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:12px;text-decoration:none;color:rgba(255,255,255,.5);font-weight:700;">in</a>
+        <a href="#" id="footer-instagram" title="Instagram" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="rgba(255,255,255,.6)" stroke="none"/></svg></a>
+        <a href="#" id="footer-facebook" title="Facebook" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;"><svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.5h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg></a>
+        <a href="#" id="footer-whatsapp" title="WhatsApp" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;"><svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><path d="M17.47 14.38c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.87 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.19-.57-.34z"/><path d="M12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.11 1.52 5.84L.06 23.27l5.57-1.46A11.93 11.93 0 0 0 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0zm0 21.82a9.79 9.79 0 0 1-5.13-1.44l-.37-.22-3.8 1 1.01-3.7-.24-.38A9.82 9.82 0 0 1 2.18 12C2.18 6.57 6.57 2.18 12 2.18S21.82 6.57 21.82 12 17.43 21.82 12 21.82z"/></svg></a>
+        <a href="#" id="footer-linkedin" title="LinkedIn" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:all .2s;"><svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></a>
       </div>
     </div>
     <div>
@@ -1365,10 +1712,22 @@ document.getElementById('ptog').addEventListener('click',function(){
 <!-- STATS STRIP -->
 <div style="border-bottom:1px solid rgba(255,255,255,.05);">
   <div style="max-width:1100px;margin:0 auto;padding:0 52px;display:grid;grid-template-columns:repeat(4,1fr);">
-    <div style="padding:26px 0 26px 0;border-right:1px solid rgba(255,255,255,.05);"><div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;">12<span style="color:#60A5FA;">,000+</span></div><div style="font-size:12px;color:rgba(255,255,255,.28);">Surprise pages created</div></div>
-    <div style="padding:26px 0 26px 32px;border-right:1px solid rgba(255,255,255,.05);"><div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span style="color:#60A5FA;">8</span> occasions</div><div style="font-size:12px;color:rgba(255,255,255,.28);">Birthday to graduation</div></div>
-    <div style="padding:26px 0 26px 32px;border-right:1px solid rgba(255,255,255,.05);"><div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span style="color:#60A5FA;">5</span> minutes</div><div style="font-size:12px;color:rgba(255,255,255,.28);">Average creation time</div></div>
-    <div style="padding:26px 0 26px 32px;"><div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span style="color:#60A5FA;">&#8734;</span> love</div><div style="font-size:12px;color:rgba(255,255,255,.28);">Delivered every day</div></div>
+    <div style="padding:26px 0;border-right:1px solid rgba(255,255,255,.05);">
+      <div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span id="footerPagesCount" style="color:#60A5FA;">0</span>+</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.28);">Surprise pages created</div>
+    </div>
+    <div style="padding:26px 0 26px 32px;border-right:1px solid rgba(255,255,255,.05);">
+      <div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span id="footerMemoriesCount" style="color:#60A5FA;">0</span>+</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.28);">Memories shared</div>
+    </div>
+    <div style="padding:26px 0 26px 32px;border-right:1px solid rgba(255,255,255,.05);">
+      <div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span style="color:#60A5FA;">5</span> minutes</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.28);">Average creation time</div>
+    </div>
+    <div style="padding:26px 0 26px 32px;">
+      <div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span style="color:#60A5FA;">98%</span></div>
+      <div style="font-size:12px;color:rgba(255,255,255,.28);">People cried, happily!</div>
+    </div>
   </div>
 </div>
 
@@ -1376,14 +1735,14 @@ document.getElementById('ptog').addEventListener('click',function(){
 <div style="border-bottom:1px solid rgba(255,255,255,.05);">
   <div style="max-width:1100px;margin:0 auto;padding:22px 52px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
     <span style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.18);margin-right:6px;flex-shrink:0;">Occasions</span>
-    <a href="gender.html?occasion=birthday" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">🎂 Birthday</a>
-    <a href="gender.html?occasion=anniversary" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">💍 Anniversary</a>
-    <a href="gender.html?occasion=farewell" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">🍃 Farewell</a>
-    <a href="gender.html?occasion=friendship" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">💛 Friendship</a>
-    <a href="gender.html?occasion=love" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">💌 Love Notes</a>
-    <a href="gender.html?occasion=apology" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">🕊️ Apology</a>
-    <a href="gender.html?occasion=graduation" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;opacity:.35;font-family:'Outfit',sans-serif;">🎓 Graduation</a>
-    <a href="gender.html?occasion=thankyou" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;opacity:.35;font-family:'Outfit',sans-serif;">🙏 Thank You</a>
+    <a href="gender.html?occasion=birthday" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:middle;margin-right:3px;"><rect x="1" y="6" width="10" height="5" rx="1.5" fill="#DBEAFE"/><ellipse cx="4" cy="4" rx=".6" ry=".9" fill="#F59E0B" style="animation:flicker 1.2s ease infinite;"/><ellipse cx="8" cy="3.5" rx=".6" ry=".9" fill="#EF4444" style="animation:flicker 1.2s .3s ease infinite;"/></svg>Birthday</a>
+    <a href="gender.html?occasion=anniversary" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M6 10 L2 6 Q1 4 3 3 Q4.5 2.5 6 5 Q7.5 2.5 9 3 Q11 4 10 6Z" fill="#FCE7F3" stroke="#EC4899" stroke-width=".8"/></svg>Anniversary</a>
+    <a href="gender.html?occasion=farewell" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M6 2 C4 3 3 5 4 6.5 C3 8 3.5 10 6 10 C8.5 10 9 8 8 6.5 C9 5 8 3 6 2Z" fill="#D1FAE5" stroke="#059669" stroke-width=".8"/></svg>Farewell</a>
+    <a href="gender.html?occasion=friendship" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M6 10 L2 6 Q1 4 3 3 Q4.5 2.5 6 5 Q7.5 2.5 9 3 Q11 4 10 6Z" fill="#FEF3C7" stroke="#D97706" stroke-width=".8"/></svg>Friendship</a>
+    <a href="gender.html?occasion=love" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:middle;margin-right:3px;"><rect x="1" y="3" width="10" height="7" rx="1.5" fill="#FDF2F8" stroke="#EC4899" stroke-width=".8"/><path d="M1 4.5 L6 7.5 L11 4.5" stroke="#F9A8D4" stroke-width=".7" fill="none"/></svg>Love Notes</a>
+    <a href="gender.html?occasion=apology" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M6 2 L6.6 4.5 L9 4.8 L7 6.5 L7.8 9 L6 7.8 L4.2 9 L5 6.5 L3 4.8 L5.4 4.5Z" fill="#DBEAFE" stroke="#2563EB" stroke-width=".6"/></svg>Apology</a>
+    <a href="gender.html?occasion=graduation" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;opacity:.35;font-family:'Outfit',sans-serif;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M6 2 L11 4.5 L6 7 L1 4.5Z" fill="#DBEAFE" stroke="#2563EB" stroke-width=".8"/><path d="M3 6 L3 8.5 Q6 10 9 8.5 L9 6" fill="#EFF6FF" stroke="#2563EB" stroke-width=".7"/></svg>Graduation</a>
+    <a href="gender.html?occasion=thankyou" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;opacity:.35;font-family:'Outfit',sans-serif;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M6 2 C4.5 2 3 3.2 3 4.8 C3 7 6 10 6 10 C6 10 9 7 9 4.8 C9 3.2 7.5 2 6 2Z" fill="#FDF2F8" stroke="#EC4899" stroke-width=".8"/></svg>Thank You</a>
   </div>
 </div>
 
@@ -1488,11 +1847,27 @@ document.getElementById('ptog').addEventListener('click',function(){
       }
     }
     // Also update any other counters on the page
-    // Update metrics counter with real data
+    // Update all counters with real data
     var metEl = document.getElementById('metPagesCount');
     if (metEl) {
       metEl.setAttribute('data-t', count);
       metEl.textContent = count.toLocaleString();
+    }
+    // Strip count
+    var stripEl = document.getElementById('stripCount');
+    var footerPages = document.getElementById('footerPagesCount');
+    if (footerPages) footerPages.textContent = count.toLocaleString();
+    var footerMem = document.getElementById('footerMemoriesCount');
+    if (footerMem) footerMem.textContent = (count * 5).toLocaleString();
+    if (stripEl) {
+      stripEl.textContent = count > 0 ? count.toLocaleString() + '+' : '0+';
+    }
+    // Memories shared = pageCount x 5 (avg memories per page)
+    var memEl = document.getElementById('metMemoriesCount');
+    if (memEl) {
+      var memories = count * 5;
+      memEl.setAttribute('data-t', memories);
+      memEl.textContent = memories.toLocaleString();
     }
   }
 
