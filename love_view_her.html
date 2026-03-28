@@ -372,8 +372,8 @@ video{width:100%;display:block;max-height:380px;object-fit:cover;}
     <div class="classified-badge"><span class="c-dot"></span>Classified</div>
     <h1 class="unlock-h1">A love note<br>for <em>you</em></h1>
     <p class="unlock-sub" id="unlockSub">Someone made this just for you…</p>
-    <input class="unlock-input" id="unlockInput" type="text" placeholder="Type your name…" autocomplete="off">
-    <button class="unlock-btn" id="unlockBtn">Open with love 💌</button>
+    <input class="unlock-input" id="unlockInput" type="text" placeholder="Type your name…" autocomplete="off" onkeydown="if(event.key==='Enter')tryUnlock()">
+    <button class="unlock-btn" id="unlockBtn" onclick="tryUnlock()">Open with love 💌</button>
     <p class="unlock-error" id="unlockError">That doesn't seem right — try again 💌</p>
     <div class="anya-stars" id="anyaStars">⭐ ⭐ ⭐</div>
   </div>
@@ -609,14 +609,12 @@ function initUnlock() {
   const name = (D.name || '').trim();
   if (!name) { showMain(); return; }
   if (D.teaser) document.getElementById('unlockSub').textContent = D.teaser;
-  const btn = document.getElementById('unlockBtn');
-  if (D.unlockLabel) btn.textContent = D.unlockLabel;
-  btn.addEventListener('click', tryUnlock);
-  document.getElementById('unlockInput').addEventListener('keydown', e => { if(e.key==='Enter') tryUnlock(); });
+  if (D.unlockLabel) document.getElementById('unlockBtn').textContent = D.unlockLabel;
   if (new URLSearchParams(location.search).get('unlock') === 'none') { showMain(); return; }
 }
 
 function tryUnlock() {
+  if (!D || !D.name) { showMain(); return; } // called before data loaded — just open
   const val = document.getElementById('unlockInput').value.trim().toLowerCase();
   const name = (D.name || '').trim().toLowerCase();
   if (val === name || val === '') {
