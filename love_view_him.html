@@ -114,6 +114,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .entry-scroll-text{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
 .entry-scroll-bar{width:1.5px;height:44px;background:linear-gradient(180deg,var(--orange),transparent);animation:scroll-pulse 1.5s ease-in-out infinite;}
 @keyframes scroll-pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+@keyframes fadeOut{0%{opacity:1;}100%{opacity:0;pointer-events:none;}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
 
 /* 2. FIRST NOTE */
 #firstNoteSection{background:var(--dark2);}
@@ -244,6 +246,103 @@ video{width:100%;display:block;max-height:380px;object-fit:cover;}
 .rv.vi{opacity:1;transform:translateY(0);}
 .d1{transition-delay:.07s;}.d2{transition-delay:.14s;}.d3{transition-delay:.21s;}.d4{transition-delay:.28s;}.d5{transition-delay:.35s;}.d6{transition-delay:.42s;}
 
+
+/* CTA SECTION */
+#ctaSection{
+  background:linear-gradient(160deg,#1F0800,#2A0D00,#FF6B00 400%);
+  padding:80px 40px;text-align:center;
+  position:relative;z-index:2;overflow:hidden;
+  border-top:2px solid var(--orange);
+}
+#ctaSection::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(255,107,0,.12),transparent 70%);
+}
+.cta-jutsu-tag{
+  display:inline-block;
+  border:1px solid var(--orange);background:rgba(255,107,0,.1);
+  color:var(--orange);font-family:var(--fd);font-size:13px;
+  letter-spacing:.2em;padding:5px 20px;margin-bottom:24px;
+  border-radius:4px;
+  text-shadow:0 0 10px rgba(255,107,0,.4);
+}
+.cta-heading{
+  font-family:var(--fd);
+  font-size:clamp(28px,5vw,56px);
+  letter-spacing:.05em;line-height:1;
+  color:var(--white);margin-bottom:14px;
+  text-shadow:0 0 40px rgba(255,107,0,.3);
+  position:relative;z-index:1;
+}
+.cta-heading span{color:var(--orange);}
+.cta-sub{
+  font-family:var(--fh);font-size:18px;
+  color:rgba(255,250,230,.7);max-width:460px;
+  margin:0 auto 32px;line-height:1.65;
+  position:relative;z-index:1;
+}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 44px;border-radius:4px;
+  background:linear-gradient(135deg,var(--orange),var(--red));
+  border:1px solid rgba(255,255,255,.15);
+  color:white;font-family:var(--fd);font-size:22px;
+  letter-spacing:.08em;text-decoration:none;
+  box-shadow:0 8px 32px rgba(255,107,0,.35);
+  transition:all .3s;
+  position:relative;z-index:1;
+}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 14px 48px rgba(255,107,0,.55);}
+
+/* POPUP */
+#ctaPopup{
+  position:fixed;inset:0;z-index:9998;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s;
+}
+#ctaPopup.show{opacity:1;pointer-events:all;}
+.popup-card{
+  background:linear-gradient(160deg,#1F0A00,#150800);
+  border:1px solid var(--orange);
+  border-radius:8px;
+  padding:40px 36px;
+  max-width:440px;width:100%;
+  text-align:center;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(255,107,0,.1);
+  animation:popup-in .4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popup-in{0%{transform:scale(.8);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.popup-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),var(--gold),transparent);}
+.popup-close{
+  position:absolute;top:12px;right:12px;
+  background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.2);
+  width:28px;height:28px;border-radius:4px;
+  color:var(--orange);font-size:14px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.popup-close:hover{background:rgba(255,107,0,.25);}
+.popup-emoji{font-size:44px;margin-bottom:16px;display:block;filter:drop-shadow(0 0 16px rgba(255,107,0,.5));animation:comfort-glow 2s ease-in-out infinite alternate;}
+.popup-title{font-family:var(--fd);font-size:26px;letter-spacing:.05em;color:var(--white);margin-bottom:10px;text-shadow:0 0 20px rgba(255,107,0,.3);}
+.popup-title span{color:var(--orange);}
+.popup-sub{font-family:var(--fh);font-size:16px;color:rgba(255,250,230,.7);margin-bottom:24px;line-height:1.6;}
+.popup-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 32px;border-radius:4px;
+  background:linear-gradient(135deg,var(--orange),var(--red));
+  border:1px solid rgba(255,215,0,.3);
+  color:white;font-family:var(--fd);font-size:20px;
+  letter-spacing:.08em;text-decoration:none;
+  box-shadow:0 6px 24px rgba(255,107,0,.35);
+  transition:all .3s;
+}
+.popup-btn:hover{box-shadow:0 10px 36px rgba(255,107,0,.55);transform:translateY(-2px);}
+.popup-note{font-size:11px;color:rgba(255,250,230,.3);margin-top:14px;font-family:var(--fs);letter-spacing:.08em;text-transform:uppercase;}
 .page-foot{text-align:center;padding:40px;font-family:var(--fs);font-size:13px;color:var(--muted);position:relative;z-index:2;letter-spacing:.06em;}
 .page-foot a{color:var(--orange);text-decoration:none;}
 
@@ -461,6 +560,27 @@ video{width:100%;display:block;max-height:380px;object-fit:cover;}
 
 </div>
 
+
+<!-- CTA SECTION -->
+<section id="ctaSection">
+  <div class="cta-jutsu-tag">◆ LIMITED TIME — FREE ACCESS ◆</div>
+  <h2 class="cta-heading">CREATE YOUR FIRST<br><span>SURPRISE PAGE FREE</span></h2>
+  <p class="cta-sub">Make someone feel exactly like this. Photos, music, secret notes — all in one beautiful page. Free during our launch.</p>
+  <a href="https://wisherly.co" class="cta-btn">◆ START FREE ON WISHERLY</a>
+</section>
+
+<!-- POPUP -->
+<div id="ctaPopup">
+  <div class="popup-card">
+    <button class="popup-close" onclick="closePopup()">×</button>
+    <span class="popup-emoji">🔥</span>
+    <h3 class="popup-title">YOUR FIRST PAGE IS <span>FREE</span></h3>
+    <p class="popup-sub">Create a surprise page just like this one — for someone you care about. Free during our launch. No card needed.</p>
+    <a href="https://wisherly.co" class="popup-btn">CREATE ON WISHERLY ◆</a>
+    <div class="popup-note">FREE · 5 MINUTES · NO SIGNUP</div>
+  </div>
+</div>
+
 <div class="page-foot"><a href="index.html">WISHERLY</a> ◆</div>
 
 <script>
@@ -507,12 +627,17 @@ function tryUnlock() {
   const val = document.getElementById('unlockInput').value.trim().toLowerCase();
   const name = (D.name || '').trim().toLowerCase();
   if (val === name || val === '') {
-    document.getElementById('unlockScreen').style.animation = 'fadeOut .5s forwards';
-    setTimeout(showMain, 500);
+    const screen = document.getElementById('unlockScreen');
+    screen.style.transition = 'opacity .5s';
+    screen.style.opacity = '0';
+    screen.style.pointerEvents = 'none';
+    setTimeout(showMain, 520);
   } else {
     document.getElementById('unlockError').style.display = 'block';
-    document.getElementById('unlockInput').style.animation = 'shake .3s';
-    setTimeout(() => document.getElementById('unlockInput').style.animation = '', 300);
+    const inp = document.getElementById('unlockInput');
+    inp.style.transition = 'none';
+    inp.style.transform = 'translateX(-8px)';
+    setTimeout(() => { inp.style.transition = 'transform .3s'; inp.style.transform = 'translateX(0)'; }, 80);
   }
 }
 
@@ -803,14 +928,24 @@ function initReveal() {
   initVideoAutoplay();
 }
 
-const style=document.createElement('style');
-style.textContent='@keyframes fadeOut{0%{opacity:1;}100%{opacity:0;pointer-events:none;}}@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}';
-document.head.appendChild(style);
+// styles already in <style> block
 
 initSpeedLines();
 initChakraParticles();
 initUnlockCanvas();
 loadPage();
+
+/* CTA POPUP — shows after 60 seconds */
+function closePopup() {
+  document.getElementById('ctaPopup').classList.remove('show');
+}
+setTimeout(() => {
+  document.getElementById('ctaPopup').classList.add('show');
+}, 60000);
+document.getElementById('ctaPopup').addEventListener('click', function(e) {
+  if (e.target === this) closePopup();
+});
+
 </script>
 </body>
 </html>
