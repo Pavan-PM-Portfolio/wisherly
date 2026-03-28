@@ -138,6 +138,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .sec-sub{font-size:12px;color:var(--muted2);margin-top:2px;}
 .sec-body{padding:32px;}
 
+/* SPLIT PREVIEW */
+.sec-body-split{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:32px;}
+.split-form{display:flex;flex-direction:column;}
+.split-preview{background:var(--snow);border:1.5px solid var(--border2);border-radius:var(--r-md);padding:20px;position:sticky;top:100px;align-self:start;}
+.preview-label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.preview-label::before{content:'';width:16px;height:1px;background:var(--pale);}
+.preview-content{font-family:var(--fb);font-size:13px;color:var(--muted);line-height:1.7;font-style:italic;}
+.preview-pill{display:inline-flex;align-items:center;gap:6px;background:var(--frost);border:1px solid var(--border);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:500;color:var(--blue);margin:3px 2px;}
+@media(max-width:700px){.sec-body-split{grid-template-columns:1fr;}.split-preview{display:none;}}
+
+
 /* FORM ELEMENTS */
 label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
 input[type=text],input[type=url],textarea{
@@ -256,6 +267,26 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
 .step-pill.pending{background:var(--snow);color:var(--muted2);border:1px solid var(--border2);}
 
 /* ANIMATIONS */
+
+/* SECTION TOGGLES */
+.section-selector{background:var(--snow);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:28px 32px;margin-bottom:32px;}
+.section-selector-title{font-family:var(--fd);font-size:22px;font-weight:400;color:var(--cobalt);margin-bottom:6px;}
+.section-selector-sub{font-size:12px;color:var(--muted2);margin-bottom:20px;}
+.section-toggles{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.sec-toggle-item{display:flex;align-items:center;justify-content:space-between;background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;transition:all .25s;}
+.sec-toggle-item.locked{background:var(--frost);border-color:rgba(37,99,235,.2);}
+.sec-toggle-item.locked .sec-toggle-label{color:var(--cobalt);font-weight:600;}
+.sec-toggle-item.disabled{opacity:.4;}
+.sec-toggle-label{font-size:13px;font-weight:500;color:var(--ink);display:flex;align-items:center;gap:8px;}
+.sec-toggle-label-icon{font-size:15px;}
+.pill-switch{position:relative;width:42px;height:24px;flex-shrink:0;cursor:pointer;}
+.pill-switch input{opacity:0;width:0;height:0;position:absolute;}
+.pill-track{position:absolute;inset:0;background:rgba(37,99,235,.15);border-radius:999px;border:1.5px solid rgba(37,99,235,.15);transition:all .3s cubic-bezier(.16,1,.3,1);}
+.pill-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--muted2);transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 1px 4px rgba(0,0,0,.15);}
+.pill-switch input:checked ~ .pill-track{background:linear-gradient(135deg,var(--royal),var(--blue));border-color:transparent;box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.pill-switch input:checked ~ .pill-thumb{left:21px;background:white;box-shadow:0 2px 8px rgba(37,99,235,.3);}
+.form-section.sec-disabled{opacity:.35;pointer-events:none;}
+
 .rv{opacity:0;transform:translateY(20px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
 .rv.vi{opacity:1;transform:translateY(0);}
 .d1{transition-delay:.07s;}.d2{transition-delay:.14s;}.d3{transition-delay:.21s;}
@@ -339,11 +370,18 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
     </div>
   </div>
 
+
+  <!-- SECTION SELECTOR -->
+  <div class="section-selector rv vi d2">
+    <div class="section-selector-title">Choose your sections</div>
+    <div class="section-selector-sub">Toggle sections on or off. Locked sections are always included.</div>
+    <div class="section-toggles" id="sectionToggles"></div>
+  </div>
   <!-- FORM -->
   <div class="form-sections" id="formSections">
 
     <!-- 1. RECIPIENT -->
-    <div class="form-section rv vi d2">
+    <div class="form-section rv vi" id="sec-unlock"" id="sec-closing"" id="sec-gift"" id="sec-wishes"" id="sec-jokes"" id="sec-specials"" id="sec-message"" id="sec-music"" id="sec-photos"" id="sec-recipient" d2">
       <div class="sec-header">
         <div class="sec-num">1</div>
         <div>
@@ -351,21 +389,27 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
           <div class="sec-sub">Their name will appear on the unlock screen and throughout the page</div>
         </div>
       </div>
-      <div class="sec-body">
-        <div class="field-row">
-          <div class="field" id="field-name">
-            <label>Their name <span class="required-star">*</span></label>
-            <input type="text" id="recipientName" placeholder="e.g. Priya, Rohan, Amma…" maxlength="40">
-            <div class="field-error">Please enter their name</div>
+      <div class="sec-body-split">
+        <div class="split-form">
+          <div class="field-row">
+            <div class="field" id="field-name">
+              <label>Their name <span class="required-star">*</span></label>
+              <input type="text" id="recipientName" placeholder="e.g. Priya, Rohan…" maxlength="40" oninput="updateRecipientPreview()">
+              <div class="field-error">Please enter their name</div>
+            </div>
+            <div class="field">
+              <label>Your name (from)</label>
+              <input type="text" id="senderName" placeholder="e.g. Your secret admirer 😄" oninput="updateRecipientPreview()">
+            </div>
           </div>
           <div class="field">
-            <label>Your name (from)</label>
-            <input type="text" id="senderName" placeholder="e.g. Your secret admirer 😄">
+            <label>Their age <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+            <input type="text" id="recipientAge" placeholder="e.g. 25, Twenty-five, ∞…" maxlength="20" oninput="updateRecipientPreview()">
           </div>
         </div>
-        <div class="field">
-          <label>Their age <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional — shown on the page)</span></label>
-          <input type="text" id="recipientAge" placeholder="e.g. 25, Twenty-five, ∞…" maxlength="20">
+        <div class="split-preview">
+          <div class="preview-label">Preview</div>
+          <div class="preview-content" id="previewRecipient">Fill in their name to see a preview…</div>
         </div>
       </div>
     </div>
@@ -431,22 +475,28 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
           <div class="sec-sub">This is the heart of the page — write from the soul</div>
         </div>
       </div>
-      <div class="sec-body">
-        <div class="field" id="field-message">
-          <div class="char-row">
-            <label>Message <span class="required-star">*</span></label>
-            <span class="char-count" id="msgCount">0 / 800</span>
+      <div class="sec-body-split">
+        <div class="split-form">
+          <div class="field" id="field-message">
+            <div class="char-row">
+              <label>Message <span class="required-star">*</span></label>
+              <span class="char-count" id="msgCount">0 / 800</span>
+            </div>
+            <textarea id="personalMessage" rows="6" maxlength="800" placeholder="Write your heart out…" oninput="updateMsgPreview()"></textarea>
+            <div class="field-error">Please write a message</div>
           </div>
-          <textarea id="personalMessage" rows="6" maxlength="800" placeholder="Write your heart out… Tell them what they mean to you, your favourite memory together, what you wish for them."></textarea>
-          <div class="field-error">Please write a message</div>
+          <div class="field">
+            <label>Message display style</label>
+            <div class="toggle-group" id="msgStyle">
+              <div class="toggle-opt selected" data-val="typed">✍️ Typing animation</div>
+              <div class="toggle-opt" data-val="reveal">✨ Fade reveal</div>
+              <div class="toggle-opt" data-val="scroll">📜 Scroll appear</div>
+            </div>
+          </div>
         </div>
-        <div class="field">
-          <label>Message display style</label>
-          <div class="toggle-group" id="msgStyle">
-            <div class="toggle-opt selected" data-val="typed">✍️ Typing animation</div>
-            <div class="toggle-opt" data-val="reveal">✨ Fade reveal</div>
-            <div class="toggle-opt" data-val="scroll">📜 Scroll appear</div>
-          </div>
+        <div class="split-preview">
+          <div class="preview-label">Preview</div>
+          <div class="preview-content" id="previewMsg">Your message will appear here…</div>
         </div>
       </div>
     </div>
@@ -460,13 +510,19 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
           <div class="sec-sub">These appear as tap-to-reveal cards — deeply personal, always tearful</div>
         </div>
       </div>
-      <div class="sec-body">
-        <div class="dynamic-list" id="specialsList">
-          <div class="list-item"><div class="list-item-num">1</div><input type="text" placeholder="e.g. You light up every room you walk into" maxlength="100"><button class="btn-remove" onclick="removeItem(this)">×</button></div>
-          <div class="list-item"><div class="list-item-num">2</div><input type="text" placeholder="e.g. You always know exactly what to say" maxlength="100"><button class="btn-remove" onclick="removeItem(this)">×</button></div>
-          <div class="list-item"><div class="list-item-num">3</div><input type="text" placeholder="e.g. You're my safe place, always" maxlength="100"><button class="btn-remove" onclick="removeItem(this)">×</button></div>
+      <div class="sec-body-split">
+        <div class="split-form">
+          <div class="dynamic-list" id="specialsList">
+            <div class="list-item"><div class="list-item-num">1</div><input type="text" placeholder="e.g. You light up every room you walk into" maxlength="100" oninput="updateSpecialsPreview()"><button class="btn-remove" onclick="removeItem(this);updateSpecialsPreview()">×</button></div>
+            <div class="list-item"><div class="list-item-num">2</div><input type="text" placeholder="e.g. You always know exactly what to say" maxlength="100" oninput="updateSpecialsPreview()"><button class="btn-remove" onclick="removeItem(this);updateSpecialsPreview()">×</button></div>
+            <div class="list-item"><div class="list-item-num">3</div><input type="text" placeholder="e.g. You're my safe place, always" maxlength="100" oninput="updateSpecialsPreview()"><button class="btn-remove" onclick="removeItem(this);updateSpecialsPreview()">×</button></div>
+          </div>
+          <button class="btn-add-item" onclick="addItem('specialsList','e.g. You make everything better just by being you',10);updateSpecialsPreview()">+ Add another reason</button>
         </div>
-        <button class="btn-add-item" onclick="addItem('specialsList', 'e.g. You make everything better just by being you', 10)">+ Add another reason</button>
+        <div class="split-preview">
+          <div class="preview-label">Preview</div>
+          <div id="previewSpecials"><div class="preview-content">These become tap-to-reveal cards on the page…</div></div>
+        </div>
       </div>
     </div>
 
@@ -542,17 +598,23 @@ input::placeholder,textarea::placeholder{color:var(--muted2);}
           <div class="sec-sub">The soft emotional landing — what you want them to feel at the end</div>
         </div>
       </div>
-      <div class="sec-body">
-        <div class="field">
-          <div class="char-row">
-            <label>Closing message</label>
-            <span class="char-count" id="closeCount">0 / 400</span>
+      <div class="sec-body-split">
+        <div class="split-form">
+          <div class="field">
+            <div class="char-row">
+              <label>Closing message</label>
+              <span class="char-count" id="closeCount">0 / 400</span>
+            </div>
+            <textarea id="closingNote" rows="4" maxlength="400" placeholder="e.g. I'm so grateful every single day that you exist…" oninput="updateClosingPreview()"></textarea>
           </div>
-          <textarea id="closingNote" rows="4" maxlength="400" placeholder="e.g. I'm so grateful every single day that you exist. Not just today, but always. Thank you for being you. Happy birthday, love. 💖"></textarea>
+          <div class="field">
+            <label>Sign-off / signature</label>
+            <input type="text" id="signOff" placeholder="e.g. With all my love, forever yours ❤️" maxlength="80" oninput="updateClosingPreview()">
+          </div>
         </div>
-        <div class="field">
-          <label>Sign-off / signature</label>
-          <input type="text" id="signOff" placeholder="e.g. With all my love, forever yours, your person ❤️" maxlength="80">
+        <div class="split-preview">
+          <div class="preview-label">Preview</div>
+          <div class="preview-content" id="previewClosing">Your closing will appear here…</div>
         </div>
       </div>
     </div>
@@ -600,6 +662,77 @@ document.getElementById('theme-name-display').textContent = theme === 'him' ? 'H
 document.querySelector('.theme-dot').style.background = theme === 'him'
   ? 'linear-gradient(135deg,#60A5FA,#1A3FA6)'
   : 'linear-gradient(135deg,#f472b6,#c4b5fd)';
+
+
+/* ── PREVIEW FUNCTIONS ── */
+function updateRecipientPreview() {
+  const name = document.getElementById('recipientName').value || '—';
+  const from = document.getElementById('senderName').value || '—';
+  const age = document.getElementById('recipientAge').value;
+  document.getElementById('previewRecipient').innerHTML =
+    `<strong>${name}</strong>${age ? ', turning <strong>' + age + '</strong>' : ''}<br>From: <strong>${from}</strong>`;
+  document.getElementById('recipientPreview').textContent = name !== '—' ? name + "'s birthday" : 'Your surprise page';
+}
+
+function updateMsgPreview() {
+  const v = document.getElementById('personalMessage').value;
+  document.getElementById('msgCount').textContent = v.length + ' / 800';
+  document.getElementById('previewMsg').textContent = v ? v.slice(0,120) + (v.length > 120 ? '…' : '') : 'Your message will appear here…';
+}
+
+function updateSpecialsPreview() {
+  const items = [...document.querySelectorAll('#specialsList input')].map(i => i.value).filter(Boolean);
+  const el = document.getElementById('previewSpecials');
+  el.innerHTML = items.length
+    ? items.slice(0,3).map(t => `<div class="preview-pill">✦ ${t}</div>`).join('')
+    : '<div class="preview-content">These become tap-to-reveal cards…</div>';
+}
+
+function updateClosingPreview() {
+  const closing = document.getElementById('closingNote').value;
+  const sign = document.getElementById('signOff').value;
+  document.getElementById('closeCount').textContent = closing.length + ' / 400';
+  document.getElementById('previewClosing').innerHTML =
+    (closing ? `<em>${closing.slice(0,100)}${closing.length>100?'…':''}</em>` : 'Your closing…') +
+    (sign ? `<br><strong>${sign}</strong>` : '');
+}
+
+
+/* SECTION TOGGLES */
+const BDAY_SECTIONS = [
+  {id:'sec-recipient', label:'Recipient',      icon:'👤', locked:true },
+  {id:'sec-photos',    label:'Photos',          icon:'📸', locked:false},
+  {id:'sec-music',     label:'Music',           icon:'🎵', locked:false},
+  {id:'sec-message',   label:'Personal Message',icon:'✍️', locked:true },
+  {id:'sec-specials',  label:'Why Special',     icon:'💫', locked:false},
+  {id:'sec-jokes',     label:'Fun Moments',     icon:'😄', locked:false},
+  {id:'sec-wishes',    label:'Wishes Wall',     icon:'🎂', locked:false},
+  {id:'sec-gift',      label:'Gift Surprise',   icon:'🎁', locked:false},
+  {id:'sec-closing',   label:'Closing Note',    icon:'💖', locked:true },
+  {id:'sec-unlock',    label:'Unlock Screen',   icon:'🔐', locked:false},
+];
+const bdaySectionState = {};
+BDAY_SECTIONS.forEach(s => bdaySectionState[s.id] = true);
+
+function buildBdayToggles() {
+  const container = document.getElementById('sectionToggles');
+  container.innerHTML = BDAY_SECTIONS.map(s => `
+    <div class="sec-toggle-item ${s.locked?'locked':''}" id="toggle-${s.id}">
+      <span class="sec-toggle-label"><span class="sec-toggle-label-icon">${s.icon}</span>${s.label}${s.locked?'<span style="font-size:9px;font-weight:700;color:var(--blue);background:var(--frost);border:1px solid var(--border);border-radius:4px;padding:1px 6px;margin-left:4px;">ON</span>':''}</span>
+      <label class="pill-switch" style="${s.locked?'pointer-events:none;':''}">
+        <input type="checkbox" checked ${s.locked?'disabled':`onchange="toggleBdaySection('${s.id}',this.checked)"`}>
+        <div class="pill-track"></div><div class="pill-thumb"></div>
+      </label>
+    </div>`).join('');
+}
+function toggleBdaySection(id, enabled) {
+  bdaySectionState[id] = enabled;
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('sec-disabled', !enabled);
+  const ti = document.getElementById('toggle-'+id);
+  if(ti) ti.classList.toggle('disabled', !enabled);
+}
+buildBdayToggles();
 
 /* ── Live name preview ── */
 const nameInput = document.getElementById('recipientName');
@@ -750,10 +883,9 @@ async function handleCreate() {
 
   const btn = document.getElementById('createBtn');
   btn.disabled = true;
-  btn.textContent = 'Creating…';
+  btn.innerHTML = '<span>✦</span> Preparing…';
 
   try {
-    const db = window._db;
     const pageId = crypto.randomUUID ? crypto.randomUUID().slice(0,8) : (Date.now().toString(36) + Math.random().toString(36).slice(2,6));
 
     /* Collect all data */
@@ -787,72 +919,34 @@ async function handleCreate() {
       createdAt: Date.now()
     };
 
-    // ── Save photos ──
-    if (db && uploadedPhotos.length) {
-      btn.textContent = 'Saving photos…';
-      const photoRefs = [];
-      for (let i = 0; i < uploadedPhotos.length; i++) {
-        btn.textContent = `Saving photo ${i+1} of ${uploadedPhotos.length}…`;
-        const photoData = uploadedPhotos[i];
-        if (photoData.length > 750000) { console.warn(`Photo ${i+1} too large, skipping.`); continue; }
-        await db.collection('photos').doc(`${pageId}_${i}`).set({ pageId, index: i, data: photoData });
-        photoRefs.push(`__photo__${pageId}_${i}`);
-      }
-      data.photos = photoRefs;
-    } else {
-      data.photos = uploadedPhotos; // sessionStorage fallback keeps inline
+    // Process photos inline (stored in sessionStorage)
+    if (uploadedPhotos.length) {
+      btn.innerHTML = '<span>✦</span> Processing photos…';
+      data.photos = uploadedPhotos;
     }
 
-    // ── Save audio ──
-    // Encode from raw bytes using 3-byte aligned slices (clean base64, no padding issues)
-    if (db && _audioFile) {
-      btn.textContent = '🎵 Reading audio…';
+    // Encode audio to base64 for sessionStorage
+    if (_audioFile) {
+      btn.innerHTML = '<span>✦</span> Processing audio…';
       const arrayBuf = await _audioFile.arrayBuffer();
       const bytes = new Uint8Array(arrayBuf);
-
-      const SLICE = 3 * 1024; // must be multiple of 3 for clean base64 alignment
+      const SLICE = 3 * 1024;
       let fullB64 = '';
       for (let i = 0; i < bytes.length; i += SLICE) {
         const end = Math.min(i + SLICE, bytes.length);
         let bin = '';
         for (let j = i; j < end; j++) bin += String.fromCharCode(bytes[j]);
         fullB64 += btoa(bin);
-        // Yield to browser every 512 slices to keep UI responsive
         if ((i / SLICE) % 512 === 0) await new Promise(r => setTimeout(r, 0));
       }
-
-      // Split into ~700KB chunks — safely under Firestore's 1MB doc limit
-      const FS_CHUNK = 700000;
-      const chunks = [];
-      for (let i = 0; i < fullB64.length; i += FS_CHUNK) {
-        chunks.push(fullB64.slice(i, i + FS_CHUNK));
-      }
-
-      btn.textContent = `🎵 Saving music… 0 / ${chunks.length}`;
-      for (let i = 0; i < chunks.length; i++) {
-        btn.textContent = `🎵 Saving music… ${i+1} / ${chunks.length}`;
-        await db.collection('audio').doc(`${pageId}_${i}`).set({
-          pageId, index: i, total: chunks.length,
-          mimeType: _audioFile.type || 'audio/mpeg',
-          data: chunks[i]
-        });
-      }
-      data.audioChunks = chunks.length;
-      data.audioMime = _audioFile.type || 'audio/mpeg';
+      data._audioB64 = fullB64;
+      data._audioMime = _audioFile.type || 'audio/mpeg';
     }
 
-    // ── Save page doc ──
-    if (db) {
-      btn.textContent = '💕 Saving page…';
-      await db.collection('pages').doc(pageId).set(data);
-      sessionStorage.setItem('wisherly_data', JSON.stringify(data));
-      const _viewPage = theme === 'him' ? 'birthday_view_him.html' : 'birthday_view_her.html';
-      window.location.href = `${_viewPage}?id=${pageId}`;
-    } else {
-      // No Firebase — store everything in sessionStorage
-      sessionStorage.setItem('wisherly_data', JSON.stringify(data));
-      window.location.href = `${_viewPage}`;
-    }
+    btn.innerHTML = '<span>✦</span> Almost there…';
+    sessionStorage.setItem('wisherly_pending', JSON.stringify(data));
+    sessionStorage.setItem('wisherly_pageId', pageId);
+    window.location.href = 'ref.html';
 
   } catch(err) {
     console.error('Create error:', err);
