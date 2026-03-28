@@ -38,7 +38,8 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opac
 #nav{position:sticky;top:0;left:0;right:0;z-index:900;height:90px;padding:0 52px 0 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,249,255,.6);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-bottom:1px solid rgba(37,99,235,.04);transition:all .5s;}
 .nav-brand{text-decoration:none;display:flex;align-items:center;flex-shrink:0;margin-left:0;}
 .nav-logo{height:64px;width:64px;display:block;object-fit:contain;}
-.nav-wordmark{font-family:'Outfit',sans-serif;font-size:20px;font-weight:600;color:#0D2260;letter-spacing:-.3px;margin-left:10px;}
+.nav-pulse-svg{display:block;flex-shrink:0;}
+.nav-wordmark{font-family:'Georgia','Times New Roman',serif;font-size:22px;font-weight:400;font-style:italic;color:#07122A;letter-spacing:-.3px;}
 .nav-brand-mark{display:none;}
 .nav-brand-name{display:none;}
 .nav-links{list-style:none;display:flex;gap:36px;align-items:center;}
@@ -138,7 +139,9 @@ section{position:relative;z-index:2;}
 <!-- NAV -->
 <nav id="nav">
   <a href="index.html" class="nav-brand">
-    <img src="logo.png" alt="Wisherly" class="nav-logo">
+    <svg class="nav-pulse-svg" width="44" height="20" viewBox="0 0 44 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="0,10 7,10 10,2 13,18 16,6 19,14 22,10 44,10" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
     <span class="nav-wordmark">Wisherly</span>
   </a>
   <ul class="nav-links">
@@ -279,8 +282,7 @@ section{position:relative;z-index:2;}
   </div>
 </div>
 
-<div class="page-foot rv vi">Made with care by <a href="index.html">Wisherly</a></div>
-</main>
+
 
 <script>
 const io = new IntersectionObserver(entries => {
@@ -288,90 +290,7 @@ const io = new IntersectionObserver(entries => {
 }, {threshold:.12});
 document.querySelectorAll('.rv').forEach(el => io.observe(el));
 </script>
-<footer style="background:linear-gradient(180deg,#020617 0%,#0a0f1e 100%);padding:72px 0 0;margin-top:80px;position:relative;overflow:hidden;">
-  <!-- top glow accent -->
-  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,0.6),rgba(236,72,153,0.6),transparent);"></div>
-  <!-- ambient blobs -->
-  <div style="position:absolute;width:500px;height:500px;top:-200px;left:-100px;background:radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%);filter:blur(80px);pointer-events:none;"></div>
-  <div style="position:absolute;width:500px;height:500px;bottom:-200px;right:-100px;background:radial-gradient(circle,rgba(236,72,153,0.10),transparent 70%);filter:blur(80px);pointer-events:none;"></div>
 
-  <div style="max-width:1160px;margin:0 auto;padding:0 52px;position:relative;z-index:1;">
-
-    <!-- top grid -->
-    <div class="wly-footer-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.06);">
-
-      <!-- brand col -->
-      <div>
-        <a href="index.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:18px;">
-          <span style="font-family:'Outfit',sans-serif;font-size:24px;font-weight:700;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.3px;">✦ Wisherly</span>
-        </a>
-        <p style="font-size:13.5px;color:rgba(255,255,255,.38);line-height:1.85;max-width:230px;margin-bottom:24px;font-family:'Outfit',sans-serif;">
-          Create beautiful digital surprise pages with photos, music and heartfelt messages from everyone they love.
-        </p>
-        <div style="display:flex;gap:10px;">
-          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="Instagram">📸</a>
-          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="Twitter">🐦</a>
-          <a href="#" style="width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:15px;text-decoration:none;transition:background .2s;" title="WhatsApp">💬</a>
-        </div>
-      </div>
-
-      <!-- product col -->
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Product</div>
-        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
-          <li><a href="occasion.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Create a Page</a></li>
-          <li><a href="demo.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">See a Demo</a></li>
-          <li><a href="index.html#features" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Features</a></li>
-          <li><a href="index.html#pricing" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;transition:color .2s;">Pricing</a></li>
-        </ul>
-      </div>
-
-      <!-- occasions col -->
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Occasions</div>
-        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Birthday Surprises</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Anniversary Pages</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Friendship Pages</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Farewell Pages</a></li>
-        </ul>
-      </div>
-
-      <!-- company col -->
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-family:'Outfit',sans-serif;">Company</div>
-        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:11px;">
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">About Wisherly</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy Policy</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Terms of Service</a></li>
-          <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- bottom bar -->
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:22px 0 28px;flex-wrap:wrap;gap:14px;">
-      <span style="font-size:12px;color:rgba(255,255,255,.22);font-family:'Outfit',sans-serif;">© 2026 Wisherly — Crafted with ❤️ to create unforgettable digital surprises</span>
-      <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;border:1px solid rgba(167,139,250,.2);background:rgba(167,139,250,.06);font-size:10px;font-weight:600;color:#a78bfa;font-family:'Outfit',sans-serif;">
-        <span style="width:5px;height:5px;border-radius:50%;background:#a78bfa;animation:wly-blink 2.5s ease infinite;display:inline-block;"></span>All systems operational
-      </span>
-      <div style="display:flex;gap:18px;">
-        <a href="#" style="font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy</a>
-        <a href="#" style="font-size:12px;color:rgba(255,255,255,.22);text-decoration:none;font-family:'Outfit',sans-serif;">Terms</a>
-      </div>
-    </div>
-  </div>
-  <style>
-@keyframes wly-blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-@media(max-width:768px){
-  footer > div{padding:0 18px!important;}
-  .wly-footer-grid{grid-template-columns:1fr 1fr!important;gap:24px!important;}
-  .wly-footer-brand{grid-column:span 2!important;}
-  footer .wly-footer-grid > div:nth-child(3){grid-column:1;}
-  footer .wly-footer-grid > div:nth-child(4){grid-column:2;}
-}
-</style>
-</footer>
 
 <script>
 (function(){
@@ -384,5 +303,142 @@ document.querySelectorAll('.rv').forEach(el => io.observe(el));
   }
 })();
 </script>
+<footer style="background:#03060F;font-family:'Outfit','Helvetica Neue',sans-serif;color:white;position:relative;z-index:2;">
+<div style="height:1px;background:linear-gradient(90deg,transparent,#2563EB,#60A5FA,#2563EB,transparent);opacity:.6;"></div>
+
+<!-- HERO BAND -->
+<div style="max-width:1100px;margin:0 auto;padding:72px 52px 60px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;border-bottom:1px solid rgba(255,255,255,.05);">
+  <div>
+    <div style="font-family:'Georgia','Times New Roman',serif;font-style:italic;font-size:42px;font-weight:400;color:white;line-height:1.1;letter-spacing:-.5px;margin-bottom:18px;">The most <span style="color:#60A5FA;">Memorable</span> Gift<br>you&#39;ll ever give someone.</div>
+    <div style="font-size:14px;color:rgba(255,255,255,.4);line-height:1.75;max-width:360px;margin-bottom:28px;">Create stunning digital surprise pages — with photos, music, and heartfelt messages from everyone they love. Free during launch, forever meaningful.</div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a href="occasion.html" style="padding:13px 28px;border-radius:10px;background:#2563EB;color:white;border:none;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;font-family:'Outfit',sans-serif;">Create your page — it&#39;s free &#8594;</a>
+      <a href="demo.html" style="padding:13px 22px;border-radius:10px;background:transparent;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1);font-size:14px;cursor:pointer;text-decoration:none;font-family:'Outfit',sans-serif;">Watch demo</a>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:28px;">
+    <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.06);">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+        <svg width="44" height="20" viewBox="0 0 44 20" fill="none"><polyline points="0,10 7,10 10,2 13,18 16,6 19,14 22,10 44,10" stroke="#60A5FA" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <span style="font-family:'Georgia','Times New Roman',serif;font-style:italic;font-size:26px;font-weight:400;color:white;letter-spacing:-.3px;">Wisherly</span>
+      </a>
+      <div style="font-size:13px;color:rgba(255,255,255,.3);line-height:1.7;max-width:300px;">Digital surprise pages for birthdays, farewells, friendships and every moment that deserves to be remembered.</div>
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.2);border-radius:999px;padding:4px 12px;font-size:11px;font-weight:600;color:#60A5FA;width:fit-content;">
+        <span style="width:5px;height:5px;border-radius:50%;background:#60A5FA;display:inline-block;animation:wfp 2s ease infinite;"></span>Free during launch &middot; No signup needed
+      </div>
+      <div style="display:flex;gap:8px;">
+        <a href="#" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;">📸</a>
+        <a href="#" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:12px;text-decoration:none;color:rgba(255,255,255,.5);font-weight:600;">&#120143;</a>
+        <a href="#" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;">💬</a>
+        <a href="#" style="width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-size:12px;text-decoration:none;color:rgba(255,255,255,.5);font-weight:700;">in</a>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.65);margin-bottom:4px;">Get product updates</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.25);margin-bottom:12px;">New occasions, features and tips. No spam, ever.</div>
+      <div style="display:flex;gap:8px;">
+        <input type="email" placeholder="your@email.com" style="flex:1;padding:10px 14px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:white;font-size:13px;outline:none;font-family:'Outfit',sans-serif;">
+        <button style="padding:10px 18px;border-radius:9px;background:#2563EB;color:white;font-size:13px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;font-family:'Outfit',sans-serif;">Subscribe</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div style="border-bottom:1px solid rgba(255,255,255,.05);">
+  <div style="max-width:1100px;margin:0 auto;padding:0 52px;display:grid;grid-template-columns:repeat(4,1fr);">
+    <div style="padding:26px 0 26px 0;border-right:1px solid rgba(255,255,255,.05);"><div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;">12<span style="color:#60A5FA;">,000+</span></div><div style="font-size:12px;color:rgba(255,255,255,.28);">Surprise pages created</div></div>
+    <div style="padding:26px 0 26px 32px;border-right:1px solid rgba(255,255,255,.05);"><div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span style="color:#60A5FA;">8</span> occasions</div><div style="font-size:12px;color:rgba(255,255,255,.28);">Birthday to graduation</div></div>
+    <div style="padding:26px 0 26px 32px;border-right:1px solid rgba(255,255,255,.05);"><div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span style="color:#60A5FA;">5</span> minutes</div><div style="font-size:12px;color:rgba(255,255,255,.28);">Average creation time</div></div>
+    <div style="padding:26px 0 26px 32px;"><div style="font-family:'Georgia',serif;font-style:italic;font-size:28px;color:white;line-height:1;margin-bottom:5px;"><span style="color:#60A5FA;">&#8734;</span> love</div><div style="font-size:12px;color:rgba(255,255,255,.28);">Delivered every day</div></div>
+  </div>
+</div>
+
+<!-- OCCASIONS STRIP -->
+<div style="border-bottom:1px solid rgba(255,255,255,.05);">
+  <div style="max-width:1100px;margin:0 auto;padding:22px 52px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <span style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.18);margin-right:6px;flex-shrink:0;">Occasions</span>
+    <a href="gender.html?occasion=birthday" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">🎂 Birthday</a>
+    <a href="gender.html?occasion=anniversary" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">💍 Anniversary</a>
+    <a href="gender.html?occasion=farewell" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">🍃 Farewell</a>
+    <a href="gender.html?occasion=friendship" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">💛 Friendship</a>
+    <a href="gender.html?occasion=love" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">💌 Love Notes</a>
+    <a href="gender.html?occasion=apology" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;font-family:'Outfit',sans-serif;">🕊️ Apology</a>
+    <a href="gender.html?occasion=graduation" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;opacity:.35;font-family:'Outfit',sans-serif;">🎓 Graduation</a>
+    <a href="gender.html?occasion=thankyou" style="padding:5px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.42);text-decoration:none;white-space:nowrap;opacity:.35;font-family:'Outfit',sans-serif;">🙏 Thank You</a>
+  </div>
+</div>
+
+<!-- LINK GRID -->
+<div style="max-width:1100px;margin:0 auto;padding:48px 52px 44px;">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;">
+    <div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:18px;font-family:'Outfit',sans-serif;">Product</div>
+      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;">
+        <li><a href="occasion.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Create a page</a></li>
+        <li><a href="demo.html" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Live demo</a></li>
+        <li><a href="index.html#features" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Features</a></li>
+        <li><a href="index.html#pricing" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Pricing</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Changelog <span style="font-size:9px;font-weight:700;background:#2563EB;color:white;border-radius:4px;padding:1px 6px;margin-left:2px;">New</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:18px;font-family:'Outfit',sans-serif;">Resources</div>
+      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;">
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">How it works</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Gift ideas &amp; tips</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">FAQs</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Wisherly blog <span style="font-size:9px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.3);border-radius:4px;padding:1px 6px;margin-left:2px;">Soon</span></a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Affiliate program</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:18px;font-family:'Outfit',sans-serif;">Company</div>
+      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;">
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">About Wisherly</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Our story</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Careers</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Press kit</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Contact us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:18px;font-family:'Outfit',sans-serif;">Legal</div>
+      <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;">
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy policy</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Terms of service</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Cookie policy</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">GDPR</a></li>
+        <li><a href="#" style="font-size:13.5px;color:rgba(255,255,255,.45);text-decoration:none;font-family:'Outfit',sans-serif;">Sitemap</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div style="max-width:1100px;margin:0 auto;padding:18px 52px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-top:1px solid rgba(255,255,255,.04);">
+  <span style="font-size:12px;color:rgba(255,255,255,.18);font-family:'Outfit',sans-serif;">&#169; 2026 <span style="color:rgba(255,255,255,.3);">Wisherly</span> &middot; Made with love in India &#127470;&#127475;</span>
+  <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.22);font-family:'Outfit',sans-serif;"><span style="width:5px;height:5px;border-radius:50%;background:#10B981;display:inline-block;animation:wfp 2.5s ease infinite;"></span>All systems operational</span>
+  <div style="display:flex;gap:20px;">
+    <a href="#" style="font-size:12px;color:rgba(255,255,255,.18);text-decoration:none;font-family:'Outfit',sans-serif;">Privacy</a>
+    <a href="#" style="font-size:12px;color:rgba(255,255,255,.18);text-decoration:none;font-family:'Outfit',sans-serif;">Terms</a>
+    <a href="#" style="font-size:12px;color:rgba(255,255,255,.18);text-decoration:none;font-family:'Outfit',sans-serif;">Cookies</a>
+    <a href="#" style="font-size:12px;color:rgba(255,255,255,.18);text-decoration:none;font-family:'Outfit',sans-serif;">Sitemap</a>
+  </div>
+</div>
+
+<style>
+@keyframes wfp{0%,100%{opacity:1;}50%{opacity:.3;}}
+@media(max-width:900px){
+  footer > div > div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;gap:40px!important;}
+  footer > div > div > div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr 1fr!important;}
+  footer > div[style*="padding:48px"]{padding:40px 20px!important;}
+  footer > div[style*="padding:72px"]{padding:48px 20px 40px!important;}
+  footer > div > div[style*="padding:0 52px"]{padding:0 20px!important;}
+  footer > div[style*="padding:22px 52px"]{padding:16px 20px!important;}
+  footer > div[style*="padding:18px 52px"]{padding:16px 20px 24px!important;flex-direction:column;align-items:flex-start!important;}
+}
+</style>
+</footer>
 </body>
 </html>
