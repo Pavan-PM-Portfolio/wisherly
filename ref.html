@@ -657,8 +657,9 @@ async function createFinalPage() {
     sessionStorage.removeItem('wisherly_pageId');
 
     // Redirect to view page
+    const occasion = data.occasion || 'anniversary';
     const gender = data.gender || 'her';
-    const viewPage = gender === 'him' ? 'anniversary_view_him.html' : 'anniversary_view_her.html';
+    const viewPage = `${occasion}_view_${gender}.html`;
     window.location.href = `${viewPage}?id=${pageId}`;
 
   } catch(err) {
