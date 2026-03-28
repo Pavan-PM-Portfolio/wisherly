@@ -659,8 +659,8 @@ async function createFinalPage() {
     // Redirect to view page
     const occasion = data.occasion || 'anniversary';
     const gender = data.gender || 'her';
-    const viewPage = `${occasion}_view_${gender}.html`;
-    window.location.href = `${viewPage}?id=${pageId}`;
+    const recipientName = data.name || '';
+    window.location.href = `done.html?id=${pageId}&occasion=${occasion}&gender=${gender}&name=${encodeURIComponent(recipientName)}`;
 
   } catch(err) {
     console.error(err);
