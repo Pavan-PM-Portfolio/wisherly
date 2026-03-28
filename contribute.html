@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="fav.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wisherly — Leave a Message</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const _cfg={apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",authDomain:"wisherly-d07d7.firebaseapp.com",projectId:"wisherly-d07d7",storageBucket:"wisherly-d07d7.firebasestorage.app",messagingSenderId:"919116839261",appId:"1:919116839261:web:147d6b5924f3cbe35050b4"};
+  if(!firebase.apps.length){firebase.initializeApp(_cfg);}
+  window._db=firebase.firestore();
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --white:#FFFFFF;--snow:#F7F9FF;--frost:#EFF3FF;--pale:#C7D9FF;
+  --navy:#07122A;--cobalt:#0D2260;--royal:#1A3FA6;--blue:#2563EB;--sky:#60A5FA;
+  --ink:#0A1628;--muted:#4A6FA5;--muted2:#7A9CC8;
+  --border:rgba(37,99,235,.1);--border2:rgba(37,99,235,.06);
+  --green:#10B981;--red:#EF4444;
+  --fd:'Cormorant Garamond',serif;--fs:'Outfit',sans-serif;--fb:'Lora',serif;
+}
+body{background:var(--white);color:var(--ink);font-family:var(--fs);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center;padding-top:80px;padding-bottom:60px;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(37,99,235,.04),transparent 60%);}
+
+/* NAV */
+.contrib-nav{position:fixed;top:0;left:0;right:0;height:68px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,249,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(37,99,235,.06);z-index:100;}
+.nav-brand{text-decoration:none;display:flex;align-items:center;gap:10px;}
+.nav-logo{height:40px;width:40px;object-fit:contain;}
+.nav-wordmark{font-family:var(--fs);font-size:18px;font-weight:600;color:var(--cobalt);}
+.nav-occasion-tag{font-family:var(--fs);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--frost);border:1px solid var(--border);border-radius:999px;padding:4px 14px;}
+
+/* CARD */
+.contrib-wrap{max-width:520px;width:100%;padding:0 20px;position:relative;z-index:2;}
+
+/* OCCASION BANNER */
+.occasion-banner{text-align:center;margin-bottom:32px;}
+.occasion-icon{font-size:48px;display:block;margin-bottom:12px;animation:icon-float 3s ease-in-out infinite alternate;}
+@keyframes icon-float{0%{transform:translateY(0);}100%{transform:translateY(-8px);}}
+.occasion-title{font-family:var(--fd);font-style:italic;font-size:clamp(24px,5vw,36px);color:var(--cobalt);margin-bottom:6px;line-height:1.1;}
+.occasion-title em{background:linear-gradient(135deg,var(--royal),var(--sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.occasion-sub{font-family:var(--fb);font-style:italic;font-size:14px;color:var(--muted);line-height:1.65;max-width:380px;margin:0 auto;}
+.slots-badge{display:inline-flex;align-items:center;gap:6px;background:var(--frost);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--blue);margin-top:14px;}
+.slots-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.slots-dot.amber{background:#F59E0B;}
+.slots-dot.red{background:var(--red);}
+
+/* FORM CARD */
+.form-card{background:var(--white);border:1.5px solid var(--border);border-radius:24px;padding:32px;box-shadow:0 8px 40px rgba(37,99,235,.06);}
+label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+input[type=text],textarea{width:100%;padding:14px 18px;border:1.5px solid rgba(37,99,235,.12);border-radius:12px;background:var(--snow);font-family:var(--fs);font-size:14px;color:var(--ink);outline:none;transition:all .25s;resize:none;}
+input[type=text]:focus,textarea:focus{border-color:rgba(37,99,235,.35);background:var(--white);box-shadow:0 0 0 4px rgba(37,99,235,.06);}
+input::placeholder,textarea::placeholder{color:var(--muted2);}
+.field{margin-bottom:22px;}
+.field:last-of-type{margin-bottom:0;}
+.char-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.char-count{font-size:11px;color:var(--muted2);}
+.field-err{font-size:12px;color:var(--red);margin-top:6px;display:none;}
+.field.error input,.field.error textarea{border-color:var(--red);}
+.field.error .field-err{display:block;}
+
+/* EMOJI PICKER */
+.emoji-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.emoji-opt{font-size:24px;padding:8px 10px;border-radius:10px;border:1.5px solid var(--border);background:var(--snow);cursor:pointer;transition:all .2s;user-select:none;line-height:1;}
+.emoji-opt:hover{background:var(--frost);border-color:rgba(37,99,235,.25);transform:scale(1.1);}
+.emoji-opt.selected{background:var(--frost);border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1);transform:scale(1.05);}
+
+/* PHOTO UPLOAD */
+.photo-upload-zone{border:2px dashed rgba(37,99,235,.18);border-radius:14px;background:var(--snow);padding:28px 20px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.photo-upload-zone:hover{border-color:rgba(37,99,235,.35);background:var(--frost);}
+.photo-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-preview-wrap{position:relative;margin-top:14px;display:none;}
+.photo-preview-wrap img{width:100%;max-height:200px;object-fit:cover;border-radius:10px;border:1.5px solid var(--border);}
+.photo-remove{position:absolute;top:8px;right:8px;background:#ef4444;color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+
+/* SUBMIT */
+.btn-submit{width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--royal),var(--blue));color:white;font-family:var(--fs);font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 8px 32px rgba(37,99,235,.28);transition:all .3s;margin-top:24px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(37,99,235,.36);}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* STATES */
+.state{display:none;}
+.state.active{display:block;}
+
+/* FULL STATE */
+.full-card{background:var(--white);border:1.5px solid var(--border);border-radius:24px;padding:48px 32px;text-align:center;box-shadow:0 8px 40px rgba(37,99,235,.06);}
+.full-icon{font-size:52px;display:block;margin-bottom:16px;}
+.full-title{font-family:var(--fd);font-style:italic;font-size:28px;color:var(--cobalt);margin-bottom:10px;}
+.full-sub{font-family:var(--fb);font-style:italic;font-size:14px;color:var(--muted);line-height:1.65;}
+.full-badge{display:inline-flex;align-items:center;gap:8px;background:var(--frost);border:1px solid var(--border);border-radius:999px;padding:8px 20px;font-size:13px;font-weight:600;color:var(--blue);margin-top:20px;}
+
+/* SUCCESS STATE */
+.success-card{background:var(--white);border:1.5px solid rgba(16,185,129,.2);border-radius:24px;padding:48px 32px;text-align:center;box-shadow:0 8px 40px rgba(16,185,129,.06);}
+.success-icon{font-size:52px;display:block;margin-bottom:16px;animation:pop-in .6s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes pop-in{0%{transform:scale(.4);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.success-title{font-family:var(--fd);font-style:italic;font-size:28px;color:var(--cobalt);margin-bottom:10px;}
+.success-title em{color:var(--green);}
+.success-sub{font-family:var(--fb);font-style:italic;font-size:14px;color:var(--muted);line-height:1.65;}
+.success-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:999px;padding:8px 20px;font-size:13px;font-weight:600;color:var(--green);margin-top:20px;}
+
+/* CONFETTI */
+.confetti-p{position:fixed;pointer-events:none;animation:confetti-fall linear forwards;}
+@keyframes confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+@media(max-width:560px){.contrib-nav{padding:0 20px;}.form-card{padding:20px;}}
+</style>
+</head>
+<body>
+
+<nav class="contrib-nav">
+  <a href="index.html" class="nav-brand">
+    <img src="logo.png" alt="Wisherly" class="nav-logo">
+    <span class="nav-wordmark">Wisherly</span>
+  </a>
+  <div class="nav-occasion-tag" id="navTag">Message</div>
+</nav>
+
+<div class="contrib-wrap">
+
+  <!-- LOADING -->
+  <div class="state active" id="stateLoading">
+    <div class="full-card">
+      <span class="full-icon" style="animation:icon-float 2s ease-in-out infinite alternate;">⏳</span>
+      <div class="full-title">Loading…</div>
+      <div class="full-sub">Getting things ready</div>
+    </div>
+  </div>
+
+  <!-- FULL -->
+  <div class="state" id="stateFull">
+    <div class="full-card">
+      <span class="full-icon">💕</span>
+      <div class="full-title">All 5 spots are filled!</div>
+      <div class="full-sub" id="fullSub">Everyone has left their message. The page is complete and ready to be shared.</div>
+      <div class="full-badge">✦ 5 of 5 messages received</div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="state" id="stateSuccess">
+    <div class="success-card">
+      <span class="success-icon" id="successIcon">🎉</span>
+      <div class="success-title">Message <em>added!</em></div>
+      <div class="success-sub" id="successSub">Your message has been added to the page. They'll see it when they open it 💕</div>
+      <div class="success-badge">✦ <span id="successCount">1</span> of 5 messages received</div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="state" id="stateForm">
+
+    <div class="occasion-banner">
+      <span class="occasion-icon" id="occasionIcon">💌</span>
+      <h1 class="occasion-title" id="occasionTitle">Leave a message for <em id="recipientNameDisplay">them</em></h1>
+      <p class="occasion-sub" id="occasionSub">Add your message, pick your emoji, and upload a photo.</p>
+      <div class="slots-badge"><span class="slots-dot" id="slotDot"></span><span id="slotsLeft">Loading…</span></div>
+    </div>
+
+    <div class="form-card">
+
+      <div class="field" id="field-name">
+        <label>Your name <span style="color:#ef4444;">*</span></label>
+        <input type="text" id="contribName" placeholder="e.g. Priya, Rohan, The whole team…" maxlength="50">
+        <div class="field-err">Please enter your name</div>
+      </div>
+
+      <div class="field" id="field-message">
+        <div class="char-row">
+          <label>Your message <span style="color:#ef4444;">*</span></label>
+          <span class="char-count" id="msgCount">0 / 200</span>
+        </div>
+        <textarea id="contribMessage" rows="4" maxlength="200" placeholder="Say something real. Make it count." oninput="document.getElementById('msgCount').textContent=this.value.length+' / 200'"></textarea>
+        <div class="field-err">Please write a message</div>
+      </div>
+
+      <div class="field">
+        <label>Your vibe</label>
+        <div class="emoji-grid" id="emojiGrid"></div>
+      </div>
+
+      <div class="field">
+        <label>A photo of you <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional — appears on their page)</span></label>
+        <div class="photo-upload-zone" id="photoZone">
+          <input type="file" id="photoInput" accept="image/*">
+          <div style="font-size:32px;margin-bottom:8px;">📸</div>
+          <div style="font-family:var(--fd);font-size:17px;color:var(--cobalt);margin-bottom:4px;">Add a photo</div>
+          <div style="font-size:12px;color:var(--muted2);">JPG or PNG · will appear on their page</div>
+        </div>
+        <div class="photo-preview-wrap" id="photoPreview">
+          <img id="photoPreviewImg" src="" alt="Your photo">
+          <button class="photo-remove" onclick="removePhoto()">×</button>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="submitBtn" onclick="submitMessage()">
+        <span id="submitIcon">💌</span> <span id="submitLabel">Add My Message</span>
+      </button>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const pageId = params.get('id') || '';
+const occasion = params.get('occasion') || 'farewell';
+const MAX = 5;
+let recipientName = '', senderName = '';
+let selectedEmoji = '';
+let photoB64 = '';
+
+/* OCCASION CONFIG */
+const OCCASION_CONFIG = {
+  birthday: {
+    icon: '🎂',
+    tag: 'Birthday',
+    title: name => `Wish <em>${name}</em> a happy birthday`,
+    sub: 'Write a birthday wish, share a memory, or just send love.',
+    placeholder: 'e.g. Happy birthday! You deserve every great thing coming your way…',
+    submitLabel: 'Add My Birthday Wish',
+    submitIcon: '🎂',
+    successIcon: '🎉',
+    successSub: name => `Your birthday wish has been added to ${name}'s page! They'll see it when they open it 🎂`,
+    fullSub: name => `All 5 birthday wishes have been added for ${name}. The page is complete!`,
+    emojis: ['🎂','🎉','🥳','💕','⭐','🎁','🎈','😭'],
+  },
+  anniversary: {
+    icon: '💍',
+    tag: 'Anniversary',
+    title: name => `Send ${name} your love`,
+    sub: 'A message celebrating their journey together.',
+    placeholder: 'e.g. Wishing you both a lifetime of love and happiness…',
+    submitLabel: 'Send My Love',
+    submitIcon: '💍',
+    successIcon: '💕',
+    successSub: name => `Your message has been added to ${name}'s anniversary page 💍`,
+    fullSub: name => `All 5 messages have been added for ${name}. The page is complete!`,
+    emojis: ['💍','💕','❤️','🥂','✨','🌹','😭','🎉'],
+  },
+  farewell: {
+    icon: '🍃',
+    tag: 'Farewell',
+    title: name => `Say goodbye to <em>${name}</em>`,
+    sub: 'Say what you want them to remember. Make it count.',
+    placeholder: 'e.g. Working with you has been one of the highlights of my year…',
+    submitLabel: 'Add My Farewell Message',
+    submitIcon: '🍃',
+    successIcon: '🍃',
+    successSub: name => `Your farewell message has been added to ${name}'s page 🍃`,
+    fullSub: name => `All 5 farewell messages have been added for ${name}. The page is complete!`,
+    emojis: ['🍃','💕','⭐','🎉','🙏','🔥','💙','😭'],
+  },
+  friendship: {
+    icon: '💛',
+    tag: 'Friendship',
+    title: name => `Celebrate <em>${name}'s</em> friendship`,
+    sub: 'Share a memory, an inside joke, or just tell them what they mean to you.',
+    placeholder: 'e.g. Remember that time we stayed up till 3am laughing about nothing?',
+    submitLabel: 'Add My Message',
+    submitIcon: '💛',
+    successIcon: '💛',
+    successSub: name => `Your message has been added to ${name}'s friendship page 💛`,
+    fullSub: name => `All 5 messages have been added for ${name}. The page is complete!`,
+    emojis: ['💛','🤝','😂','💕','⭐','🔥','🥹','🎉'],
+  },
+  graduation: {
+    icon: '🎓',
+    tag: 'Graduation',
+    title: name => `Congratulate <em>${name}</em>`,
+    sub: 'What do you want them to carry forward into this new chapter?',
+    placeholder: 'e.g. Watching you grow has been the greatest privilege. Go conquer the world…',
+    submitLabel: 'Add My Congratulations',
+    submitIcon: '🎓',
+    successIcon: '🎓',
+    successSub: name => `Your message has been added to ${name}'s graduation page 🎓`,
+    fullSub: name => `All 5 messages have been added for ${name}. The page is complete!`,
+    emojis: ['🎓','🎉','⭐','💪','💕','🥹','🔥','✨'],
+  },
+  thankyou: {
+    icon: '🙏',
+    tag: 'Thank You',
+    title: name => `Thank <em>${name}</em>`,
+    sub: 'What would you like to say to them?',
+    placeholder: 'e.g. You have no idea how much your support meant to me during that time…',
+    submitLabel: 'Add My Thank You',
+    submitIcon: '🙏',
+    successIcon: '🙏',
+    successSub: name => `Your message has been added to ${name}'s thank you page 🙏`,
+    fullSub: name => `All 5 messages have been added for ${name}. The page is complete!`,
+    emojis: ['🙏','💕','⭐','❤️','✨','😭','🥹','🎉'],
+  },
+};
+
+const CFG = OCCASION_CONFIG[occasion] || OCCASION_CONFIG.farewell;
+
+/* INIT */
+async function init() {
+  if (!pageId) { showState('stateFull'); return; }
+
+  // Set nav tag
+  document.getElementById('navTag').textContent = CFG.tag;
+
+  try {
+    // Load page data
+    const pageSnap = await window._db.collection('pages').doc(pageId).get();
+    if (pageSnap.exists) {
+      const data = pageSnap.data();
+      recipientName = data.name || 'them';
+      senderName = data.sender || '';
+    }
+
+    // Set occasion UI
+    document.getElementById('occasionIcon').textContent = CFG.icon;
+    document.getElementById('occasionTitle').innerHTML = CFG.title(recipientName);
+    document.getElementById('occasionSub').textContent = CFG.sub;
+    document.getElementById('contribMessage').placeholder = CFG.placeholder;
+    document.getElementById('submitLabel').textContent = CFG.submitLabel;
+    document.getElementById('submitIcon').textContent = CFG.submitIcon;
+    document.getElementById('fullSub').textContent = CFG.fullSub(recipientName);
+
+    // Build emoji grid
+    selectedEmoji = CFG.emojis[0];
+    document.getElementById('emojiGrid').innerHTML = CFG.emojis.map((e, i) =>
+      `<div class="emoji-opt${i===0?' selected':''}" onclick="selectEmoji(this)">${e}</div>`
+    ).join('');
+
+    // Check slots
+    const contribSnap = await window._db.collection('contributions').doc(pageId).collection('messages').get();
+    const count = contribSnap.size;
+
+    if (count >= MAX) { showState('stateFull'); return; }
+
+    const remaining = MAX - count;
+    document.getElementById('slotsLeft').textContent = `${remaining} spot${remaining > 1 ? 's' : ''} remaining`;
+    const dot = document.getElementById('slotDot');
+    dot.className = remaining === 1 ? 'slots-dot red' : remaining <= 2 ? 'slots-dot amber' : 'slots-dot';
+
+    showState('stateForm');
+  } catch(err) {
+    console.error(err);
+    // Still show form on error
+    document.getElementById('occasionIcon').textContent = CFG.icon;
+    document.getElementById('occasionTitle').innerHTML = CFG.title('them');
+    document.getElementById('occasionSub').textContent = CFG.sub;
+    document.getElementById('contribMessage').placeholder = CFG.placeholder;
+    document.getElementById('submitLabel').textContent = CFG.submitLabel;
+    document.getElementById('submitIcon').textContent = CFG.submitIcon;
+    selectedEmoji = CFG.emojis[0];
+    document.getElementById('emojiGrid').innerHTML = CFG.emojis.map((e, i) =>
+      `<div class="emoji-opt${i===0?' selected':''}" onclick="selectEmoji(this)">${e}</div>`
+    ).join('');
+    document.getElementById('slotsLeft').textContent = `${MAX} spots remaining`;
+    showState('stateForm');
+  }
+}
+
+function showState(id) {
+  document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function selectEmoji(el) {
+  document.querySelectorAll('.emoji-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedEmoji = el.textContent;
+}
+
+/* PHOTO UPLOAD */
+document.getElementById('photoInput').addEventListener('change', function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX_DIM = 600; let {width:w, height:h} = img;
+      if(w>MAX_DIM){h=Math.round(h*MAX_DIM/w);w=MAX_DIM;} if(h>MAX_DIM){w=Math.round(w*MAX_DIM/h);h=MAX_DIM;}
+      canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h);
+      photoB64 = canvas.toDataURL('image/jpeg', .75);
+      document.getElementById('photoPreviewImg').src = photoB64;
+      document.getElementById('photoPreview').style.display = 'block';
+      document.getElementById('photoZone').style.display = 'none';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+
+function removePhoto() {
+  photoB64 = '';
+  document.getElementById('photoPreview').style.display = 'none';
+  document.getElementById('photoZone').style.display = 'block';
+}
+
+/* SUBMIT */
+async function submitMessage() {
+  const name = document.getElementById('contribName').value.trim();
+  const message = document.getElementById('contribMessage').value.trim();
+  let valid = true;
+
+  document.getElementById('field-name').classList.remove('error');
+  document.getElementById('field-message').classList.remove('error');
+  if (!name) { document.getElementById('field-name').classList.add('error'); valid = false; }
+  if (!message) { document.getElementById('field-message').classList.add('error'); valid = false; }
+  if (!valid) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.innerHTML = `<span>${CFG.submitIcon}</span> Saving…`;
+
+  try {
+    const db = window._db;
+
+    // Double-check slots
+    const check = await db.collection('contributions').doc(pageId).collection('messages').get();
+    if (check.size >= MAX) { showState('stateFull'); return; }
+
+    // Save photo
+    let photoRef = '';
+    if (photoB64) {
+      const photoId = `${pageId}_${Date.now()}`;
+      await db.collection('contrib_photos').doc(photoId).set({ pageId, occasion, data: photoB64 });
+      photoRef = photoId;
+    }
+
+    // Save message
+    await db.collection('contributions').doc(pageId).collection('messages').add({
+      name, message,
+      emoji: selectedEmoji,
+      photoRef,
+      occasion,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    const newCount = check.size + 1;
+    document.getElementById('successCount').textContent = newCount;
+    document.getElementById('successIcon').textContent = CFG.successIcon;
+    document.getElementById('successSub').textContent = CFG.successSub(recipientName);
+    showState('stateSuccess');
+    burstConfetti();
+
+  } catch(err) {
+    console.error(err);
+    btn.disabled = false;
+    btn.innerHTML = `<span>${CFG.submitIcon}</span> ${CFG.submitLabel}`;
+    alert('Something went wrong: ' + err.message);
+  }
+}
+
+/* CONFETTI */
+function burstConfetti() {
+  const shapes = [CFG.icon, '✦', '⭐', '💕'];
+  for(let i=0;i<35;i++){
+    const el=document.createElement('div');el.className='confetti-p';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;font-size:${14+Math.random()*12}px;animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.6}s;`;
+    el.textContent=shapes[Math.floor(Math.random()*shapes.length)];
+    document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());
+  }
+}
+
+init();
+</script>
+</body>
+</html>
