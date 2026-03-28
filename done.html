@@ -219,31 +219,32 @@ function showCopied(btn) {
 
 // WHATSAPP
 function shareWA(type) {
-  let msg = '';
-  const recipName = decodeURIComponent(name);
+  var rn = decodeURIComponent(name);
+  var msg = '';
   if (type === 'view') {
-    msg = `Hey ${recipName}! 🎉 Someone made something special just for you on Wisherly. Open it here: ${viewLinkVal}`;
+    msg = 'Hey ' + rn + '! Someone made something special just for you on Wisherly. Open it here: ' + viewLinkVal;
   } else {
-    const contribMsgs = {
-      birthday: `Hey! We're making a surprise birthday page for ${recipName} on Wisherly 🎂 Add your birthday wish + photo here (only 5 spots!): ${contribLinkVal}`,
-      anniversary: `Hey! We're making an anniversary surprise for ${recipName} on Wisherly 💍 Add your message of love here (only 5 spots!): ${contribLinkVal}`,
-      farewell: `Hey! ${recipName} is leaving and we're making a farewell page on Wisherly 🍃 Add your message + photo here (only 5 spots!): ${contribLinkVal}`,
-      friendship: `Hey! We're celebrating ${recipName}'s friendship on Wisherly 💛 Add your message + photo here (only 5 spots!): ${contribLinkVal}`,
-      graduation: `Hey! We're making a graduation surprise for ${recipName} on Wisherly 🎓 Add your congratulations + photo here (only 5 spots!): ${contribLinkVal}`,
-      thankyou: `Hey! We're making a thank you page for ${recipName} on Wisherly 🙏 Add your message + photo here (only 5 spots!): ${contribLinkVal}`,
+    var contribBase = 'Add your message + photo here (only 5 spots!): ' + contribLinkVal;
+    var msgs = {
+      birthday:    'Hey! We are making a surprise birthday page for ' + rn + ' on Wisherly. Add your birthday wish + photo here (only 5 spots!): ' + contribLinkVal,
+      anniversary: 'Hey! We are making an anniversary surprise for ' + rn + ' on Wisherly. Add your message of love here (only 5 spots!): ' + contribLinkVal,
+      farewell:    'Hey! ' + rn + ' is leaving and we are making a farewell page on Wisherly. ' + contribBase,
+      friendship:  'Hey! We are celebrating ' + rn + ' on Wisherly. Share a memory or message here (only 5 spots!): ' + contribLinkVal,
+      graduation:  'Hey! We are making a graduation surprise for ' + rn + ' on Wisherly. Add your congratulations here (only 5 spots!): ' + contribLinkVal,
+      thankyou:    'Hey! We are making a thank you page for ' + rn + ' on Wisherly. ' + contribBase,
     };
-    msg = contribMsgs[occasion] || contribMsgs.farewell;
+    msg = msgs[occasion] || msgs.farewell;
   }
-  const encoded = encodeURIComponent(msg);
-  const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-  const url = isMobile
-    ? `whatsapp://send?text=${encoded}`
-    : `https://web.whatsapp.com/send?text=${encoded}`;
-  // Use location.href for mobile deep links, window.open for desktop
+  var encoded = encodeURIComponent(msg);
+  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  var url = isMobile
+    ? 'whatsapp://send?text=' + encoded
+    : 'https://web.whatsapp.com/send?text=' + encoded;
   if (isMobile) {
-    location.href = url;
+    window.location.href = url;
   } else {
-    window.open(url, '_blank');
+    var win = window.open(url, '_blank');
+    if (!win) { window.location.href = url; }
   }
 }
 
