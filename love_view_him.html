@@ -152,7 +152,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .stack-card:nth-child(2){transform:rotate(3deg) translateY(6px);z-index:1;}
 .stack-card:nth-child(3){transform:rotate(-2deg) translateY(12px);z-index:0;}
 .stack-card.top{z-index:3;transform:rotate(0deg);}
-.stack-card.top:hover{transform:rotate(1deg) scale(1.02) translateY(-4px);box-shadow:0 16px 48px rgba(255,107,0,.2);}
+.stack-card.top:hover{box-shadow:0 16px 48px rgba(255,107,0,.2);cursor:pointer;}
 .stack-card.fly-away{animation:card-fly-r .5s cubic-bezier(.16,1,.3,1) forwards;}
 @keyframes card-fly-r{0%{transform:rotate(0deg) translateX(0) translateY(0) scale(1);opacity:1;}100%{transform:rotate(10deg) translateX(130%) translateY(-40px) scale(.9);opacity:0;}}
 .card-stamp{font-family:var(--fd);font-size:11px;letter-spacing:.15em;color:var(--orange);margin-bottom:8px;opacity:.7;}
@@ -778,9 +778,16 @@ function startTypewriter() {
 let stackCards=[], currentTop=0;
 function initStack(total) {
   stackCards = Array.from(document.querySelectorAll('.stack-card'));
+  let animating = false;
+
   stackCards.forEach(card => {
-    card.addEventListener('click', () => {
+    function handleTap(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (animating) return;
       if (!card.classList.contains('top')) return;
+      animating = true;
+
       card.classList.add('fly-away');
       setTimeout(() => {
         card.classList.remove('fly-away','top'); card.style.zIndex='0';
@@ -794,12 +801,17 @@ function initStack(total) {
           }
         });
         updateStackCounter(total);
-      }, 450);
-    });
+        animating = false;
+      }, 500);
+    }
+
+    card.addEventListener('click', handleTap);
+    card.addEventListener('touchend', handleTap, { passive: false });
   });
 }
 function updateStackCounter(total) {
-  const remaining = total - currentTop;
+  const viewed = currentTop;
+  const remaining = total - viewed;
   document.getElementById('stackCounter').textContent = remaining > 0
     ? `${remaining} NOTE${remaining>1?'S':''} REMAINING — TAP TO READ`
     : '◆ ALL NOTES READ';
