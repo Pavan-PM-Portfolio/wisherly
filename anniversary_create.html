@@ -1178,10 +1178,9 @@ async function handleCreate() {
   if (!valid) { document.querySelector('.field.error').scrollIntoView({behavior:'smooth',block:'center'}); return; }
 
   const btn = document.getElementById('createBtn');
-  btn.disabled = true; btn.textContent = 'Creating…';
+  btn.disabled = true; btn.innerHTML = '<span>💍</span> Preparing…';
 
   try {
-    const db = window._db;
     const pageId = crypto.randomUUID ? crypto.randomUUID().slice(0,8) : (Date.now().toString(36)+Math.random().toString(36).slice(2,6));
 
     /* Collect milestones */
@@ -1232,22 +1231,19 @@ async function handleCreate() {
       createdAt: Date.now()
     };
 
-    /* Save photos */
+    /* Save photos as base64 inline — store in sessionStorage */
     if (uploadedPhotos.length) {
-      btn.textContent = 'Saving photos…';
+      btn.innerHTML = '<span>💍</span> Processing photos…';
       const photoRefs = [];
       for (let i=0;i<uploadedPhotos.length;i++) {
-        btn.textContent = `Saving photo ${i+1} of ${uploadedPhotos.length}…`;
-        if (uploadedPhotos[i].length > 750000) { console.warn('Photo too large, skipping'); continue; }
-        await db.collection('photos').doc(`${pageId}_${i}`).set({pageId,index:i,data:uploadedPhotos[i]});
-        photoRefs.push(`__photo__${pageId}_${i}`);
+        photoRefs.push(uploadedPhotos[i]);
       }
       data.photos = photoRefs;
     }
 
-    /* Save audio */
+    /* Encode audio to base64 and store for later */
     if (_audioFile) {
-      btn.textContent = '🎵 Reading audio…';
+      btn.innerHTML = '<span>💍</span> Processing audio…';
       const arrayBuf = await _audioFile.arrayBuffer();
       const bytes = new Uint8Array(arrayBuf);
       const SLICE = 3*1024; let fullB64='';
@@ -1257,19 +1253,14 @@ async function handleCreate() {
         fullB64+=btoa(bin);
         if ((i/SLICE)%512===0) await new Promise(r=>setTimeout(r,0));
       }
-      const FS_CHUNK=700000; const chunks=[];
-      for (let i=0;i<fullB64.length;i+=FS_CHUNK) chunks.push(fullB64.slice(i,i+FS_CHUNK));
-      for (let i=0;i<chunks.length;i++) {
-        btn.textContent=`🎵 Saving music… ${i+1}/${chunks.length}`;
-        await db.collection('audio').doc(`${pageId}_${i}`).set({pageId,index:i,total:chunks.length,mimeType:_audioFile.type||'audio/mpeg',data:chunks[i]});
-      }
-      data.audioChunks=chunks.length; data.audioMime=_audioFile.type||'audio/mpeg';
+      data._audioB64 = fullB64;
+      data._audioMime = _audioFile.type||'audio/mpeg';
     }
 
-    /* Save video */
+    /* Encode video to base64 and store for later */
     const videoSource = _videoBlob || (_videoFile ? _videoFile : null);
     if (videoSource) {
-      btn.textContent = '🎥 Reading video…';
+      btn.innerHTML = '<span>💍</span> Processing video…';
       const arrayBuf = await videoSource.arrayBuffer();
       const bytes = new Uint8Array(arrayBuf);
       const SLICE=3*1024; let fullB64='';
@@ -1279,22 +1270,17 @@ async function handleCreate() {
         fullB64+=btoa(bin);
         if ((i/SLICE)%256===0) await new Promise(r=>setTimeout(r,0));
       }
-      const FS_CHUNK=700000; const vChunks=[];
-      for (let i=0;i<fullB64.length;i+=FS_CHUNK) vChunks.push(fullB64.slice(i,i+FS_CHUNK));
-      for (let i=0;i<vChunks.length;i++) {
-        btn.textContent=`🎥 Saving video… ${i+1}/${vChunks.length}`;
-        await db.collection('videos').doc(`${pageId}_${i}`).set({pageId,index:i,total:vChunks.length,mimeType:_videoBlob?'video/webm':(_videoFile?.type||'video/mp4'),data:vChunks[i]});
-      }
-      data.videoChunks=vChunks.length; data.videoMime=_videoBlob?'video/webm':(_videoFile?.type||'video/mp4');
+      data._videoB64 = fullB64;
+      data._videoMime = _videoBlob?'video/webm':(_videoFile?.type||'video/mp4');
     }
 
-    /* Save page doc */
-    btn.textContent = '💕 Saving page…';
-    await db.collection('pages').doc(pageId).set(data);
+    /* Save everything to sessionStorage — ref.html will read this and push to Firestore */
+    btn.innerHTML = '<span>💍</span> Almost there…';
+    sessionStorage.setItem('wisherly_pending', JSON.stringify(data));
+    sessionStorage.setItem('wisherly_pageId', pageId);
 
-    /* Redirect */
-    const viewPage = gender==='him' ? 'anniversary_view_him.html' : 'anniversary_view_her.html';
-    window.location.href = `${viewPage}?id=${pageId}`;
+    /* Redirect to ref.html */
+    window.location.href = 'ref.html';
 
   } catch(err) {
     console.error(err);
@@ -1302,6 +1288,8 @@ async function handleCreate() {
     alert('Something went wrong: '+err.message);
   }
 }
+
+/* ── MOBILE NAV ── */
 
 /* ── MOBILE NAV ── */
 document.getElementById('nav-hamburger').addEventListener('click',()=>document.getElementById('nav-mobile').classList.toggle('open'));
