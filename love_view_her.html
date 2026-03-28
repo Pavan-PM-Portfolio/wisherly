@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="fav.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wisherly — A Love Note 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const _cfg={apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",authDomain:"wisherly-d07d7.firebaseapp.com",projectId:"wisherly-d07d7",storageBucket:"wisherly-d07d7.firebasestorage.app",messagingSenderId:"919116839261",appId:"1:919116839261:web:147d6b5924f3cbe35050b4"};
+  if(!firebase.apps.length){firebase.initializeApp(_cfg);}
+  window._db=firebase.firestore();
+})();
+</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --cream:#FFFAF5;
+  --warm:#FFF5EE;
+  --blush:#FFE8E0;
+  --petal:#FECDD3;
+  --red:#E63946;
+  --red-deep:#C1121F;
+  --gold:#F4A300;
+  --gold-light:#FFD166;
+  --pink:#FF85A1;
+  --ink:#2D1515;
+  --muted:#7A4545;
+  --muted2:#B08080;
+  --border:rgba(230,57,70,.12);
+  --shadow:rgba(193,18,31,.08);
+  --fd:'Playfair Display',serif;
+  --fs:'Nunito',sans-serif;
+  --fh:'Caveat',cursive;
+}
+body{background:var(--cream);color:var(--ink);font-family:var(--fs);overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+/* AMBIENT */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 10% 10%,rgba(230,57,70,.06),transparent 60%),
+             radial-gradient(ellipse 50% 40% at 90% 90%,rgba(244,163,0,.06),transparent 60%);}
+
+/* FLOATING STARS */
+#starLayer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.star-el{position:absolute;animation:star-float linear infinite;opacity:0;}
+@keyframes star-float{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:.6;}90%{opacity:.4;}100%{transform:translateY(-100px) rotate(360deg);opacity:0;}}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:900;height:68px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,250,245,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(230,57,70,.08);}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),var(--gold),var(--red),transparent);opacity:.4;}
+.topbar-logo{font-family:var(--fh);font-size:26px;color:var(--red-deep);text-decoration:none;letter-spacing:.5px;}
+.topbar-tag{font-family:var(--fs);font-size:12px;font-weight:700;color:var(--muted);background:var(--blush);border:1.5px solid rgba(230,57,70,.15);border-radius:999px;padding:5px 16px;}
+
+/* UNLOCK SCREEN */
+#unlockScreen{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;overflow:hidden;}
+.unlock-bg{position:absolute;inset:0;background:linear-gradient(160deg,#1a0a0a 0%,#3d0f0f 40%,#7a1a1a 70%,#c1121f 100%);}
+.unlock-stars-bg{position:absolute;inset:0;}
+.u-star{position:absolute;animation:twinkle ease-in-out infinite alternate;}
+@keyframes twinkle{0%{opacity:.1;transform:scale(1);}100%{opacity:.8;transform:scale(1.4);}}
+.mission-tape{position:absolute;top:28px;left:50%;transform:translateX(-50%) rotate(-1.5deg);background:var(--gold);padding:6px 32px;font-family:var(--fs);font-size:11px;font-weight:900;letter-spacing:.25em;text-transform:uppercase;color:#1a0a0a;box-shadow:0 4px 16px rgba(0,0,0,.3);}
+.unlock-content{position:relative;z-index:2;}
+.classified-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(230,57,70,.2);border:2px solid rgba(230,57,70,.5);border-radius:4px;padding:6px 20px;font-family:var(--fs);font-size:11px;font-weight:900;letter-spacing:.25em;text-transform:uppercase;color:var(--red);margin-bottom:24px;}
+.c-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:cdot 1.2s ease infinite;}
+@keyframes cdot{0%,100%{opacity:1;}50%{opacity:.2;}}
+.unlock-h1{font-family:var(--fd);font-style:italic;font-size:clamp(44px,9vw,90px);font-weight:700;color:white;text-shadow:0 0 60px rgba(230,57,70,.6),0 4px 40px rgba(0,0,0,.5);margin-bottom:16px;line-height:.95;animation:mission-in 1s cubic-bezier(.16,1,.3,1) both;}
+.unlock-h1 em{color:var(--gold);font-style:italic;}
+@keyframes mission-in{0%{opacity:0;transform:translateY(30px) scale(.95);}100%{opacity:1;transform:translateY(0) scale(1);}}
+.unlock-sub{font-family:var(--fh);font-size:20px;color:rgba(255,255,255,.7);max-width:380px;margin:0 auto 32px;line-height:1.6;animation:mission-in 1s .2s cubic-bezier(.16,1,.3,1) both;}
+.unlock-input{display:block;margin:0 auto 14px;padding:14px 28px;width:270px;border:2px solid rgba(230,57,70,.5);border-radius:8px;background:rgba(255,255,255,.1);backdrop-filter:blur(20px);font-family:var(--fh);font-size:20px;color:white;text-align:center;outline:none;transition:all .3s;animation:mission-in 1s .3s cubic-bezier(.16,1,.3,1) both;}
+.unlock-input::placeholder{color:rgba(255,255,255,.4);}
+.unlock-input:focus{border-color:var(--gold);background:rgba(255,255,255,.15);box-shadow:0 0 0 4px rgba(244,163,0,.15);}
+.unlock-btn{display:block;margin:0 auto;padding:14px 44px;border-radius:8px;border:2px solid var(--gold);background:linear-gradient(135deg,var(--red),var(--red-deep));color:white;font-family:var(--fs);font-size:16px;font-weight:800;cursor:pointer;letter-spacing:.06em;box-shadow:0 8px 32px rgba(193,18,31,.4);transition:all .3s;animation:mission-in 1s .4s cubic-bezier(.16,1,.3,1) both;}
+.unlock-btn:hover{background:linear-gradient(135deg,var(--gold),#e08c00);color:#1a0a0a;transform:translateY(-2px);}
+.unlock-error{color:var(--gold);font-size:13px;font-weight:700;margin-top:12px;display:none;}
+.anya-stars{display:flex;justify-content:center;gap:14px;margin-top:24px;font-size:22px;animation:anya-bounce .6s ease-in-out infinite alternate;}
+@keyframes anya-bounce{0%{transform:translateY(0);}100%{transform:translateY(-6px);}}
+
+/* MAIN */
+#mainContent{display:none;}
+
+/* SECTION */
+.section{position:relative;z-index:2;padding:80px 0;}
+.section-inner{max-width:800px;margin:0 auto;padding:0 40px;}
+
+/* MISSION DIVIDER */
+.mission-div{position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:8px 40px;max-width:800px;margin:0 auto;}
+.mission-div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(230,57,70,.2),transparent);}
+.mission-div-star{font-size:16px;color:var(--red);opacity:.5;}
+
+/* SECTION LABEL */
+.sec-label{display:inline-flex;align-items:center;gap:8px;font-family:var(--fs);font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:20px;}
+.sec-label::before{content:'★';font-size:12px;}
+
+/* 1. SOFT ENTRY */
+#entrySection{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,var(--cream) 0%,var(--warm) 50%,var(--blush) 100%);position:relative;z-index:2;padding:80px 40px;overflow:hidden;}
+.entry-deco{position:absolute;font-size:120px;opacity:.04;user-select:none;pointer-events:none;}
+.entry-deco.tl{top:-20px;left:-20px;transform:rotate(-15deg);}
+.entry-deco.br{bottom:-20px;right:-20px;transform:rotate(15deg);}
+.entry-whisper{font-family:var(--fh);font-size:clamp(18px,3vw,26px);color:var(--muted);margin-bottom:16px;letter-spacing:.02em;}
+.entry-name{font-family:var(--fd);font-style:italic;font-size:clamp(60px,14vw,130px);font-weight:700;line-height:.9;color:var(--red-deep);text-shadow:0 0 60px rgba(230,57,70,.15);margin-bottom:20px;letter-spacing:-.02em;}
+.entry-typewriter{font-family:var(--fh);font-size:clamp(18px,2.5vw,24px);color:var(--muted);min-height:36px;max-width:480px;margin:0 auto 40px;}
+.entry-scroll{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.entry-scroll-text{font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);}
+.entry-scroll-bar{width:1.5px;height:44px;background:linear-gradient(180deg,var(--red),transparent);animation:scroll-pulse 1.5s ease-in-out infinite;}
+@keyframes scroll-pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* 2. FIRST NOTE */
+#firstNoteSection{background:var(--warm);}
+.note-card{background:white;border-radius:16px;padding:36px 40px;box-shadow:0 8px 40px var(--shadow),0 2px 0 var(--red) inset;position:relative;overflow:hidden;max-width:560px;margin:0 auto;}
+.note-card::before{content:'💌';position:absolute;top:-16px;right:20px;font-size:40px;}
+.note-card-lines{position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(230,57,70,.06) 31px,rgba(230,57,70,.06) 32px);border-radius:inherit;}
+.note-text{font-family:var(--fh);font-size:20px;color:var(--ink);line-height:1.8;position:relative;z-index:1;}
+
+/* 3. LITTLE THINGS */
+#littleThingsSection{background:var(--cream);}
+.sticky-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.sticky-note{padding:20px;border-radius:4px 4px 4px 16px;position:relative;font-family:var(--fh);font-size:17px;line-height:1.6;color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.1),2px 2px 0 rgba(0,0,0,.05);transform:rotate(var(--rot,0deg));transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+.sticky-note:hover{transform:rotate(0deg) scale(1.04) translateY(-4px);}
+.sticky-note::before{content:'';position:absolute;top:0;left:0;right:0;height:28px;background:rgba(0,0,0,.06);border-radius:4px 4px 0 0;}
+.sticky-note:nth-child(1){background:#FFE4E1;--rot:-1.5deg;}
+.sticky-note:nth-child(2){background:#FFEAA7;--rot:1deg;}
+.sticky-note:nth-child(3){background:#DFE6E9;--rot:-2deg;}
+.sticky-note:nth-child(4){background:#FD79A8;--rot:1.5deg;color:white;}
+.sticky-note:nth-child(5){background:#A8E6CF;--rot:-1deg;}
+.sticky-note:nth-child(6){background:#FFB3C1;--rot:2deg;}
+
+/* 4. WHAT YOU MEAN */
+#meaningSection{background:linear-gradient(160deg,var(--blush),var(--warm));}
+.meaning-cards{display:flex;flex-direction:column;gap:14px;max-width:560px;margin:0 auto;}
+.meaning-card{background:white;border-radius:14px;padding:22px 24px;border-left:4px solid var(--red);box-shadow:0 4px 20px var(--shadow);font-family:var(--fh);font-size:19px;color:var(--ink);line-height:1.65;transition:transform .3s;}
+.meaning-card:hover{transform:translateX(6px);}
+
+/* 5. RANDOM THOUGHTS */
+#thoughtsSection{background:var(--warm);}
+.thoughts-wrap{position:relative;min-height:300px;}
+.thought-bubble{position:relative;display:inline-block;background:white;border-radius:20px;padding:16px 22px;margin:8px;font-family:var(--fh);font-size:17px;color:var(--ink);box-shadow:0 4px 16px var(--shadow);border:2px solid rgba(230,57,70,.1);animation:thought-float ease-in-out infinite alternate;max-width:280px;}
+.thought-bubble::after{content:'';position:absolute;bottom:-10px;left:20px;width:12px;height:12px;background:white;border-right:2px solid rgba(230,57,70,.1);border-bottom:2px solid rgba(230,57,70,.1);transform:rotate(45deg);}
+@keyframes thought-float{0%{transform:translateY(0);}100%{transform:translateY(-8px);}}
+.thoughts-flow{display:flex;flex-wrap:wrap;gap:4px;align-items:flex-start;}
+
+/* 6. NOTES STACK */
+#notesStackSection{background:var(--cream);}
+.notes-stack-wrap{position:relative;width:300px;height:200px;margin:0 auto;}
+.stack-card{
+  position:absolute;inset:0;
+  background:white;border-radius:16px;
+  padding:28px;
+  display:flex;flex-direction:column;justify-content:center;
+  box-shadow:0 8px 32px var(--shadow);
+  border:1.5px solid rgba(230,57,70,.12);
+  font-family:var(--fh);font-size:18px;color:var(--ink);line-height:1.6;
+  cursor:pointer;
+  transition:all .4s cubic-bezier(.34,1.56,.64,1);
+  backface-visibility:hidden;
+  user-select:none;
+}
+.stack-card:nth-child(2){transform:rotate(3deg) translateY(6px);z-index:1;}
+.stack-card:nth-child(3){transform:rotate(-2deg) translateY(12px);z-index:0;}
+.stack-card.top{z-index:3;transform:rotate(0deg) translateY(0);}
+.stack-card.top:hover{transform:rotate(1deg) scale(1.02) translateY(-4px);box-shadow:0 16px 48px var(--shadow);}
+.stack-card.fly-away{animation:card-fly .5s cubic-bezier(.16,1,.3,1) forwards;}
+@keyframes card-fly{0%{transform:rotate(0deg) translateX(0) translateY(0) scale(1);opacity:1;}100%{transform:rotate(8deg) translateX(120%) translateY(-40px) scale(.95);opacity:0;}}
+.stack-card .card-stamp{font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:8px;opacity:.6;}
+.stack-counter{text-align:center;margin-top:24px;font-family:var(--fs);font-size:12px;font-weight:700;color:var(--muted2);letter-spacing:.08em;}
+.stack-hint{text-align:center;margin-top:8px;font-family:var(--fh);font-size:14px;color:var(--muted2);}
+
+/* 7. COMFORT */
+#comfortSection{background:linear-gradient(160deg,#FFF0F3,var(--warm));}
+.comfort-quote{max-width:560px;margin:0 auto;text-align:center;padding:48px 32px;}
+.comfort-icon{font-size:48px;margin-bottom:20px;display:block;animation:comfort-pulse 2s ease-in-out infinite alternate;}
+@keyframes comfort-pulse{0%{transform:scale(1);}100%{transform:scale(1.1);}}
+.comfort-text{font-family:var(--fd);font-style:italic;font-size:clamp(20px,3vw,28px);color:var(--red-deep);line-height:1.7;}
+
+/* 8. SECRET NOTE */
+#secretSection{background:var(--cream);}
+.secret-wrap{max-width:380px;margin:0 auto;text-align:center;}
+.secret-label{font-family:var(--fh);font-size:18px;color:var(--muted);margin-bottom:20px;}
+.scratch-container{position:relative;width:100%;height:200px;border-radius:18px;overflow:hidden;border:2px solid rgba(230,57,70,.15);box-shadow:0 8px 32px var(--shadow);margin:0 auto 14px;cursor:crosshair;}
+.scratch-reveal{position:absolute;inset:0;background:linear-gradient(135deg,var(--warm),white);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.scratch-reveal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
+.scratch-reveal-emoji{font-size:36px;margin-bottom:10px;}
+.scratch-reveal-text{font-family:var(--fh);font-size:19px;color:var(--ink);text-align:center;line-height:1.5;}
+#scratchCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:none;}
+.scratch-hint{font-family:var(--fh);font-size:13px;color:var(--muted2);}
+.scratch-done-btn{display:none;margin-top:14px;padding:10px 28px;border-radius:999px;border:2px solid rgba(230,57,70,.2);background:var(--blush);color:var(--red-deep);font-family:var(--fh);font-size:17px;cursor:pointer;transition:all .3s;}
+.scratch-done-btn:hover{background:var(--red);color:white;transform:scale(1.05);}
+
+/* 9. VIDEO */
+#videoSection{background:var(--warm);}
+.video-outer{max-width:580px;margin:0 auto;border-radius:18px;overflow:hidden;border:2px solid rgba(230,57,70,.12);box-shadow:0 16px 48px var(--shadow);}
+.video-outer::before{content:'🎥  A message just for you…';display:block;padding:14px 20px;background:linear-gradient(90deg,var(--blush),var(--warm));border-bottom:1px solid rgba(230,57,70,.1);font-family:var(--fh);font-size:16px;color:var(--red-deep);}
+video{width:100%;display:block;max-height:380px;object-fit:cover;}
+.video-caption-bar{background:var(--blush);padding:12px 20px;border-top:1px solid rgba(230,57,70,.1);font-family:var(--fh);font-size:15px;color:var(--muted);}
+
+/* 10. LATE NIGHT */
+#lateNightSection{background:linear-gradient(160deg,#1a0505,#3d0a0a,#1a0505);min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;}
+.late-stars{position:absolute;inset:0;pointer-events:none;}
+.late-star{position:absolute;border-radius:50%;background:white;animation:twinkle ease-in-out infinite alternate;}
+.late-content{position:relative;z-index:1;padding:60px 40px;}
+.late-moon{font-size:56px;margin-bottom:24px;display:block;animation:moon-glow 3s ease-in-out infinite alternate;}
+@keyframes moon-glow{0%{filter:drop-shadow(0 0 8px rgba(255,209,102,.4));}100%{filter:drop-shadow(0 0 24px rgba(255,209,102,.8));}}
+.late-text{font-family:var(--fd);font-style:italic;font-size:clamp(20px,3.5vw,30px);color:white;max-width:520px;margin:0 auto;line-height:1.75;text-shadow:0 0 40px rgba(230,57,70,.3);}
+
+/* 11. CORE LOVE LINE */
+#coreSection{min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,var(--blush),#FFF0F3,var(--warm));position:relative;z-index:2;overflow:hidden;padding:80px 40px;}
+.core-bg-text{position:absolute;font-family:var(--fh);font-size:clamp(80px,20vw,180px);color:rgba(230,57,70,.04);white-space:nowrap;user-select:none;pointer-events:none;animation:core-drift 20s ease-in-out infinite alternate;}
+@keyframes core-drift{0%{transform:translateX(-5%);}100%{transform:translateX(5%);}}
+.core-heart{font-size:64px;margin-bottom:24px;display:block;animation:core-beat .8s ease-in-out infinite alternate;}
+@keyframes core-beat{0%{transform:scale(1);}100%{transform:scale(1.12);}}
+.core-line{font-family:var(--fd);font-style:italic;font-size:clamp(22px,4vw,38px);color:var(--red-deep);max-width:600px;margin:0 auto;line-height:1.5;text-shadow:0 0 40px rgba(230,57,70,.15);position:relative;z-index:1;}
+
+/* 12. SOFT ENDING */
+#endingSection{background:var(--cream);min-height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;z-index:2;}
+.ending-inner{padding:60px 40px;}
+.ending-icon{font-size:44px;margin-bottom:16px;display:block;animation:thought-float 2.5s ease-in-out infinite alternate;}
+.ending-text{font-family:var(--fh);font-size:clamp(20px,3vw,26px);color:var(--muted);max-width:420px;margin:0 auto 16px;line-height:1.75;}
+.ending-signoff{font-family:var(--fd);font-style:italic;font-size:20px;color:var(--red-deep);margin-bottom:28px;}
+.ending-badge{display:inline-flex;align-items:center;gap:8px;background:white;border:1.5px solid var(--border);border-radius:999px;padding:8px 18px;font-family:var(--fs);font-size:12px;font-weight:600;color:var(--muted);}
+
+/* PHOTOS */
+#photosSection{background:var(--warm);overflow:hidden;}
+.photos-caption{font-family:var(--fd);font-style:italic;font-size:22px;color:var(--red-deep);text-align:center;margin-bottom:28px;}
+.polaroid-track{display:flex;gap:20px;animation:polaroid-slide 20s linear infinite;width:max-content;padding:20px 0;}
+.polaroid-track:hover{animation-play-state:paused;}
+.polaroid{background:white;padding:12px 12px 36px;box-shadow:0 8px 32px rgba(0,0,0,.12);transform:rotate(var(--r,0deg));transition:transform .3s cubic-bezier(.34,1.56,.64,1);flex-shrink:0;}
+.polaroid:hover{transform:rotate(0deg) scale(1.05);}
+.polaroid img{width:160px;height:160px;object-fit:cover;display:block;}
+.polaroid-label{font-family:var(--fh);font-size:13px;color:var(--muted);text-align:center;margin-top:8px;}
+@keyframes polaroid-slide{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.photos-track-wrap{overflow:hidden;position:relative;}
+.photos-track-wrap::before{content:'';position:absolute;left:0;top:0;bottom:0;width:80px;background:linear-gradient(90deg,var(--warm),transparent);z-index:1;pointer-events:none;}
+.photos-track-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(270deg,var(--warm),transparent);z-index:1;pointer-events:none;}
+
+/* MUSIC */
+#musicPlayer{position:fixed;bottom:24px;right:24px;z-index:800;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-deep));border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:white;box-shadow:0 8px 24px rgba(193,18,31,.3);transition:all .3s;}
+#musicPlayer:hover{transform:scale(1.1);}
+#musicPlayer.playing{animation:music-pulse 1.5s ease-in-out infinite alternate;}
+@keyframes music-pulse{0%{box-shadow:0 8px 24px rgba(193,18,31,.3);}100%{box-shadow:0 8px 40px rgba(230,57,70,.6);}}
+
+/* CONFETTI */
+.confetti-star{position:fixed;pointer-events:none;animation:confetti-fall linear forwards;}
+@keyframes confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* ANIMATIONS */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+.rv.vi{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.07s;}.d2{transition-delay:.14s;}.d3{transition-delay:.21s;}.d4{transition-delay:.28s;}.d5{transition-delay:.35s;}.d6{transition-delay:.42s;}
+
+.page-foot{text-align:center;padding:40px;font-family:var(--fs);font-size:13px;color:var(--muted2);position:relative;z-index:2;}
+.page-foot a{color:var(--red);text-decoration:none;font-family:var(--fh);}
+
+@media(max-width:768px){
+  .topbar{padding:0 20px;}.section-inner{padding:0 20px;}.mission-div{padding:8px 20px;}
+  .sticky-grid{grid-template-columns:1fr 1fr;}.notes-stack-wrap{width:260px;height:180px;}
+  .late-content{padding:40px 20px;}.core-section{padding:60px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div id="starLayer"></div>
+
+<!-- UNLOCK -->
+<div id="unlockScreen">
+  <div class="unlock-bg"></div>
+  <div class="unlock-stars-bg" id="unlockStarsBg"></div>
+  <div class="mission-tape">TOP SECRET — FOR YOUR EYES ONLY</div>
+  <div class="unlock-content">
+    <div class="classified-badge"><span class="c-dot"></span>Classified</div>
+    <h1 class="unlock-h1">A love note<br>for <em>you</em></h1>
+    <p class="unlock-sub" id="unlockSub">Someone made this just for you…</p>
+    <input class="unlock-input" id="unlockInput" type="text" placeholder="Type your name…" autocomplete="off">
+    <button class="unlock-btn" id="unlockBtn">Open with love 💌</button>
+    <p class="unlock-error" id="unlockError">That doesn't seem right — try again 💌</p>
+    <div class="anya-stars" id="anyaStars">⭐ ⭐ ⭐</div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar" style="display:none;" id="topbar">
+  <a href="index.html" class="topbar-logo">✦ Wisherly</a>
+  <div class="topbar-tag" id="topbarTag">A Love Note 💌</div>
+</div>
+
+<div id="musicPlayer" style="display:none;" onclick="toggleMusic()">🎵</div>
+<audio id="bgMusic" loop></audio>
+
+<div id="mainContent">
+
+  <!-- 1. ENTRY -->
+  <section id="entrySection">
+    <div class="entry-deco tl">💌</div>
+    <div class="entry-deco br">💕</div>
+    <div style="position:relative;z-index:1;">
+      <div class="entry-whisper" id="entryWhisper">Hey you…</div>
+      <h1 class="entry-name" id="entryName">You</h1>
+      <div class="entry-typewriter" id="entryTypewriter"></div>
+      <div class="entry-scroll"><span class="entry-scroll-text">Keep reading</span><div class="entry-scroll-bar"></div></div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 2. FIRST NOTE -->
+  <section class="section" id="firstNoteSection">
+    <div class="section-inner">
+      <div class="sec-label rv">The First Note</div>
+      <div class="note-card rv d1">
+        <div class="note-card-lines"></div>
+        <div class="note-text" id="firstNoteText">I've been meaning to tell you this for a while…</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 3. LITTLE THINGS -->
+  <section class="section" id="littleThingsSection">
+    <div class="section-inner">
+      <div class="sec-label rv">Little Things I Notice</div>
+      <div class="sticky-grid" id="stickyGrid"></div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 4. MEANING -->
+  <section class="section" id="meaningSection">
+    <div class="section-inner">
+      <div class="sec-label rv">What You Mean to Me</div>
+      <div class="meaning-cards" id="meaningCards"></div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 5. RANDOM THOUGHTS -->
+  <section class="section" id="thoughtsSection">
+    <div class="section-inner">
+      <div class="sec-label rv">Random Thoughts About You</div>
+      <div class="thoughts-flow" id="thoughtsFlow"></div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 6. NOTES STACK -->
+  <section class="section" id="notesStackSection">
+    <div class="section-inner" style="text-align:center;">
+      <div class="sec-label rv" style="display:inline-flex;">Mini Notes — Just For You</div>
+      <div class="notes-stack-wrap rv d1" id="notesStack"></div>
+      <div class="stack-counter rv d2" id="stackCounter">Tap the top card to read the next note</div>
+      <div class="stack-hint rv d3">💌 Each card has something special inside</div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- PHOTOS -->
+  <section class="section" id="photosSection">
+    <div class="section-inner">
+      <div class="sec-label rv">Our Moments</div>
+      <div class="photos-caption rv d1" id="photosCaption">Us, always 💕</div>
+    </div>
+    <div class="photos-track-wrap rv d2">
+      <div class="polaroid-track" id="polaroidTrack"></div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 7. COMFORT -->
+  <section class="section" id="comfortSection">
+    <div class="section-inner">
+      <div class="sec-label rv">You Feel Like…</div>
+      <div class="comfort-quote rv d1">
+        <span class="comfort-icon">🏠</span>
+        <p class="comfort-text" id="comfortText">You feel like home. The kind I never want to leave.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 8. SECRET NOTE -->
+  <section class="section" id="secretSection">
+    <div class="section-inner">
+      <div class="sec-label rv">A Secret Note</div>
+      <div class="secret-wrap rv d1">
+        <p class="secret-label">Scratch to reveal something I've never said out loud…</p>
+        <div class="scratch-container" id="scratchContainer">
+          <div class="scratch-reveal">
+            <div class="scratch-reveal-emoji">🔐</div>
+            <div class="scratch-reveal-text" id="secretText">A secret just for you.</div>
+          </div>
+          <canvas id="scratchCanvas"></canvas>
+        </div>
+        <p class="scratch-hint">Use your finger or mouse 💌</p>
+        <button class="scratch-done-btn" id="scratchDoneBtn" onclick="launchConfetti()">Aww 💕</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 9. VIDEO -->
+  <section class="section" id="videoSection">
+    <div class="section-inner">
+      <div class="sec-label rv">I couldn't just type this…</div>
+      <div class="video-outer rv d1">
+        <video id="mainVideo" controls playsinline muted></video>
+        <div class="video-caption-bar" id="videoCaption">Play when you're ready 💌</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 10. LATE NIGHT -->
+  <section id="lateNightSection">
+    <div class="late-stars" id="lateStars"></div>
+    <div class="late-content">
+      <span class="late-moon">🌙</span>
+      <p class="late-text" id="lateText">If I could, I'd pause time when I'm with you.</p>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 11. CORE LOVE LINE -->
+  <section id="coreSection">
+    <div class="core-bg-text">LOVE</div>
+    <div style="position:relative;z-index:1;text-align:center;">
+      <span class="core-heart">💖</span>
+      <p class="core-line" id="coreLine">Loving you feels like the most natural thing in the world.</p>
+    </div>
+  </section>
+
+  <div class="mission-div"><div class="mission-div-line"></div><div class="mission-div-star">★</div><div class="mission-div-line"></div></div>
+
+  <!-- 12. ENDING -->
+  <section id="endingSection">
+    <div class="ending-inner">
+      <span class="ending-icon">🌹</span>
+      <p class="ending-text" id="endingText">That's all… I just wanted you to know. ❤️</p>
+      <div class="ending-signoff" id="endingSignoff">Always yours 💕</div>
+      <div class="ending-badge">Made with love on <strong style="margin-left:4px;font-family:var(--fh);">Wisherly ✦</strong></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="page-foot"><a href="index.html">Wisherly</a> — made with 💕</div>
+
+<script>
+let D = {};
+
+async function loadPage() {
+  const params = new URLSearchParams(location.search);
+  const pageId = params.get('id');
+  if (pageId && window._db) {
+    try {
+      const snap = await window._db.collection('pages').doc(pageId).get();
+      if (snap.exists) {
+        D = snap.data();
+        if (D.photos && D.photos.length) {
+          const loaded = [];
+          for (const ref of D.photos) {
+            const m = ref.match && ref.match(/^__photo__(.+)$/);
+            if (m) { try { const ps = await window._db.collection('photos').doc(m[1]).get(); if(ps.exists) loaded.push(ps.data().data); } catch(e){} }
+            else { loaded.push(ref); }
+          }
+          D._photos = loaded;
+        }
+        if (D.audioChunks) setupMusic(pageId, D.audioChunks, D.audioMime);
+        if (D.videoChunks) setupVideo(pageId, D.videoChunks, D.videoMime);
+      }
+    } catch(e){ console.error(e); }
+  }
+  renderPage();
+}
+
+function initUnlock() {
+  const name = (D.name || '').trim();
+  if (!name) { showMain(); return; }
+  if (D.teaser) document.getElementById('unlockSub').textContent = D.teaser;
+  const btn = document.getElementById('unlockBtn');
+  if (D.unlockLabel) btn.textContent = D.unlockLabel;
+  btn.addEventListener('click', tryUnlock);
+  document.getElementById('unlockInput').addEventListener('keydown', e => { if(e.key==='Enter') tryUnlock(); });
+  if (new URLSearchParams(location.search).get('unlock') === 'none') { showMain(); return; }
+}
+
+function tryUnlock() {
+  const val = document.getElementById('unlockInput').value.trim().toLowerCase();
+  const name = (D.name || '').trim().toLowerCase();
+  if (val === name || val === '') {
+    document.getElementById('unlockScreen').style.animation = 'fadeOut .5s forwards';
+    setTimeout(showMain, 500);
+  } else {
+    document.getElementById('unlockError').style.display = 'block';
+    document.getElementById('unlockInput').style.animation = 'shake .3s';
+    setTimeout(() => document.getElementById('unlockInput').style.animation = '', 300);
+  }
+}
+
+function showMain() {
+  document.getElementById('unlockScreen').style.display = 'none';
+  document.getElementById('topbar').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'block';
+  setTimeout(initScratch, 400);
+  if (D.audioChunks) {
+    document.getElementById('musicPlayer').style.display = 'flex';
+    const audio = document.getElementById('bgMusic');
+    audio.volume = 0.45;
+    audio.play().then(() => { musicPlaying = true; document.getElementById('musicPlayer').textContent = '⏸'; document.getElementById('musicPlayer').classList.add('playing'); }).catch(()=>{});
+  }
+  launchConfetti();
+  startTypewriter();
+  initReveal();
+}
+
+function renderPage() {
+  const name = D.name || 'You';
+  const sender = D.sender || 'Someone who loves you';
+
+  const DEF = {
+    entryLine: D.entryLine || `I've been meaning to tell you this for a while…`,
+    entryWhisper: D.entryWhisper || 'Hey you…',
+    firstNote: D.firstNote || D.message || `There's something about you that I can't quite put into words. But I'll try. You make everything around you better just by being in it. I notice it every single time.`,
+    littleThings: (D.littleThings||[]).length ? D.littleThings : [
+      `The way you smile when something genuinely makes you happy`,
+      `How you say my name — like it means something`,
+      `The little laugh you do when you're embarrassed`,
+      `The way your eyes light up about things you love`,
+      `How you make even silence feel comfortable`,
+      `That thing you do when you're thinking really hard`,
+    ],
+    meaning: (D.meaning||[]).length ? D.meaning : [
+      `You're my calm in the middle of everything`,
+      `You make even the ordinary days feel worth remembering`,
+      `With you, things just make sense`,
+    ],
+    thoughts: (D.thoughts||[]).length ? D.thoughts : [
+      `I think about you at the most random times`,
+      `You cross my mind more than you should`,
+      `Sometimes I just smile for no reason and it's because of you`,
+      `I wonder if you know how much I think about you`,
+    ],
+    miniNotes: (D.miniNotes||[]).length ? D.miniNotes : [
+      `You are my favourite notification 💌`,
+      `I choose you. Every single time. No hesitation.`,
+      `Being with you feels like exhaling after holding my breath all day`,
+      `You're the person I want to tell everything to`,
+      `I didn't know what "home" felt like until you`,
+      `Thank you for being exactly who you are`,
+    ],
+    comfort: D.comfort || `You feel like home. The kind I never want to leave.`,
+    secret: D.secret || D.gift || `I fall a little more in love with you every single day. And I never want that to stop.`,
+    lateNight: D.lateNight || `If I could, I'd pause time when I'm with you.`,
+    coreLine: D.coreLine || D.coreMessage || `Loving you feels like the most natural thing in the world.`,
+    ending: D.ending || D.closing || `That's all… I just wanted you to know. ❤️`,
+    signOff: D.signOff || D.signoff || `Always yours, ${sender} 💕`,
+    photoCaption: D.photoCaption || `Us, always 💕`,
+  };
+
+  // Entry
+  document.getElementById('entryName').textContent = name;
+  document.getElementById('entryWhisper').textContent = DEF.entryWhisper;
+  document.getElementById('topbarTag').textContent = `For ${name} 💌`;
+  window._typewriterText = DEF.entryLine;
+
+  // First note
+  document.getElementById('firstNoteText').textContent = DEF.firstNote;
+
+  // Little things — sticky notes
+  document.getElementById('stickyGrid').innerHTML = DEF.littleThings.map(t => `<div class="sticky-note rv">${t}</div>`).join('');
+
+  // Meaning
+  document.getElementById('meaningCards').innerHTML = DEF.meaning.map(m => `<div class="meaning-card rv">${typeof m==='string'?m:(m.text||m)}</div>`).join('');
+
+  // Thoughts
+  const floatDelays = [0, .5, 1, 1.5, 2, 2.5];
+  document.getElementById('thoughtsFlow').innerHTML = DEF.thoughts.map((t,i) => `
+    <div class="thought-bubble" style="animation-delay:${floatDelays[i%floatDelays.length]}s;animation-duration:${2+i*.3}s;">${typeof t==='string'?t:(t.text||t)}</div>`).join('');
+
+  // Mini notes stack
+  const stack = document.getElementById('notesStack');
+  const notes = DEF.miniNotes.slice(0,6);
+  stack.innerHTML = notes.map((note,i) => `
+    <div class="stack-card ${i===0?'top':''}" data-index="${i}">
+      <div class="card-stamp">Note ${String(i+1).padStart(2,'0')}</div>
+      ${typeof note==='string'?note:(note.text||note)}
+    </div>`).join('');
+  updateStackCounter(notes.length);
+  initStack(notes.length);
+
+  // Photos
+  const photos = D._photos || D.photos || [];
+  if (photos.length) {
+    document.getElementById('photosCaption').textContent = DEF.photoCaption;
+    const rotations = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1];
+    const doubled = [...photos, ...photos]; // duplicate for infinite loop
+    document.getElementById('polaroidTrack').innerHTML = doubled.map((src,i) => `
+      <div class="polaroid" style="--r:${rotations[i%rotations.length]}deg;">
+        <img src="${src}" alt="Memory ${i+1}" loading="lazy">
+        <div class="polaroid-label">💕</div>
+      </div>`).join('');
+  } else {
+    document.getElementById('photosSection').style.display = 'none';
+  }
+
+  // Comfort
+  document.getElementById('comfortText').textContent = DEF.comfort;
+
+  // Secret
+  document.getElementById('secretText').textContent = DEF.secret;
+
+  // Video
+  if (!D.videoChunks) document.getElementById('videoSection').style.display = 'none';
+
+  // Late night
+  document.getElementById('lateText').textContent = DEF.lateNight;
+
+  // Core line
+  document.getElementById('coreLine').textContent = DEF.coreLine;
+
+  // Ending
+  document.getElementById('endingText').textContent = DEF.ending;
+  document.getElementById('endingSignoff').textContent = DEF.signOff;
+
+  initUnlock();
+}
+
+/* TYPEWRITER */
+function startTypewriter() {
+  const el = document.getElementById('entryTypewriter');
+  const text = window._typewriterText || "I've been meaning to tell you this…";
+  let i = 0; el.textContent = '';
+  const cursor = document.createElement('span');
+  cursor.textContent = '|'; cursor.style.cssText = 'animation:blink .7s ease infinite;color:var(--red);';
+  el.appendChild(cursor);
+  const style = document.createElement('style');
+  style.textContent = '@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}';
+  document.head.appendChild(style);
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        el.insertBefore(document.createTextNode(text[i]), cursor);
+        i++;
+      } else { clearInterval(interval); setTimeout(() => cursor.remove(), 1000); }
+    }, 45);
+  }, 800);
+}
+
+/* NOTES STACK */
+let stackCards = [];
+let currentTop = 0;
+
+function initStack(total) {
+  stackCards = Array.from(document.querySelectorAll('.stack-card'));
+  stackCards.forEach((card, i) => {
+    card.addEventListener('click', () => {
+      if (!card.classList.contains('top')) return;
+      card.classList.add('fly-away');
+      setTimeout(() => {
+        card.classList.remove('fly-away', 'top');
+        card.style.zIndex = '0';
+        // bring next to top
+        currentTop = (currentTop + 1) % stackCards.length;
+        stackCards[currentTop].classList.add('top');
+        // restack others
+        stackCards.forEach((c, idx) => {
+          if (!c.classList.contains('top')) {
+            const offset = ((idx - currentTop + stackCards.length) % stackCards.length);
+            c.style.transform = `rotate(${offset % 2 === 0 ? 2 : -2}deg) translateY(${offset * 6}px)`;
+            c.style.zIndex = stackCards.length - offset;
+          }
+        });
+        updateStackCounter(total);
+      }, 450);
+    });
+  });
+}
+
+function updateStackCounter(total) {
+  const remaining = total - currentTop;
+  document.getElementById('stackCounter').textContent = remaining > 0
+    ? `${remaining} note${remaining > 1 ? 's' : ''} remaining — tap to read`
+    : '✦ You've read all the notes 💕';
+}
+
+/* SCRATCH */
+function initScratch() {
+  const canvas = document.getElementById('scratchCanvas');
+  const container = document.getElementById('scratchContainer');
+  const w = container.offsetWidth, h = container.offsetHeight;
+  if (!w || !h) return;
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  const grad = ctx.createLinearGradient(0,0,w,h);
+  grad.addColorStop(0,'#FFB3C1'); grad.addColorStop(.5,'#FF85A1'); grad.addColorStop(1,'#FFB3C1');
+  ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle = 'rgba(255,255,255,.2)';
+  for(let i=0;i<12;i++){ctx.font=`${12+Math.random()*12}px serif`;ctx.fillText('★',Math.random()*w,Math.random()*h);}
+  ctx.fillStyle = 'rgba(80,0,20,.45)';ctx.font='italic 600 15px "Caveat",cursive';ctx.textAlign='center';
+  ctx.fillText('★  Scratch to reveal  ★',w/2,h/2);
+  let scratched = 0;
+  ctx.globalCompositeOperation = 'destination-out';
+  function getPos(e){const r=canvas.getBoundingClientRect();const sx=canvas.width/r.width,sy=canvas.height/r.height;const cx=e.touches?e.touches[0].clientX:e.clientX;const cy=e.touches?e.touches[0].clientY:e.clientY;return{x:(cx-r.left)*sx,y:(cy-r.top)*sy};}
+  function scratch(x,y){ctx.beginPath();ctx.arc(x,y,24,0,Math.PI*2);ctx.fill();scratched+=Math.PI*24*24;if(scratched/(w*h)>.55){canvas.style.transition='opacity .5s';canvas.style.opacity='0';document.getElementById('scratchDoneBtn').style.display='inline-block';}}
+  let sc=false;
+  canvas.addEventListener('mousedown',e=>{sc=true;const p=getPos(e);scratch(p.x,p.y);});
+  canvas.addEventListener('mousemove',e=>{if(sc){const p=getPos(e);scratch(p.x,p.y);}});
+  canvas.addEventListener('mouseup',()=>sc=false);
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();sc=true;const p=getPos(e);scratch(p.x,p.y);},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(sc){const p=getPos(e);scratch(p.x,p.y);}},{passive:false});
+  canvas.addEventListener('touchend',()=>sc=false);
+}
+
+/* MUSIC */
+async function setupMusic(pageId, total, mime) {
+  try {
+    let b64=''; for(let i=0;i<total;i++){const s=await window._db.collection('audio').doc(`${pageId}_${i}`).get();if(s.exists)b64+=s.data().data;}
+    document.getElementById('bgMusic').src=URL.createObjectURL(new Blob([Uint8Array.from(atob(b64),c=>c.charCodeAt(0))],{type:mime||'audio/mpeg'}));
+    document.getElementById('musicPlayer').style.display='flex';
+  } catch(e){}
+}
+let musicPlaying=false;
+function toggleMusic(){const a=document.getElementById('bgMusic'),b=document.getElementById('musicPlayer');if(musicPlaying){a.pause();b.textContent='🎵';b.classList.remove('playing');musicPlaying=false;}else{a.play();b.textContent='⏸';b.classList.add('playing');musicPlaying=true;}}
+
+/* VIDEO */
+async function setupVideo(pageId, total, mime) {
+  try {
+    let b64=''; for(let i=0;i<total;i++){const s=await window._db.collection('videos').doc(`${pageId}_${i}`).get();if(s.exists)b64+=s.data().data;}
+    document.getElementById('mainVideo').src=URL.createObjectURL(new Blob([Uint8Array.from(atob(b64),c=>c.charCodeAt(0))],{type:mime||'video/mp4'}));
+    if(D.videoCaption)document.getElementById('videoCaption').textContent=D.videoCaption;
+  } catch(e){document.getElementById('videoSection').style.display='none';}
+}
+
+/* VIDEO AUTOPLAY ON SCROLL */
+function initVideoAutoplay() {
+  const video = document.getElementById('mainVideo');
+  if (!video || !D.videoChunks) return;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { video.play().catch(()=>{}); }
+      else { video.pause(); }
+    });
+  }, {threshold: .5});
+  io.observe(video);
+}
+
+/* CONFETTI */
+function launchConfetti() {
+  const colors = ['#E63946','#F4A300','#FF85A1','#FFD166','#white'];
+  const shapes = ['★','♥','✦','●'];
+  for(let i=0;i<50;i++){
+    const el=document.createElement('div');el.className='confetti-star';
+    el.style.cssText=`left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;border-radius:${Math.random()>.5?'50%':'2px'};`;
+    document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());
+  }
+}
+
+/* FLOATING STARS BG */
+function initStars() {
+  const layer = document.getElementById('starLayer');
+  for(let i=0;i<12;i++){
+    const el=document.createElement('div');el.className='star-el';
+    el.textContent=['★','♥','✦','💕','🌸'][Math.floor(Math.random()*5)];
+    el.style.cssText=`left:${Math.random()*100}vw;bottom:-20px;font-size:${12+Math.random()*16}px;animation-duration:${15+Math.random()*20}s;animation-delay:-${Math.random()*20}s;color:rgba(230,57,70,${.15+Math.random()*.15});`;
+    layer.appendChild(el);
+  }
+  // Unlock stars
+  const ubg = document.getElementById('unlockStarsBg');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');s.className='u-star';
+    const sz=1+Math.random()*2.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;border-radius:50%;background:white;position:absolute;left:${Math.random()*100}%;top:${Math.random()*80}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
+    ubg.appendChild(s);
+  }
+  // Late night stars
+  const ln = document.getElementById('lateStars');
+  for(let i=0;i<40;i++){
+    const s=document.createElement('div');s.className='late-star';
+    const sz=1+Math.random()*2;
+    s.style.cssText=`width:${sz}px;height:${sz}px;border-radius:50%;background:white;position:absolute;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
+    ln.appendChild(s);
+  }
+}
+
+/* REVEAL */
+function initReveal() {
+  const io = new IntersectionObserver(entries => {entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vi');});},{threshold:.1});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+  initVideoAutoplay();
+}
+
+const style=document.createElement('style');
+style.textContent='@keyframes fadeOut{0%{opacity:1;}100%{opacity:0;pointer-events:none;}}@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}';
+document.head.appendChild(style);
+
+initStars();
+loadPage();
+</script>
+</body>
+</html>

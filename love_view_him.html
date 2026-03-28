@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="fav.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wisherly — A Love Note 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const _cfg={apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",authDomain:"wisherly-d07d7.firebaseapp.com",projectId:"wisherly-d07d7",storageBucket:"wisherly-d07d7.firebasestorage.app",messagingSenderId:"919116839261",appId:"1:919116839261:web:147d6b5924f3cbe35050b4"};
+  if(!firebase.apps.length){firebase.initializeApp(_cfg);}
+  window._db=firebase.firestore();
+})();
+</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --dark:#0A0500;
+  --dark2:#150B00;
+  --dark3:#1F1000;
+  --orange:#FF6B00;
+  --orange2:#FF8C00;
+  --orange-soft:#FF9A3C;
+  --red:#E63900;
+  --gold:#FFD700;
+  --white:#FFFAF0;
+  --cream:#FFF5E6;
+  --muted:#B87A40;
+  --muted2:#7A5020;
+  --border:rgba(255,107,0,.15);
+  --glow:rgba(255,107,0,.25);
+  --fd:'Bebas Neue',cursive;
+  --fs:'Rajdhani',sans-serif;
+  --fh:'Caveat',cursive;
+  --fn:'Noto Serif',serif;
+}
+body{background:var(--dark);color:var(--white);font-family:var(--fs);font-weight:400;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+/* AMBIENT */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 10% 10%,rgba(255,107,0,.08),transparent 60%),
+             radial-gradient(ellipse 50% 40% at 90% 90%,rgba(255,60,0,.06),transparent 60%);}
+
+/* SPEED LINES BG */
+#speedLines{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:.03;}
+.speed-line{position:absolute;background:linear-gradient(90deg,transparent,var(--orange),transparent);height:1px;animation:speed-flash linear infinite;}
+@keyframes speed-flash{0%{transform:translateX(-100%);opacity:0;}50%{opacity:1;}100%{transform:translateX(200%);opacity:0;}}
+
+/* CHAKRA PARTICLES */
+#chakraLayer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.chakra-dot{position:absolute;border-radius:50%;animation:chakra-float linear infinite;opacity:0;}
+@keyframes chakra-float{0%{transform:translateY(100vh);opacity:0;}10%{opacity:.6;}90%{opacity:.3;}100%{transform:translateY(-50px);opacity:0;}}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:900;height:68px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,5,0,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,107,0,.12);}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),var(--gold),var(--orange),transparent);}
+.topbar-logo{font-family:var(--fd);font-size:28px;color:var(--orange);text-decoration:none;letter-spacing:.1em;text-shadow:0 0 20px rgba(255,107,0,.4);}
+.topbar-tag{font-family:var(--fs);font-size:11px;font-weight:700;color:var(--muted);background:rgba(255,107,0,.08);border:1px solid var(--border);border-radius:4px;padding:5px 14px;letter-spacing:.1em;text-transform:uppercase;}
+
+/* UNLOCK */
+#unlockScreen{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;overflow:hidden;}
+.unlock-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,#1F0800 0%,#0A0300 60%,#000000 100%);}
+#unlockCanvas{position:absolute;inset:0;z-index:1;}
+.unlock-content{position:relative;z-index:2;}
+.seal-ring{width:160px;height:160px;margin:0 auto 28px;position:relative;animation:seal-spin 20s linear infinite;}
+.seal-ring svg{width:100%;height:100%;}
+@keyframes seal-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.unlock-jutsu{font-family:var(--fd);font-size:13px;letter-spacing:.4em;text-transform:uppercase;color:var(--orange);margin-bottom:16px;text-shadow:0 0 20px var(--orange);animation:jutsu-pulse 2s ease-in-out infinite alternate;}
+@keyframes jutsu-pulse{0%{opacity:.6;}100%{opacity:1;text-shadow:0 0 30px var(--orange),0 0 60px rgba(255,107,0,.3);}}
+.unlock-h1{font-family:var(--fd);font-size:clamp(56px,12vw,120px);letter-spacing:.05em;line-height:.9;color:var(--white);text-shadow:0 0 60px rgba(255,107,0,.4),0 4px 0 rgba(0,0,0,.5);margin-bottom:16px;animation:name-burst 1s cubic-bezier(.34,1.56,.64,1) both;}
+.unlock-h1 span{color:var(--orange);}
+@keyframes name-burst{0%{opacity:0;transform:scale(.5);}60%{transform:scale(1.05);}100%{opacity:1;transform:scale(1);}}
+.unlock-sub{font-family:var(--fh);font-size:20px;color:rgba(255,250,240,.65);max-width:380px;margin:0 auto 32px;line-height:1.6;animation:rise .8s .3s cubic-bezier(.16,1,.3,1) both;}
+@keyframes rise{0%{opacity:0;transform:translateY(20px);}100%{opacity:1;transform:translateY(0);}}
+.unlock-input{display:block;margin:0 auto 14px;padding:14px 28px;width:270px;border:2px solid rgba(255,107,0,.4);border-radius:4px;background:rgba(255,107,0,.06);font-family:var(--fh);font-size:20px;color:var(--white);text-align:center;outline:none;transition:all .3s;animation:rise .8s .4s cubic-bezier(.16,1,.3,1) both;}
+.unlock-input::placeholder{color:rgba(255,250,240,.3);}
+.unlock-input:focus{border-color:var(--orange);background:rgba(255,107,0,.1);box-shadow:0 0 0 4px rgba(255,107,0,.1),0 0 30px rgba(255,107,0,.15);}
+.unlock-btn{display:block;margin:0 auto;padding:14px 48px;border-radius:4px;border:2px solid var(--orange);background:linear-gradient(135deg,var(--orange),var(--red));color:white;font-family:var(--fd);font-size:22px;letter-spacing:.1em;cursor:pointer;box-shadow:0 8px 32px rgba(255,107,0,.3),inset 0 1px 0 rgba(255,255,255,.1);transition:all .3s;animation:rise .8s .5s cubic-bezier(.16,1,.3,1) both;}
+.unlock-btn:hover{box-shadow:0 12px 48px rgba(255,107,0,.5);transform:translateY(-2px);}
+.unlock-error{color:var(--orange);font-size:13px;font-weight:700;margin-top:12px;display:none;letter-spacing:.06em;}
+
+/* MAIN */
+#mainContent{display:none;}
+
+/* SECTION */
+.section{position:relative;z-index:2;padding:80px 0;}
+.section-inner{max-width:820px;margin:0 auto;padding:0 40px;}
+
+/* KUNAI DIVIDER */
+.kunai-div{position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:8px 40px;max-width:820px;margin:0 auto;}
+.kunai-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,107,0,.25),transparent);}
+.kunai-icon{font-size:14px;color:var(--orange);opacity:.5;transform:rotate(45deg);}
+
+/* SECTION LABEL */
+.sec-label{display:inline-flex;align-items:center;gap:8px;font-family:var(--fs);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:20px;border-left:3px solid var(--orange);padding-left:12px;}
+
+/* 1. ENTRY */
+#entrySection{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 40%,#1F0A00 0%,var(--dark) 70%);position:relative;z-index:2;padding:80px 40px;overflow:hidden;}
+.entry-bg-spiral{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.entry-spiral{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;border:1px solid rgba(255,107,0,.04);animation:spiral-expand 4s ease-in-out infinite alternate;}
+.entry-spiral:nth-child(2){width:400px;height:400px;border-color:rgba(255,107,0,.06);animation-delay:.5s;}
+.entry-spiral:nth-child(3){width:200px;height:200px;border-color:rgba(255,107,0,.08);animation-delay:1s;}
+@keyframes spiral-expand{0%{transform:translate(-50%,-50%) scale(1);}100%{transform:translate(-50%,-50%) scale(1.08);}}
+.entry-whisper{font-family:var(--fh);font-size:22px;color:var(--muted);margin-bottom:12px;letter-spacing:.05em;}
+.entry-name{font-family:var(--fd);font-size:clamp(64px,16vw,150px);letter-spacing:.05em;line-height:.85;color:var(--white);text-shadow:0 0 80px rgba(255,107,0,.3),0 4px 0 rgba(0,0,0,.5);margin-bottom:20px;}
+.entry-name span{color:var(--orange);}
+.entry-typewriter{font-family:var(--fh);font-size:clamp(18px,2.5vw,24px);color:rgba(255,250,240,.65);min-height:36px;max-width:500px;margin:0 auto 40px;}
+.entry-scroll{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.entry-scroll-text{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+.entry-scroll-bar{width:1.5px;height:44px;background:linear-gradient(180deg,var(--orange),transparent);animation:scroll-pulse 1.5s ease-in-out infinite;}
+@keyframes scroll-pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* 2. FIRST NOTE */
+#firstNoteSection{background:var(--dark2);}
+.scroll-card{background:linear-gradient(160deg,#1F1000,#150B00);border:1px solid rgba(255,107,0,.15);border-radius:8px;padding:36px 40px;max-width:560px;margin:0 auto;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.4),0 0 0 1px rgba(255,107,0,.08);}
+.scroll-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--orange),var(--gold),transparent);}
+.scroll-card::after{content:'📜';position:absolute;bottom:-20px;right:10px;font-size:80px;opacity:.04;user-select:none;}
+.scroll-text{font-family:var(--fh);font-size:20px;color:var(--cream);line-height:1.8;position:relative;z-index:1;}
+
+/* 3. LITTLE THINGS */
+#littleThingsSection{background:var(--dark);}
+.kunai-list{display:flex;flex-direction:column;gap:12px;}
+.kunai-item{display:flex;align-items:flex-start;gap:14px;background:rgba(255,107,0,.04);border:1px solid rgba(255,107,0,.1);border-radius:6px;padding:16px 20px;transition:all .3s;}
+.kunai-item:hover{border-color:rgba(255,107,0,.25);background:rgba(255,107,0,.07);transform:translateX(6px);}
+.kunai-bullet{width:28px;height:28px;border-radius:4px;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px;}
+.kunai-text{font-family:var(--fh);font-size:18px;color:var(--cream);line-height:1.55;}
+
+/* 4. MEANING */
+#meaningSection{background:var(--dark2);}
+.meaning-scroll{display:flex;flex-direction:column;gap:14px;max-width:560px;margin:0 auto;}
+.meaning-item{padding:20px 24px;border-left:3px solid var(--orange);background:rgba(255,107,0,.04);border-radius:0 8px 8px 0;font-family:var(--fh);font-size:19px;color:var(--cream);line-height:1.6;transition:all .3s;}
+.meaning-item:hover{background:rgba(255,107,0,.08);transform:translateX(6px);}
+
+/* 5. RANDOM THOUGHTS */
+#thoughtsSection{background:var(--dark);}
+.thoughts-grid{display:flex;flex-wrap:wrap;gap:12px;}
+.thought-tag{background:rgba(255,107,0,.08);border:1px solid rgba(255,107,0,.2);border-radius:4px;padding:10px 18px;font-family:var(--fh);font-size:17px;color:var(--cream);animation:tag-float ease-in-out infinite alternate;}
+@keyframes tag-float{0%{transform:translateY(0);}100%{transform:translateY(-5px);}}
+
+/* 6. NOTES STACK */
+#notesStackSection{background:var(--dark2);}
+.notes-stack-wrap{position:relative;width:320px;height:210px;margin:0 auto;}
+.stack-card{position:absolute;inset:0;background:linear-gradient(160deg,#1F1000,#150B00);border:1px solid rgba(255,107,0,.2);border-radius:8px;padding:28px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 8px 32px rgba(0,0,0,.4);font-family:var(--fh);font-size:18px;color:var(--cream);line-height:1.6;cursor:pointer;transition:all .4s cubic-bezier(.34,1.56,.64,1);backface-visibility:hidden;user-select:none;overflow:hidden;}
+.stack-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);}
+.stack-card:nth-child(2){transform:rotate(3deg) translateY(6px);z-index:1;}
+.stack-card:nth-child(3){transform:rotate(-2deg) translateY(12px);z-index:0;}
+.stack-card.top{z-index:3;transform:rotate(0deg);}
+.stack-card.top:hover{transform:rotate(1deg) scale(1.02) translateY(-4px);box-shadow:0 16px 48px rgba(255,107,0,.2);}
+.stack-card.fly-away{animation:card-fly-r .5s cubic-bezier(.16,1,.3,1) forwards;}
+@keyframes card-fly-r{0%{transform:rotate(0deg) translateX(0) translateY(0) scale(1);opacity:1;}100%{transform:rotate(10deg) translateX(130%) translateY(-40px) scale(.9);opacity:0;}}
+.card-stamp{font-family:var(--fd);font-size:11px;letter-spacing:.15em;color:var(--orange);margin-bottom:8px;opacity:.7;}
+.stack-counter{text-align:center;margin-top:24px;font-family:var(--fs);font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.stack-hint{text-align:center;margin-top:8px;font-family:var(--fh);font-size:14px;color:var(--muted);}
+
+/* 7. COMFORT */
+#comfortSection{background:linear-gradient(160deg,#150B00,#0A0500);}
+.comfort-block{max-width:560px;margin:0 auto;text-align:center;padding:48px 32px;}
+.comfort-icon{font-size:52px;margin-bottom:24px;display:block;filter:drop-shadow(0 0 20px rgba(255,107,0,.4));animation:comfort-glow 2s ease-in-out infinite alternate;}
+@keyframes comfort-glow{0%{filter:drop-shadow(0 0 10px rgba(255,107,0,.3));}100%{filter:drop-shadow(0 0 30px rgba(255,107,0,.6));}}
+.comfort-text{font-family:var(--fn);font-style:italic;font-size:clamp(20px,3vw,26px);color:var(--cream);line-height:1.75;text-shadow:0 0 40px rgba(255,107,0,.1);}
+
+/* 8. SECRET */
+#secretSection{background:var(--dark);}
+.secret-wrap{max-width:380px;margin:0 auto;text-align:center;}
+.secret-label{font-family:var(--fh);font-size:18px;color:var(--muted);margin-bottom:20px;}
+.scratch-container{position:relative;width:100%;height:200px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,107,0,.2);box-shadow:0 8px 32px rgba(0,0,0,.4);margin:0 auto 14px;cursor:crosshair;}
+.scratch-reveal{position:absolute;inset:0;background:linear-gradient(135deg,#1F1000,#150B00);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.scratch-reveal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);}
+.scratch-reveal-emoji{font-size:36px;margin-bottom:10px;}
+.scratch-reveal-text{font-family:var(--fh);font-size:19px;color:var(--cream);text-align:center;line-height:1.5;}
+#scratchCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:none;}
+.scratch-hint{font-family:var(--fh);font-size:13px;color:var(--muted);}
+.scratch-done-btn{display:none;margin-top:14px;padding:10px 28px;border-radius:4px;border:1px solid var(--border);background:rgba(255,107,0,.1);color:var(--orange);font-family:var(--fh);font-size:17px;cursor:pointer;transition:all .3s;}
+.scratch-done-btn:hover{background:var(--orange);color:white;}
+
+/* 9. VIDEO */
+#videoSection{background:var(--dark2);}
+.video-outer{max-width:580px;margin:0 auto;border-radius:8px;overflow:hidden;border:1px solid rgba(255,107,0,.15);box-shadow:0 16px 48px rgba(0,0,0,.5);}
+.video-outer::before{content:'🎥  A message just for you…';display:block;padding:14px 20px;background:rgba(255,107,0,.06);border-bottom:1px solid rgba(255,107,0,.1);font-family:var(--fh);font-size:16px;color:var(--orange-soft);}
+video{width:100%;display:block;max-height:380px;object-fit:cover;}
+.video-caption-bar{background:rgba(255,107,0,.06);padding:12px 20px;border-top:1px solid rgba(255,107,0,.1);font-family:var(--fh);font-size:15px;color:var(--muted);}
+
+/* 10. LATE NIGHT */
+#lateNightSection{background:radial-gradient(ellipse 80% 60% at 50% 50%,#0F0500,#000000);min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;}
+.late-stars-layer{position:absolute;inset:0;pointer-events:none;}
+.late-star-dot{position:absolute;border-radius:50%;background:white;animation:twinkle ease-in-out infinite alternate;}
+@keyframes twinkle{0%{opacity:.1;transform:scale(1);}100%{opacity:.9;transform:scale(1.5);}}
+.late-content{position:relative;z-index:1;padding:60px 40px;}
+.late-moon{font-size:56px;margin-bottom:24px;display:block;filter:drop-shadow(0 0 20px rgba(255,215,0,.5));animation:moon-glow 3s ease-in-out infinite alternate;}
+@keyframes moon-glow{0%{filter:drop-shadow(0 0 10px rgba(255,215,0,.4));}100%{filter:drop-shadow(0 0 30px rgba(255,215,0,.8));}}
+.late-text{font-family:var(--fn);font-style:italic;font-size:clamp(20px,3.5vw,30px);color:var(--cream);max-width:520px;margin:0 auto;line-height:1.75;text-shadow:0 0 40px rgba(255,107,0,.2);}
+
+/* 11. CORE LINE */
+#coreSection{min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse 60% 50% at 50% 50%,#2A1000,var(--dark));position:relative;z-index:2;padding:80px 40px;overflow:hidden;}
+.core-bg-kanji{position:absolute;font-family:var(--fd);font-size:clamp(100px,25vw,220px);color:rgba(255,107,0,.03);white-space:nowrap;user-select:none;pointer-events:none;animation:kanji-drift 15s ease-in-out infinite alternate;letter-spacing:.1em;}
+@keyframes kanji-drift{0%{transform:translateX(-3%) rotate(-1deg);}100%{transform:translateX(3%) rotate(1deg);}}
+.core-glow-ring{position:absolute;width:400px;height:400px;border-radius:50%;border:1px solid rgba(255,107,0,.08);top:50%;left:50%;transform:translate(-50%,-50%);animation:ring-pulse 3s ease-in-out infinite alternate;}
+@keyframes ring-pulse{0%{width:300px;height:300px;opacity:.3;}100%{width:500px;height:500px;opacity:.1;}}
+.core-symbol{font-size:60px;margin-bottom:20px;display:block;animation:core-beat .8s ease-in-out infinite alternate;filter:drop-shadow(0 0 20px rgba(255,107,0,.5));}
+@keyframes core-beat{0%{transform:scale(1);}100%{transform:scale(1.1);}}
+.core-line{font-family:var(--fn);font-style:italic;font-size:clamp(22px,4vw,38px);color:var(--cream);max-width:600px;margin:0 auto;line-height:1.5;text-shadow:0 0 40px rgba(255,107,0,.2);position:relative;z-index:1;}
+
+/* 12. ENDING */
+#endingSection{background:var(--dark2);min-height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;z-index:2;}
+.ending-inner{padding:60px 40px;}
+.ending-symbol{font-size:44px;margin-bottom:16px;display:block;filter:drop-shadow(0 0 16px rgba(255,107,0,.4));animation:comfort-glow 2s ease-in-out infinite alternate;}
+.ending-text{font-family:var(--fh);font-size:clamp(20px,3vw,26px);color:var(--cream);max-width:420px;margin:0 auto 16px;line-height:1.75;}
+.ending-signoff{font-family:var(--fn);font-style:italic;font-size:20px;color:var(--orange-soft);margin-bottom:28px;}
+.ending-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,0,.06);border:1px solid var(--border);border-radius:4px;padding:8px 18px;font-family:var(--fs);font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.08em;}
+
+/* PHOTOS */
+#photosSection{background:var(--dark);overflow:hidden;}
+.photos-caption{font-family:var(--fd);font-size:24px;color:var(--orange);text-align:center;margin-bottom:28px;letter-spacing:.05em;text-shadow:0 0 20px rgba(255,107,0,.3);}
+.film-track-wrap{overflow:hidden;position:relative;}
+.film-track-wrap::before,.film-track-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:1;pointer-events:none;}
+.film-track-wrap::before{left:0;background:linear-gradient(90deg,var(--dark),transparent);}
+.film-track-wrap::after{right:0;background:linear-gradient(270deg,var(--dark),transparent);}
+.film-track{display:flex;gap:4px;animation:film-scroll 20s linear infinite;width:max-content;padding:16px 0;}
+.film-track:hover{animation-play-state:paused;}
+.film-frame{background:var(--dark2);border:2px solid rgba(255,107,0,.2);flex-shrink:0;position:relative;padding:8px 8px 32px;}
+.film-frame img{width:160px;height:160px;object-fit:cover;display:block;filter:sepia(.15);}
+.film-sprocket{position:absolute;top:0;left:0;right:0;height:8px;background:repeating-linear-gradient(90deg,transparent 0,transparent 12px,rgba(255,107,0,.3) 12px,rgba(255,107,0,.3) 20px);}
+.film-sprocket.bottom{top:auto;bottom:0;}
+.film-label{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:var(--fd);font-size:11px;color:var(--orange);letter-spacing:.08em;opacity:.7;}
+@keyframes film-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* MUSIC */
+#musicPlayer{position:fixed;bottom:24px;right:24px;z-index:800;width:52px;height:52px;border-radius:4px;background:linear-gradient(135deg,var(--orange),var(--red));border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:white;box-shadow:0 8px 24px rgba(255,107,0,.3);transition:all .3s;}
+#musicPlayer:hover{transform:scale(1.1);}
+#musicPlayer.playing{animation:orange-pulse 1.5s ease-in-out infinite alternate;}
+@keyframes orange-pulse{0%{box-shadow:0 8px 24px rgba(255,107,0,.3);}100%{box-shadow:0 8px 40px rgba(255,107,0,.7);}}
+
+/* PARTICLE BURST */
+.chakra-burst{position:fixed;pointer-events:none;animation:burst-out linear forwards;}
+@keyframes burst-out{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0;}}
+
+/* ANIMATIONS */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+.rv.vi{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.07s;}.d2{transition-delay:.14s;}.d3{transition-delay:.21s;}.d4{transition-delay:.28s;}.d5{transition-delay:.35s;}.d6{transition-delay:.42s;}
+
+.page-foot{text-align:center;padding:40px;font-family:var(--fs);font-size:13px;color:var(--muted);position:relative;z-index:2;letter-spacing:.06em;}
+.page-foot a{color:var(--orange);text-decoration:none;}
+
+@media(max-width:768px){
+  .topbar{padding:0 20px;}.section-inner{padding:0 20px;}.kunai-div{padding:8px 20px;}
+  .notes-stack-wrap{width:280px;height:190px;}.late-content{padding:40px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div id="speedLines"></div>
+<div id="chakraLayer"></div>
+
+<!-- UNLOCK -->
+<div id="unlockScreen">
+  <div class="unlock-bg"></div>
+  <canvas id="unlockCanvas"></canvas>
+  <div class="unlock-content">
+    <div class="seal-ring">
+      <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="80" cy="80" r="70" stroke="rgba(255,107,0,.3)" stroke-width="1"/>
+        <circle cx="80" cy="80" r="60" stroke="rgba(255,107,0,.15)" stroke-width="1" stroke-dasharray="4 4"/>
+        <circle cx="80" cy="80" r="50" stroke="rgba(255,107,0,.2)" stroke-width="1"/>
+        <text x="80" y="88" text-anchor="middle" font-family="Bebas Neue" font-size="22" fill="rgba(255,107,0,.6)" letter-spacing="4">LOVE</text>
+        <path d="M80 10 L85 25 L80 20 L75 25 Z" fill="rgba(255,107,0,.4)"/>
+        <path d="M80 150 L85 135 L80 140 L75 135 Z" fill="rgba(255,107,0,.4)"/>
+        <path d="M10 80 L25 75 L20 80 L25 85 Z" fill="rgba(255,107,0,.4)"/>
+        <path d="M150 80 L135 75 L140 80 L135 85 Z" fill="rgba(255,107,0,.4)"/>
+      </svg>
+    </div>
+    <div class="unlock-jutsu" id="unlockJutsu">A Message — For Your Eyes Only</div>
+    <h1 class="unlock-h1">For <span id="unlockNameDisplay">You</span></h1>
+    <p class="unlock-sub" id="unlockSub">Someone made this just for you…</p>
+    <input class="unlock-input" id="unlockInput" type="text" placeholder="Type your name…" autocomplete="off">
+    <button class="unlock-btn" id="unlockBtn">OPEN — 開く</button>
+    <p class="unlock-error" id="unlockError">That doesn't match — try again</p>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar" style="display:none;" id="topbar">
+  <a href="index.html" class="topbar-logo">WISHERLY</a>
+  <div class="topbar-tag" id="topbarTag">Love Note 💌</div>
+</div>
+
+<div id="musicPlayer" style="display:none;" onclick="toggleMusic()">🎵</div>
+<audio id="bgMusic" loop></audio>
+
+<div id="mainContent">
+
+  <!-- 1. ENTRY -->
+  <section id="entrySection">
+    <div class="entry-bg-spiral">
+      <div class="entry-spiral"></div>
+      <div class="entry-spiral"></div>
+      <div class="entry-spiral"></div>
+    </div>
+    <div style="position:relative;z-index:1;">
+      <div class="entry-whisper" id="entryWhisper">Hey you…</div>
+      <h1 class="entry-name"><span id="entryName">You</span></h1>
+      <div class="entry-typewriter" id="entryTypewriter"></div>
+      <div class="entry-scroll"><span class="entry-scroll-text">Keep reading</span><div class="entry-scroll-bar"></div></div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 2. FIRST NOTE -->
+  <section class="section" id="firstNoteSection">
+    <div class="section-inner">
+      <div class="sec-label rv">The First Note</div>
+      <div class="scroll-card rv d1">
+        <div class="scroll-text" id="firstNoteText"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 3. LITTLE THINGS -->
+  <section class="section" id="littleThingsSection">
+    <div class="section-inner">
+      <div class="sec-label rv">Little Things I Notice</div>
+      <div class="kunai-list" id="kunaiList"></div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 4. MEANING -->
+  <section class="section" id="meaningSection">
+    <div class="section-inner">
+      <div class="sec-label rv">What You Mean to Me</div>
+      <div class="meaning-scroll" id="meaningScroll"></div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 5. RANDOM THOUGHTS -->
+  <section class="section" id="thoughtsSection">
+    <div class="section-inner">
+      <div class="sec-label rv">Random Thoughts About You</div>
+      <div class="thoughts-grid" id="thoughtsGrid"></div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 6. NOTES STACK -->
+  <section class="section" id="notesStackSection">
+    <div class="section-inner" style="text-align:center;">
+      <div class="sec-label rv" style="display:inline-flex;">Mission Notes — For You</div>
+      <div class="notes-stack-wrap rv d1" id="notesStack"></div>
+      <div class="stack-counter rv d2" id="stackCounter">TAP THE TOP CARD TO READ THE NEXT NOTE</div>
+      <div class="stack-hint rv d3">Each card has a message inside</div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- PHOTOS -->
+  <section class="section" id="photosSection">
+    <div class="section-inner">
+      <div class="sec-label rv">Our Moments</div>
+      <div class="photos-caption rv d1" id="photosCaption">Us, always</div>
+    </div>
+    <div class="film-track-wrap rv d2">
+      <div class="film-track" id="filmTrack"></div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 7. COMFORT -->
+  <section class="section" id="comfortSection">
+    <div class="section-inner">
+      <div class="sec-label rv">You Feel Like…</div>
+      <div class="comfort-block rv d1">
+        <span class="comfort-icon">🔥</span>
+        <p class="comfort-text" id="comfortText">You feel like home. The kind I never want to leave.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 8. SECRET -->
+  <section class="section" id="secretSection">
+    <div class="section-inner">
+      <div class="sec-label rv">A Sealed Message</div>
+      <div class="secret-wrap rv d1">
+        <p class="secret-label">Scratch the seal to reveal…</p>
+        <div class="scratch-container" id="scratchContainer">
+          <div class="scratch-reveal">
+            <div class="scratch-reveal-emoji">🔐</div>
+            <div class="scratch-reveal-text" id="secretText">A secret just for you.</div>
+          </div>
+          <canvas id="scratchCanvas"></canvas>
+        </div>
+        <p class="scratch-hint">Use your finger or mouse ◆</p>
+        <button class="scratch-done-btn" id="scratchDoneBtn" onclick="burstChakra()">Understood ◆</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 9. VIDEO -->
+  <section class="section" id="videoSection">
+    <div class="section-inner">
+      <div class="sec-label rv">I couldn't just write this…</div>
+      <div class="video-outer rv d1">
+        <video id="mainVideo" controls playsinline muted></video>
+        <div class="video-caption-bar" id="videoCaption">Play when you're ready</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 10. LATE NIGHT -->
+  <section id="lateNightSection">
+    <div class="late-stars-layer" id="lateStars"></div>
+    <div class="late-content">
+      <span class="late-moon">🌙</span>
+      <p class="late-text" id="lateText">If I could, I'd pause time when I'm with you.</p>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 11. CORE LINE -->
+  <section id="coreSection">
+    <div class="core-bg-kanji">BELIEVE IT</div>
+    <div class="core-glow-ring"></div>
+    <div style="position:relative;z-index:1;text-align:center;">
+      <span class="core-symbol">🔥</span>
+      <p class="core-line" id="coreLine">Loving you feels like the most natural thing in the world.</p>
+    </div>
+  </section>
+
+  <div class="kunai-div"><div class="kunai-line"></div><div class="kunai-icon">◆</div><div class="kunai-line"></div></div>
+
+  <!-- 12. ENDING -->
+  <section id="endingSection">
+    <div class="ending-inner">
+      <span class="ending-symbol">💫</span>
+      <p class="ending-text" id="endingText">That's all… I just wanted you to know.</p>
+      <div class="ending-signoff" id="endingSignoff">Always yours</div>
+      <div class="ending-badge">MADE ON WISHERLY ◆</div>
+    </div>
+  </section>
+
+</div>
+
+<div class="page-foot"><a href="index.html">WISHERLY</a> ◆</div>
+
+<script>
+let D = {};
+
+async function loadPage() {
+  const params = new URLSearchParams(location.search);
+  const pageId = params.get('id');
+  if (pageId && window._db) {
+    try {
+      const snap = await window._db.collection('pages').doc(pageId).get();
+      if (snap.exists) {
+        D = snap.data();
+        if (D.photos && D.photos.length) {
+          const loaded = [];
+          for (const ref of D.photos) {
+            const m = ref.match && ref.match(/^__photo__(.+)$/);
+            if (m) { try { const ps = await window._db.collection('photos').doc(m[1]).get(); if(ps.exists) loaded.push(ps.data().data); } catch(e){} }
+            else { loaded.push(ref); }
+          }
+          D._photos = loaded;
+        }
+        if (D.audioChunks) setupMusic(pageId, D.audioChunks, D.audioMime);
+        if (D.videoChunks) setupVideo(pageId, D.videoChunks, D.videoMime);
+      }
+    } catch(e){ console.error(e); }
+  }
+  renderPage();
+}
+
+function initUnlock() {
+  const name = (D.name || '').trim();
+  if (name) document.getElementById('unlockNameDisplay').textContent = name;
+  if (!name) { showMain(); return; }
+  if (D.teaser) document.getElementById('unlockSub').textContent = D.teaser;
+  const btn = document.getElementById('unlockBtn');
+  if (D.unlockLabel) btn.textContent = D.unlockLabel;
+  btn.addEventListener('click', tryUnlock);
+  document.getElementById('unlockInput').addEventListener('keydown', e => { if(e.key==='Enter') tryUnlock(); });
+  if (new URLSearchParams(location.search).get('unlock') === 'none') { showMain(); return; }
+}
+
+function tryUnlock() {
+  const val = document.getElementById('unlockInput').value.trim().toLowerCase();
+  const name = (D.name || '').trim().toLowerCase();
+  if (val === name || val === '') {
+    document.getElementById('unlockScreen').style.animation = 'fadeOut .5s forwards';
+    setTimeout(showMain, 500);
+  } else {
+    document.getElementById('unlockError').style.display = 'block';
+    document.getElementById('unlockInput').style.animation = 'shake .3s';
+    setTimeout(() => document.getElementById('unlockInput').style.animation = '', 300);
+  }
+}
+
+function showMain() {
+  document.getElementById('unlockScreen').style.display = 'none';
+  document.getElementById('topbar').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'block';
+  setTimeout(initScratch, 400);
+  if (D.audioChunks) {
+    document.getElementById('musicPlayer').style.display = 'flex';
+    const audio = document.getElementById('bgMusic');
+    audio.volume = 0.45;
+    audio.play().then(() => { musicPlaying = true; document.getElementById('musicPlayer').textContent = '⏸'; document.getElementById('musicPlayer').classList.add('playing'); }).catch(()=>{});
+  }
+  burstChakra();
+  startTypewriter();
+  initReveal();
+}
+
+function renderPage() {
+  const name = D.name || 'You';
+  const sender = D.sender || 'Someone who loves you';
+
+  const DEF = {
+    entryLine: D.entryLine || `I've been meaning to tell you this for a while…`,
+    entryWhisper: D.entryWhisper || 'Hey you…',
+    firstNote: D.firstNote || D.message || `There's something about you that I can't quite put into words. But I'll try. You make everything around you better just by being in it. I notice it every single time.`,
+    littleThings: (D.littleThings||[]).length ? D.littleThings : [
+      `The way you smile when something genuinely makes you happy`,
+      `How you say my name — like it means something`,
+      `The little laugh you do when you're embarrassed`,
+      `The way your eyes light up about things you love`,
+      `How you make even silence feel comfortable`,
+      `That thing you do when you're thinking really hard`,
+    ],
+    meaning: (D.meaning||[]).length ? D.meaning : [
+      `You're my calm in the middle of everything`,
+      `You make even the ordinary days feel worth remembering`,
+      `With you, things just make sense`,
+    ],
+    thoughts: (D.thoughts||[]).length ? D.thoughts : [
+      `I think about you at the most random times`,
+      `You cross my mind more than you should`,
+      `Sometimes I just smile for no reason and it's because of you`,
+      `I wonder if you know how much I think about you`,
+    ],
+    miniNotes: (D.miniNotes||[]).length ? D.miniNotes : [
+      `You are my favourite notification 💌`,
+      `I choose you. Every single time. No hesitation.`,
+      `Being with you feels like exhaling after holding my breath all day`,
+      `You're the person I want to tell everything to`,
+      `I didn't know what "home" felt like until you`,
+      `Thank you for being exactly who you are`,
+    ],
+    comfort: D.comfort || `You feel like home. The kind I never want to leave.`,
+    secret: D.secret || D.gift || `I fall a little more in love with you every single day. And I never want that to stop.`,
+    lateNight: D.lateNight || `If I could, I'd pause time when I'm with you.`,
+    coreLine: D.coreLine || D.coreMessage || `Loving you feels like the most natural thing in the world.`,
+    ending: D.ending || D.closing || `That's all… I just wanted you to know.`,
+    signOff: D.signOff || D.signoff || `Always yours — ${sender}`,
+    photoCaption: D.photoCaption || `Us, always`,
+  };
+
+  document.getElementById('entryName').textContent = name;
+  document.getElementById('entryWhisper').textContent = DEF.entryWhisper;
+  document.getElementById('topbarTag').textContent = `For ${name} 💌`;
+  window._typewriterText = DEF.entryLine;
+
+  document.getElementById('firstNoteText').textContent = DEF.firstNote;
+
+  document.getElementById('kunaiList').innerHTML = DEF.littleThings.map((t,i) => `
+    <div class="kunai-item rv" style="transition-delay:${i*.06}s;">
+      <div class="kunai-bullet">◆</div>
+      <div class="kunai-text">${typeof t==='string'?t:(t.text||t)}</div>
+    </div>`).join('');
+
+  document.getElementById('meaningScroll').innerHTML = DEF.meaning.map(m => `
+    <div class="meaning-item rv">${typeof m==='string'?m:(m.text||m)}</div>`).join('');
+
+  const floatDelays = [0,.4,.8,1.2,1.6,2];
+  document.getElementById('thoughtsGrid').innerHTML = DEF.thoughts.map((t,i) => `
+    <div class="thought-tag" style="animation-delay:${floatDelays[i%floatDelays.length]}s;animation-duration:${2.5+i*.3}s;">${typeof t==='string'?t:(t.text||t)}</div>`).join('');
+
+  const stack = document.getElementById('notesStack');
+  const notes = DEF.miniNotes.slice(0,6);
+  stack.innerHTML = notes.map((note,i) => `
+    <div class="stack-card ${i===0?'top':''}" data-index="${i}">
+      <div class="card-stamp">NOTE ${String(i+1).padStart(2,'0')}</div>
+      ${typeof note==='string'?note:(note.text||note)}
+    </div>`).join('');
+  updateStackCounter(notes.length);
+  initStack(notes.length);
+
+  const photos = D._photos || D.photos || [];
+  if (photos.length) {
+    document.getElementById('photosCaption').textContent = DEF.photoCaption;
+    const doubled = [...photos, ...photos];
+    document.getElementById('filmTrack').innerHTML = doubled.map((src,i) => `
+      <div class="film-frame">
+        <div class="film-sprocket"></div>
+        <img src="${src}" alt="Memory ${i+1}" loading="lazy">
+        <div class="film-sprocket bottom"></div>
+        <div class="film-label">◆ ${String((i%photos.length)+1).padStart(2,'0')}</div>
+      </div>`).join('');
+  } else { document.getElementById('photosSection').style.display='none'; }
+
+  document.getElementById('comfortText').textContent = DEF.comfort;
+  document.getElementById('secretText').textContent = DEF.secret;
+  if (!D.videoChunks) document.getElementById('videoSection').style.display='none';
+  document.getElementById('lateText').textContent = DEF.lateNight;
+  document.getElementById('coreLine').textContent = DEF.coreLine;
+  document.getElementById('endingText').textContent = DEF.ending;
+  document.getElementById('endingSignoff').textContent = DEF.signOff;
+
+  initUnlock();
+}
+
+/* TYPEWRITER */
+function startTypewriter() {
+  const el = document.getElementById('entryTypewriter');
+  const text = window._typewriterText || "I've been meaning to tell you this…";
+  let i = 0; el.textContent = '';
+  const cursor = document.createElement('span');
+  cursor.textContent = '|';cursor.style.cssText='animation:blink .7s ease infinite;color:#FF6B00;';
+  el.appendChild(cursor);
+  const style = document.createElement('style');
+  style.textContent='@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}';
+  document.head.appendChild(style);
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      if (i < text.length) { el.insertBefore(document.createTextNode(text[i]), cursor); i++; }
+      else { clearInterval(interval); setTimeout(() => cursor.remove(), 1000); }
+    }, 45);
+  }, 800);
+}
+
+/* NOTES STACK */
+let stackCards=[], currentTop=0;
+function initStack(total) {
+  stackCards = Array.from(document.querySelectorAll('.stack-card'));
+  stackCards.forEach(card => {
+    card.addEventListener('click', () => {
+      if (!card.classList.contains('top')) return;
+      card.classList.add('fly-away');
+      setTimeout(() => {
+        card.classList.remove('fly-away','top'); card.style.zIndex='0';
+        currentTop = (currentTop+1) % stackCards.length;
+        stackCards[currentTop].classList.add('top');
+        stackCards.forEach((c,idx) => {
+          if (!c.classList.contains('top')) {
+            const offset=((idx-currentTop+stackCards.length)%stackCards.length);
+            c.style.transform=`rotate(${offset%2===0?2:-2}deg) translateY(${offset*6}px)`;
+            c.style.zIndex=stackCards.length-offset;
+          }
+        });
+        updateStackCounter(total);
+      }, 450);
+    });
+  });
+}
+function updateStackCounter(total) {
+  const remaining = total - currentTop;
+  document.getElementById('stackCounter').textContent = remaining > 0
+    ? `${remaining} NOTE${remaining>1?'S':''} REMAINING — TAP TO READ`
+    : '◆ ALL NOTES READ';
+}
+
+/* SCRATCH */
+function initScratch() {
+  const canvas=document.getElementById('scratchCanvas');
+  const container=document.getElementById('scratchContainer');
+  const w=container.offsetWidth, h=container.offsetHeight;
+  if(!w||!h)return;
+  canvas.width=w; canvas.height=h;
+  const ctx=canvas.getContext('2d');
+  const grad=ctx.createLinearGradient(0,0,w,h);
+  grad.addColorStop(0,'#1F0A00'); grad.addColorStop(.5,'#FF6B00'); grad.addColorStop(1,'#1F0A00');
+  ctx.fillStyle=grad; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle='rgba(255,215,0,.15)';
+  for(let i=0;i<10;i++){ctx.font=`${12+Math.random()*14}px serif`;ctx.fillText('◆',Math.random()*w,Math.random()*h);}
+  ctx.fillStyle='rgba(255,250,230,.5)';ctx.font='700 14px "Bebas Neue",cursive';ctx.textAlign='center';ctx.letterSpacing='4px';
+  ctx.fillText('◆  SCRATCH TO REVEAL  ◆',w/2,h/2);
+  let scratched=0; ctx.globalCompositeOperation='destination-out';
+  function getPos(e){const r=canvas.getBoundingClientRect();const sx=canvas.width/r.width,sy=canvas.height/r.height;const cx=e.touches?e.touches[0].clientX:e.clientX;const cy=e.touches?e.touches[0].clientY:e.clientY;return{x:(cx-r.left)*sx,y:(cy-r.top)*sy};}
+  function scratch(x,y){ctx.beginPath();ctx.arc(x,y,24,0,Math.PI*2);ctx.fill();scratched+=Math.PI*24*24;if(scratched/(w*h)>.55){canvas.style.transition='opacity .5s';canvas.style.opacity='0';document.getElementById('scratchDoneBtn').style.display='inline-block';}}
+  let sc=false;
+  canvas.addEventListener('mousedown',e=>{sc=true;const p=getPos(e);scratch(p.x,p.y);});
+  canvas.addEventListener('mousemove',e=>{if(sc){const p=getPos(e);scratch(p.x,p.y);}});
+  canvas.addEventListener('mouseup',()=>sc=false);
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();sc=true;const p=getPos(e);scratch(p.x,p.y);},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(sc){const p=getPos(e);scratch(p.x,p.y);}},{passive:false});
+  canvas.addEventListener('touchend',()=>sc=false);
+}
+
+/* CHAKRA BURST */
+function burstChakra() {
+  const colors=['#FF6B00','#FF8C00','#FFD700','#FF3C00','#FFFAF0'];
+  for(let i=0;i<50;i++){
+    const el=document.createElement('div');el.className='chakra-burst';
+    const angle=Math.random()*Math.PI*2, dist=80+Math.random()*150;
+    el.style.cssText=`left:50vw;top:50vh;width:${3+Math.random()*5}px;height:${3+Math.random()*5}px;border-radius:${Math.random()>.5?'50%':'2px'};background:${colors[Math.floor(Math.random()*colors.length)]};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;animation-duration:${.6+Math.random()*.8}s;animation-delay:${Math.random()*.3}s;`;
+    document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());
+  }
+}
+
+/* MUSIC */
+async function setupMusic(pageId, total, mime) {
+  try {
+    let b64=''; for(let i=0;i<total;i++){const s=await window._db.collection('audio').doc(`${pageId}_${i}`).get();if(s.exists)b64+=s.data().data;}
+    document.getElementById('bgMusic').src=URL.createObjectURL(new Blob([Uint8Array.from(atob(b64),c=>c.charCodeAt(0))],{type:mime||'audio/mpeg'}));
+    document.getElementById('musicPlayer').style.display='flex';
+  } catch(e){}
+}
+let musicPlaying=false;
+function toggleMusic(){const a=document.getElementById('bgMusic'),b=document.getElementById('musicPlayer');if(musicPlaying){a.pause();b.textContent='🎵';b.classList.remove('playing');musicPlaying=false;}else{a.play();b.textContent='⏸';b.classList.add('playing');musicPlaying=true;}}
+
+/* VIDEO */
+async function setupVideo(pageId, total, mime) {
+  try {
+    let b64=''; for(let i=0;i<total;i++){const s=await window._db.collection('videos').doc(`${pageId}_${i}`).get();if(s.exists)b64+=s.data().data;}
+    document.getElementById('mainVideo').src=URL.createObjectURL(new Blob([Uint8Array.from(atob(b64),c=>c.charCodeAt(0))],{type:mime||'video/mp4'}));
+    if(D.videoCaption)document.getElementById('videoCaption').textContent=D.videoCaption;
+  } catch(e){document.getElementById('videoSection').style.display='none';}
+}
+
+/* VIDEO AUTOPLAY ON SCROLL */
+function initVideoAutoplay() {
+  const video=document.getElementById('mainVideo');
+  if(!video||!D.videoChunks)return;
+  const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){video.play().catch(()=>{});}else{video.pause();}});},{threshold:.5});
+  io.observe(video);
+}
+
+/* SPEED LINES */
+function initSpeedLines() {
+  const layer=document.getElementById('speedLines');
+  for(let i=0;i<8;i++){
+    const el=document.createElement('div');el.className='speed-line';
+    el.style.cssText=`top:${10+Math.random()*80}%;width:${60+Math.random()*40}%;animation-duration:${3+Math.random()*4}s;animation-delay:-${Math.random()*5}s;`;
+    layer.appendChild(el);
+  }
+}
+
+/* CHAKRA PARTICLES */
+function initChakraParticles() {
+  const layer=document.getElementById('chakraLayer');
+  for(let i=0;i<15;i++){
+    const el=document.createElement('div');el.className='chakra-dot';
+    const sz=2+Math.random()*4;
+    el.style.cssText=`width:${sz}px;height:${sz}px;background:${Math.random()>.5?'rgba(255,107,0,.6)':'rgba(255,215,0,.5)'};left:${Math.random()*100}vw;animation-duration:${10+Math.random()*15}s;animation-delay:-${Math.random()*15}s;`;
+    layer.appendChild(el);
+  }
+  // Late night stars
+  const ln=document.getElementById('lateStars');
+  for(let i=0;i<50;i++){
+    const s=document.createElement('div');s.className='late-star-dot';
+    const sz=1+Math.random()*2;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${1.5+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
+    ln.appendChild(s);
+  }
+}
+
+/* UNLOCK CANVAS — rasengan spiral */
+function initUnlockCanvas() {
+  const canvas=document.getElementById('unlockCanvas');
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const ctx=canvas.getContext('2d');
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const cx=canvas.width/2, cy=canvas.height/2;
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(t*.005);
+    for(let i=0;i<6;i++){
+      const angle=(i/6)*Math.PI*2;
+      const x=Math.cos(angle)*180, y=Math.sin(angle)*180;
+      ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,107,0,${.1+.1*Math.sin(t*.02+i)})`;ctx.fill();
+    }
+    ctx.restore();
+    t++; requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function initReveal() {
+  const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vi');});},{threshold:.1});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+  initVideoAutoplay();
+}
+
+const style=document.createElement('style');
+style.textContent='@keyframes fadeOut{0%{opacity:1;}100%{opacity:0;pointer-events:none;}}@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}';
+document.head.appendChild(style);
+
+initSpeedLines();
+initChakraParticles();
+initUnlockCanvas();
+loadPage();
+</script>
+</body>
+</html>
