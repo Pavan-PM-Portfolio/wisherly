@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-
-
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="%2307122A"/><polyline points="2,16 8,16 11,6 14,26 17,10 20,22 23,16 30,16" stroke="%232563EB" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" fill="none"/></svg>">
-  <link rel="icon" type="image/png" href="fav.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="fav.png">
+  <link rel="apple-touch-icon" href="fav.png">
+  <rect width="32" height="32" rx="8" fill="%2307122A"/><polyline points="2,16 8,16 11,6 14,26 17,10 20,22 23,16 30,16" stroke="%232563EB" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" fill="none"/></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wisherly — Create Digital Surprise Pages for Birthdays, Love & Special Moments</title>
 <meta name="description" content="Create beautiful digital surprise pages for birthdays, anniversaries, love letters and special moments.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,9 +118,9 @@ section{position:relative;z-index:2;}
   min-height:46px;
 }
 #topBanner.hidden{transform:translateY(-100%);}
-.banner-logo{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-right:8px;padding-right:16px;border-right:1px solid rgba(255,255,255,.1);}
-.banner-logo-text{font-family:'Georgia','Times New Roman',serif;font-style:italic;font-size:15px;font-weight:400;color:white;letter-spacing:-.2px;}
-.banner-dot{width:6px;height:6px;border-radius:50%;background:#2563EB;animation:bdot 1.8s ease infinite;flex-shrink:0;}
+.banner-shimmer{position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(96,165,250,.08) 40%,rgba(96,165,250,.15) 50%,rgba(96,165,250,.08) 60%,transparent 100%);animation:bshimmer 3s ease-in-out infinite;pointer-events:none;}
+@keyframes bshimmer{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+.banner-dot{width:6px;height:6px;border-radius:50%;background:#60A5FA;animation:bdot 1.8s ease infinite;flex-shrink:0;box-shadow:0 0 6px rgba(96,165,250,.6);}
 @keyframes bdot{0%,100%{opacity:1;}50%{opacity:.25;}}
 .banner-text{font-family:var(--fs);font-size:13px;font-weight:400;color:rgba(255,255,255,.8);letter-spacing:.01em;}
 .banner-text strong{color:white;font-weight:600;}
@@ -793,7 +792,6 @@ section{position:relative;z-index:2;}
 @media(max-width:768px){
   /* Nav */
   #topBanner{padding:10px 40px 10px 14px;gap:8px;justify-content:flex-start;min-height:auto;}
-  .banner-logo{display:none!important;}
   .banner-text{font-size:12px;}
   .banner-sep{display:none;}
   .banner-link{font-size:12px;}
@@ -861,12 +859,9 @@ section{position:relative;z-index:2;}
 <!-- NAV -->
 <!-- BANNER -->
 <div id="topBanner">
-  <div class="banner-logo">
-    <svg width="32" height="14" viewBox="0 0 32 14" fill="none"><polyline points="0,7 5,7 7,2 10,12 12,4 14,10 16,7 32,7" stroke="#60A5FA" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg>
-    <span class="banner-logo-text">Wisherly</span>
-  </div>
+  <span class="banner-shimmer"></span>
   <span class="banner-dot"></span>
-  <span class="banner-text"><strong>Free during launch</strong> — create your first surprise page today</span>
+  <span class="banner-text"><strong>✦ Wisherly is free during launch</strong> — create your first surprise page today</span>
   <span class="banner-sep">·</span>
   <a href="occasion.html" class="banner-link">Start free →</a>
   <button class="banner-close" onclick="closeBanner()" aria-label="Close">×</button>
