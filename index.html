@@ -1820,81 +1820,54 @@ document.getElementById('ptog').addEventListener('click',function(){
 
 <script>
 (function(){
-  function animateCount(el, target, duration) {
-    var start = 0;
-    var startTime = null;
-    function step(ts) {
-      if (!startTime) startTime = ts;
-      var progress = Math.min((ts - startTime) / duration, 1);
-      var ease = 1 - Math.pow(1 - progress, 3);
-      var current = Math.floor(ease * target);
-      el.textContent = current.toLocaleString() + '+';
-      if (progress < 1) requestAnimationFrame(step);
-      else el.textContent = target.toLocaleString() + '+';
-    }
-    requestAnimationFrame(step);
-  }
-
-  function updateCounters(count) {
-    var lc = document.getElementById('liveCounter');
-    var bc = document.getElementById('bannerCount');
-    if (lc) animateCount(lc, count, 1200);
-    if (bc) {
-      if (count >= 1000) {
-        bc.textContent = (count >= 1000 ? Math.floor(count/100)*100 : count).toLocaleString() + '+';
-      } else {
-        bc.textContent = count + '+';
-      }
-    }
-    // Also update any other counters on the page
-    // Update all counters with real data
-    var metEl = document.getElementById('metPagesCount');
-    if (metEl) {
-      metEl.setAttribute('data-t', count);
-      metEl.textContent = count.toLocaleString();
-    }
-    // Footer pages count
-    var footerPages = document.getElementById('footerPagesCount');
-    if (footerPages) footerPages.textContent = count.toLocaleString();
-    // Memories shared = pageCount x 5 (avg memories per page)
+  function setAllCounters(count) {
     var memories = count * 5;
-    var heroMemEl = document.getElementById('heroMemoriesCount');
-    if (heroMemEl) heroMemEl.textContent = memories.toLocaleString();
-    var metMemEl = document.getElementById('metMemoriesCount');
-    if (metMemEl) {
-      metMemEl.setAttribute('data-t', memories);
-      metMemEl.textContent = memories.toLocaleString();
+    var els = {
+      'liveCounter':     function(el){ el.textContent = count.toLocaleString(); },
+      'bannerCount':     function(el){ el.textContent = count.toLocaleString() + '+'; },
+      'metPagesCount':   function(el){ el.textContent = count.toLocaleString(); el.setAttribute('data-t', count); },
+      'heroMemoriesCount': function(el){ el.textContent = memories.toLocaleString(); },
+      'metMemoriesCount':  function(el){ el.textContent = memories.toLocaleString(); el.setAttribute('data-t', memories); },
+      'footerPagesCount':  function(el){ el.textContent = count.toLocaleString(); },
+      'footerMemoriesCount': function(el){ el.textContent = memories.toLocaleString(); }
+    };
+    Object.keys(els).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) els[id](el);
+    });
+  }
+
+  function initCounter() {
+    if (!window._db) {
+      console.warn('Wisherly: _db not ready, retrying in 500ms');
+      setTimeout(initCounter, 500);
+      return;
     }
-    var footerMemEl2 = document.getElementById('footerMemoriesCount');
-    if (footerMemEl2) footerMemEl2.textContent = memories.toLocaleString();
-  }
-
-  function timeAgo(ts) {
-    var diff = Math.floor((Date.now() - ts) / 1000);
-    if (diff < 60) return diff + 's ago';
-    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-    return Math.floor(diff/86400) + 'd ago';
-  }
-
-  // Try to read real count from Firestore
-  if (window._db) {
-    // Listen to stats doc for real-time updates
     window._db.collection('stats').doc('global')
-      .onSnapshot(function(doc) {
-        if (doc.exists) {
-          var data = doc.data();
-          var count = data.pageCount || 0;
-          updateCounters(count);
-          var lcEl = document.getElementById('lastCreated');
-          if (lcEl && data.lastCreatedAt) {
-            lcEl.textContent = 'Last page: ' + timeAgo(data.lastCreatedAt);
+      .onSnapshot(
+        function(doc) {
+          if (doc && doc.exists) {
+            var data = doc.data();
+            var count = (data && data.pageCount) ? data.pageCount : 0;
+            setAllCounters(count);
+          } else {
+            // doc doesn't exist yet — show 0
+            setAllCounters(0);
           }
+        },
+        function(err) {
+          console.error('Wisherly counter error:', err.code, err.message);
+          // Firestore rules may be blocking — show 0
+          setAllCounters(0);
         }
-      }, function(err) {
-        // Firestore error — keep default display
-        console.log('Counter:', err.message);
-      });
+      );
+  }
+
+  // Wait for DOM + Firebase to be ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCounter);
+  } else {
+    initCounter();
   }
 })();
 </script>
