@@ -148,7 +148,7 @@ const viewLink = `${base}/${occasion}_view_${gender}.html?id=${pageId}`;
 const contribLink = `${base}/contribute.html?id=${pageId}&occasion=${occasion}`;
 
 // Populate
-document.getElementById('recipientName').textContent = name;
+document.getElementById('recipientName').textContent = decodeURIComponent(name);
 document.getElementById('viewLinkText').textContent = viewLink;
 document.getElementById('contribLinkText').textContent = contribLink;
 document.getElementById('previewBtn').href = viewLink + '&unlock=none';
@@ -175,8 +175,7 @@ if (CONTRIB_OCCASIONS.includes(occasion)) {
   };
   document.querySelector('#contribLinkCard .link-card-title').textContent = contribTitles[occasion] || contribTitles.farewell;
   document.getElementById('contribDesc').textContent = contribDescs[occasion] || contribDescs.farewell;
-  document.getElementById('successSub').textContent = `Share both links below — one for ${name}, one for contributors.`;
-  document.getElementById('confettiIcon').textContent = '🍃';
+  document.getElementById('successSub').textContent = `Share both links below — one for ${decodeURIComponent(name)}, one for contributors.`;
 }
 
 // Occasion-specific icon
@@ -189,19 +188,39 @@ const contribLinkVal = contribLink;
 
 function copyLink(type, btnId) {
   const text = type === 'viewLink' ? viewLinkVal : contribLinkVal;
-  navigator.clipboard.writeText(text).catch(() => {
-    const ta = document.createElement('textarea'); ta.value = text;
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-  });
   const btn = document.getElementById(btnId);
-  btn.textContent = 'Copied!'; btn.classList.add('copied');
-  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+
+  // Try modern clipboard API first
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showCopied(btn);
+    }).catch(() => fallbackCopy(text, btn));
+  } else {
+    fallbackCopy(text, btn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  // Create visible textarea, select, copy
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;opacity:1;z-index:9999;font-size:14px;';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); showCopied(btn); } catch(e) { btn.textContent = 'Copy manually'; }
+  document.body.removeChild(ta);
+}
+
+function showCopied(btn) {
+  btn.textContent = 'Copied! ✓'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2500);
 }
 
 // WHATSAPP
 function shareWA(type) {
   let msg = '';
-  const recipName = name;
+  const recipName = decodeURIComponent(name);
   if (type === 'view') {
     msg = `Hey ${recipName}! 🎉 Someone made something special just for you on Wisherly. Open it here: ${viewLinkVal}`;
   } else {
@@ -216,8 +235,16 @@ function shareWA(type) {
     msg = contribMsgs[occasion] || contribMsgs.farewell;
   }
   const encoded = encodeURIComponent(msg);
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  window.open(isMobile ? `whatsapp://send?text=${encoded}` : `https://web.whatsapp.com/send?text=${encoded}`, '_blank');
+  const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  const url = isMobile
+    ? `whatsapp://send?text=${encoded}`
+    : `https://web.whatsapp.com/send?text=${encoded}`;
+  // Use location.href for mobile deep links, window.open for desktop
+  if (isMobile) {
+    location.href = url;
+  } else {
+    window.open(url, '_blank');
+  }
 }
 
 // CONFETTI BURST
