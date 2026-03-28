@@ -364,18 +364,21 @@ video{width:100%;display:block;max-height:380px;object-fit:cover;}
 <div id="starLayer"></div>
 
 <!-- UNLOCK -->
-<div id="unlockScreen">
-  <div class="unlock-bg"></div>
-  <div class="unlock-stars-bg" id="unlockStarsBg"></div>
-  <div class="mission-tape">TOP SECRET — FOR YOUR EYES ONLY</div>
-  <div class="unlock-content">
-    <div class="classified-badge"><span class="c-dot"></span>Classified</div>
-    <h1 class="unlock-h1">A love note<br>for <em>you</em></h1>
-    <p class="unlock-sub" id="unlockSub">Someone made this just for you…</p>
-    <input class="unlock-input" id="unlockInput" type="text" placeholder="Type your name…" autocomplete="off" onkeydown="if(event.key==='Enter')tryUnlock()">
-    <button class="unlock-btn" id="unlockBtn" onclick="tryUnlock()">Open with love 💌</button>
-    <p class="unlock-error" id="unlockError">That doesn't seem right — try again 💌</p>
-    <div class="anya-stars" id="anyaStars">⭐ ⭐ ⭐</div>
+<div id="unlockScreen" style="position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;background:linear-gradient(160deg,#1a0a0a 0%,#3d0f0f 40%,#7a1a1a 70%,#c1121f 100%);">
+  <div id="unlockStarsBg" style="position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;"></div>
+  <div style="position:absolute;top:28px;left:50%;transform:translateX(-50%) rotate(-1.5deg);background:#F4A300;padding:6px 32px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:900;letter-spacing:.25em;text-transform:uppercase;color:#1a0a0a;pointer-events:none;z-index:1;">TOP SECRET — FOR YOUR EYES ONLY</div>
+  <div style="position:relative;z-index:2;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(230,57,70,.2);border:2px solid rgba(230,57,70,.5);border-radius:4px;padding:6px 20px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:900;letter-spacing:.25em;text-transform:uppercase;color:#E63946;margin-bottom:24px;">● CLASSIFIED</div>
+    <h1 style="font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(44px,9vw,90px);font-weight:700;color:white;text-shadow:0 0 60px rgba(230,57,70,.6);margin-bottom:16px;line-height:.95;">A love note<br>for <em style="color:#F4A300;">you</em></h1>
+    <p id="unlockSub" style="font-family:'Caveat',cursive;font-size:20px;color:rgba(255,255,255,.7);max-width:380px;margin:0 auto 32px;line-height:1.6;">Someone made this just for you…</p>
+    <input id="unlockInput" type="text" placeholder="Type your name…" autocomplete="off"
+      onclick="this.focus()"
+      onkeydown="if(event.key==='Enter')tryUnlock()"
+      style="display:block;margin:0 auto 14px;padding:14px 28px;width:270px;border:2px solid rgba(230,57,70,.5);border-radius:8px;background:rgba(255,255,255,.1);font-family:'Caveat',cursive;font-size:20px;color:white;text-align:center;outline:none;-webkit-appearance:none;">
+    <button onclick="tryUnlock()"
+      style="display:block;margin:0 auto;padding:14px 44px;border-radius:8px;border:2px solid #F4A300;background:linear-gradient(135deg,#E63946,#C1121F);color:white;font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:.06em;box-shadow:0 8px 32px rgba(193,18,31,.4);">Open with love 💌</button>
+    <p id="unlockError" style="color:#F4A300;font-size:13px;font-weight:700;margin-top:12px;display:none;">That doesn't seem right — try again 💌</p>
+    <div style="margin-top:24px;font-size:22px;">⭐ ⭐ ⭐</div>
   </div>
 </div>
 
