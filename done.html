@@ -136,126 +136,139 @@ nav{position:fixed;top:0;left:0;right:0;height:72px;padding:0 40px;display:flex;
 </div>
 
 <script>
-const params = new URLSearchParams(location.search);
-const pageId = params.get('id') || '';
-const occasion = params.get('occasion') || 'birthday';
-const gender = params.get('gender') || 'her';
-const name = params.get('name') || 'them';
+// All vars — plain strings, no template literals at top level
+var params = new URLSearchParams(location.search);
+var pageId = params.get('id') || '';
+var occasion = params.get('occasion') || 'birthday';
+var gender = params.get('gender') || 'her';
+var rawName = params.get('name') || 'them';
+var recipName = '';
+try { recipName = decodeURIComponent(rawName); } catch(e) { recipName = rawName; }
 
-// Build links
-const base = location.origin;
-const viewLink = `${base}/${occasion}_view_${gender}.html?id=${pageId}`;
-const contribLink = `${base}/contribute.html?id=${pageId}&occasion=${occasion}`;
+var base = location.origin;
+var viewLinkVal = base + '/' + occasion + '_view_' + gender + '.html?id=' + pageId;
+var contribLinkVal = base + '/contribute.html?id=' + pageId + '&occasion=' + occasion;
 
-// Populate
-document.getElementById('recipientName').textContent = decodeURIComponent(name);
-document.getElementById('viewLinkText').textContent = viewLink;
-document.getElementById('contribLinkText').textContent = contribLink;
-document.getElementById('previewBtn').href = viewLink + '&unlock=none';
+// Populate page
+try { document.getElementById('recipientName').textContent = recipName; } catch(e){}
+try { document.getElementById('viewLinkText').textContent = viewLinkVal; } catch(e){}
+try { document.getElementById('contribLinkText').textContent = contribLinkVal; } catch(e){}
+try { document.getElementById('previewBtn').href = viewLinkVal + '&unlock=none'; } catch(e){}
 
-// Show contrib card for relevant occasions
-const CONTRIB_OCCASIONS = ['birthday','anniversary','farewell','friendship','graduation','thankyou'];
-if (CONTRIB_OCCASIONS.includes(occasion)) {
-  document.getElementById('contribLinkCard').style.display = 'block';
-  const contribTitles = {
+// Contrib card — show for relevant occasions
+var CONTRIB_OCCASIONS = ['birthday','anniversary','farewell','friendship','graduation','thankyou'];
+if (CONTRIB_OCCASIONS.indexOf(occasion) !== -1) {
+  try { document.getElementById('contribLinkCard').style.display = 'block'; } catch(e){}
+
+  var contribTitles = {
     birthday: 'Collect birthday wishes',
     anniversary: 'Collect messages of love',
     farewell: 'Share with contributors',
     friendship: 'Collect friendship messages',
     graduation: 'Collect congratulations',
-    thankyou: 'Collect thank you messages',
+    thankyou: 'Collect thank you messages'
   };
-  const contribDescs = {
+  var contribDescs = {
     birthday: 'Let up to 5 friends add birthday wishes + photos',
     anniversary: 'Let up to 5 people send their love + photos',
-    farewell: 'Let up to 5 friends add their farewell messages + photos',
+    farewell: 'Let up to 5 friends add farewell messages + photos',
     friendship: 'Let up to 5 friends share memories + photos',
     graduation: 'Let up to 5 people send congratulations + photos',
-    thankyou: 'Let up to 5 people add their thank you messages + photos',
+    thankyou: 'Let up to 5 people add thank you messages + photos'
   };
-  document.querySelector('#contribLinkCard .link-card-title').textContent = contribTitles[occasion] || contribTitles.farewell;
-  document.getElementById('contribDesc').textContent = contribDescs[occasion] || contribDescs.farewell;
-  document.getElementById('successSub').textContent = `Share both links below — one for ${decodeURIComponent(name)}, one for contributors.`;
+
+  try { document.querySelector('#contribLinkCard .link-card-title').textContent = contribTitles[occasion] || 'Share with contributors'; } catch(e){}
+  try { document.getElementById('contribDesc').textContent = contribDescs[occasion] || 'Let up to 5 friends add their messages + photos'; } catch(e){}
+  try { document.getElementById('successSub').textContent = 'Share both links below — one for ' + recipName + ', one for contributors.'; } catch(e){}
 }
 
-// Occasion-specific icon
-const icons = { birthday:'🎂', anniversary:'💍', apology:'🕊️', love:'💌', farewell:'🍃', friendship:'💛', graduation:'🎓', thankyou:'🙏' };
-if (icons[occasion]) document.getElementById('confettiIcon').textContent = icons[occasion];
+// Occasion icon
+var icons = { birthday:'🎂', anniversary:'💍', apology:'🕊️', love:'💌', farewell:'🍃', friendship:'💛', graduation:'🎓', thankyou:'🙏' };
+try { if (icons[occasion]) document.getElementById('confettiIcon').textContent = icons[occasion]; } catch(e){}
 
-// COPY
-const viewLinkVal = viewLink;
-const contribLinkVal = contribLink;
-
+// ── COPY ──
 function copyLink(type, btnId) {
-  const text = type === 'viewLink' ? viewLinkVal : contribLinkVal;
-  const btn = document.getElementById(btnId);
+  var text = (type === 'viewLink') ? viewLinkVal : contribLinkVal;
+  var btn = document.getElementById(btnId);
+  if (!btn) return;
 
-  // Try modern clipboard API first
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(() => {
-      showCopied(btn);
-    }).catch(() => fallbackCopy(text, btn));
+  function showCopied() {
+    btn.textContent = 'Copied! ✓';
+    btn.style.background = '#10B981';
+    btn.style.color = 'white';
+    btn.style.borderColor = '#10B981';
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 2500);
+  }
+
+  // Try clipboard API
+  if (window.navigator && navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopied).catch(function() { fallback(text, showCopied); });
   } else {
-    fallbackCopy(text, btn);
+    fallback(text, showCopied);
   }
 }
 
-function fallbackCopy(text, btn) {
-  // Create visible textarea, select, copy
-  const ta = document.createElement('textarea');
+function fallback(text, onSuccess) {
+  var ta = document.createElement('textarea');
   ta.value = text;
-  ta.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;opacity:1;z-index:9999;font-size:14px;';
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;width:2em;height:2em;padding:0;border:none;outline:none;box-shadow:none;background:transparent;';
   document.body.appendChild(ta);
   ta.focus();
   ta.select();
-  try { document.execCommand('copy'); showCopied(btn); } catch(e) { btn.textContent = 'Copy manually'; }
+  try {
+    var ok = document.execCommand('copy');
+    if (ok && onSuccess) onSuccess();
+  } catch(e) {}
   document.body.removeChild(ta);
 }
 
-function showCopied(btn) {
-  btn.textContent = 'Copied! ✓'; btn.classList.add('copied');
-  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2500);
-}
-
-// WHATSAPP
+// ── WHATSAPP ──
 function shareWA(type) {
-  var rn = decodeURIComponent(name);
   var msg = '';
   if (type === 'view') {
-    msg = 'Hey ' + rn + '! Someone made something special just for you on Wisherly. Open it here: ' + viewLinkVal;
+    msg = 'Hey ' + recipName + '! Someone made something special just for you on Wisherly. Open it here: ' + viewLinkVal;
   } else {
-    var contribBase = 'Add your message + photo here (only 5 spots!): ' + contribLinkVal;
     var msgs = {
-      birthday:    'Hey! We are making a surprise birthday page for ' + rn + ' on Wisherly. Add your birthday wish + photo here (only 5 spots!): ' + contribLinkVal,
-      anniversary: 'Hey! We are making an anniversary surprise for ' + rn + ' on Wisherly. Add your message of love here (only 5 spots!): ' + contribLinkVal,
-      farewell:    'Hey! ' + rn + ' is leaving and we are making a farewell page on Wisherly. ' + contribBase,
-      friendship:  'Hey! We are celebrating ' + rn + ' on Wisherly. Share a memory or message here (only 5 spots!): ' + contribLinkVal,
-      graduation:  'Hey! We are making a graduation surprise for ' + rn + ' on Wisherly. Add your congratulations here (only 5 spots!): ' + contribLinkVal,
-      thankyou:    'Hey! We are making a thank you page for ' + rn + ' on Wisherly. ' + contribBase,
+      birthday:    'Hey! We are making a surprise birthday page for ' + recipName + ' on Wisherly. Add your birthday wish + photo here (only 5 spots!): ' + contribLinkVal,
+      anniversary: 'Hey! We are making an anniversary surprise for ' + recipName + ' on Wisherly. Add your message of love (only 5 spots!): ' + contribLinkVal,
+      farewell:    'Hey! ' + recipName + ' is leaving and we made a farewell page on Wisherly. Add your message + photo (only 5 spots!): ' + contribLinkVal,
+      friendship:  'Hey! We are celebrating ' + recipName + ' on Wisherly. Share a memory or message (only 5 spots!): ' + contribLinkVal,
+      graduation:  'Hey! We are making a graduation surprise for ' + recipName + ' on Wisherly. Add your congratulations (only 5 spots!): ' + contribLinkVal,
+      thankyou:    'Hey! We are making a thank you page for ' + recipName + ' on Wisherly. Add your message (only 5 spots!): ' + contribLinkVal
     };
     msg = msgs[occasion] || msgs.farewell;
   }
+
   var encoded = encodeURIComponent(msg);
   var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   var url = isMobile
     ? 'whatsapp://send?text=' + encoded
     : 'https://web.whatsapp.com/send?text=' + encoded;
+
   if (isMobile) {
     window.location.href = url;
   } else {
-    var win = window.open(url, '_blank');
-    if (!win) { window.location.href = url; }
+    var w = window.open(url, '_blank');
+    if (!w) window.location.href = url;
   }
 }
 
-// CONFETTI BURST
+// ── CONFETTI ──
 function burstConfetti() {
-  const shapes = ['🎉','✦','⭐','💕','🌟'];
-  for(let i=0;i<40;i++){
-    const el=document.createElement('div');el.className='confetti-particle';
-    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;font-size:${14+Math.random()*12}px;animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s;`;
-    el.textContent=shapes[Math.floor(Math.random()*shapes.length)];
-    document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());
+  var shapes = ['🎉','✦','⭐','💕','🌟'];
+  for (var i = 0; i < 40; i++) {
+    var el = document.createElement('div');
+    el.className = 'confetti-particle';
+    el.style.cssText = 'position:fixed;left:' + (Math.random()*100) + 'vw;top:-20px;font-size:' + (14+Math.random()*12) + 'px;animation:confetti-fall ' + (1.5+Math.random()*2) + 's linear ' + (Math.random()*.8) + 's forwards;pointer-events:none;';
+    el.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+    document.body.appendChild(el);
+    el.addEventListener('animationend', function() { if(this.parentNode) this.parentNode.removeChild(this); });
   }
 }
 burstConfetti();
