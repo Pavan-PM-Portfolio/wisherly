@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="fav.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wisherly — A Friendship ✦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  var _cfg={apiKey:"AIzaSyDdcxg-L8xuypJC1Rs_O2BPgly_JNH2woU",authDomain:"wisherly-d07d7.firebaseapp.com",projectId:"wisherly-d07d7",storageBucket:"wisherly-d07d7.firebasestorage.app",messagingSenderId:"919116839261",appId:"1:919116839261:web:147d6b5924f3cbe35050b4"};
+  if(!firebase.apps.length){firebase.initializeApp(_cfg);}
+  window._db=firebase.firestore();
+})();
+</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --cream:#FDFAF4;--warm:#FFF8EE;--blush:#FFF0F3;--petal:#FFE4EC;
+  --rose:#D4688A;--rose2:#B5496E;--sage:#7AAF7A;--sage2:#5A9160;
+  --lavender:#9B8EC4;--gold:#C8A84B;
+  --ink:#2E1A2E;--muted:#7A5070;--muted2:#B090A8;
+  --border:rgba(180,100,130,.12);--shadow:rgba(46,26,46,.07);
+  --fd:'Playfair Display',serif;--fs:'Nunito',sans-serif;--fh:'Caveat',cursive;
+}
+body{background:var(--cream);color:var(--ink);font-family:var(--fs);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 10% 10%,rgba(154,142,196,.07),transparent 60%),
+             radial-gradient(ellipse 50% 40% at 90% 90%,rgba(212,104,138,.07),transparent 60%);}
+
+/* PETAL LAYER */
+#petalLayer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.petal{position:absolute;opacity:0;animation:petal-fall linear infinite;}
+@keyframes petal-fall{0%{transform:translateY(-20px) rotate(0deg) translateX(0);opacity:0;}10%{opacity:.7;}90%{opacity:.3;}100%{transform:translateY(110vh) rotate(540deg) translateX(var(--drift,40px));opacity:0;}}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:900;height:68px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(253,250,244,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(212,104,138,.1);}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--rose),var(--lavender),var(--sage),transparent);opacity:.35;}
+.topbar-logo{font-family:var(--fd);font-style:italic;font-weight:400;font-size:26px;color:var(--rose2);text-decoration:none;}
+.topbar-tag{font-family:var(--fs);font-size:12px;font-weight:700;color:var(--muted);background:rgba(212,104,138,.08);border:1.5px solid var(--border);border-radius:999px;padding:5px 16px;}
+
+/* UNLOCK */
+#unlockScreen{position:fixed;inset:0;z-index:9999;overflow:hidden;}
+.u-bg{position:absolute;inset:0;background:linear-gradient(160deg,#2a1a0f 0%,#4a2a1a 30%,#7a4a2a 55%,#c47a3a 75%,#e8b870 90%,#f5d48a 100%);}
+.u-petal-layer{position:absolute;inset:0;pointer-events:none;z-index:1;}
+.u-content{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;}
+.u-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px 18px;font-family:var(--fs);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.9);margin-bottom:24px;}
+.u-dot{width:5px;height:5px;border-radius:50%;background:#f5d48a;animation:u-pulse 1.5s ease infinite;}
+@keyframes u-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,212,138,.6);}50%{box-shadow:0 0 0 6px transparent;}}
+.u-h1{font-family:var(--fd);font-style:italic;font-size:clamp(44px,9vw,90px);font-weight:700;color:white;line-height:.95;margin-bottom:16px;text-shadow:0 0 60px rgba(245,212,138,.4),0 4px 40px rgba(0,0,0,.4);}
+.u-h1 em{color:#f5d48a;}
+.u-sub{font-family:var(--fh);font-size:20px;color:rgba(255,255,255,.75);max-width:380px;margin:0 auto 32px;line-height:1.6;}
+.u-input{display:block;margin:0 auto 14px;padding:14px 28px;width:270px;border:2px solid rgba(255,255,255,.3);border-radius:999px;background:rgba(255,255,255,.12);backdrop-filter:blur(20px);font-family:var(--fh);font-size:20px;color:white;text-align:center;outline:none;transition:all .3s;}
+.u-input::placeholder{color:rgba(255,255,255,.45);}
+.u-input:focus{border-color:rgba(245,212,138,.7);background:rgba(255,255,255,.18);}
+.u-btn{display:block;margin:0 auto;padding:14px 44px;border-radius:999px;border:2px solid rgba(245,212,138,.5);background:linear-gradient(135deg,rgba(122,175,122,.5),rgba(154,142,196,.4));backdrop-filter:blur(20px);color:white;font-family:var(--fd);font-style:italic;font-size:20px;cursor:pointer;box-shadow:0 8px 32px rgba(0,0,0,.2);transition:all .3s;}
+.u-btn:hover{transform:translateY(-2px);background:linear-gradient(135deg,rgba(122,175,122,.7),rgba(154,142,196,.6));}
+.u-error{color:#f5d48a;font-size:13px;font-weight:700;margin-top:12px;display:none;}
+
+/* MAIN */
+#mainContent{display:none;}
+.section{position:relative;z-index:2;padding:80px 0;}
+.section-inner{max-width:820px;margin:0 auto;padding:0 40px;}
+.sec-label{display:inline-flex;align-items:center;gap:8px;font-family:var(--fs);font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:20px;}
+.sec-label::before{content:'🌸';font-size:13px;}
+.div-line{position:relative;z-index:2;display:flex;align-items:center;gap:14px;padding:8px 40px;max-width:820px;margin:0 auto;}
+.div-line-l{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,104,138,.2),transparent);}
+.div-line-icon{font-size:16px;opacity:.5;}
+
+/* HERO */
+#heroSection{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px;position:relative;z-index:2;overflow:hidden;background:linear-gradient(180deg,var(--cream) 0%,var(--warm) 55%,var(--blush) 100%);}
+.hero-deco{position:absolute;font-size:100px;opacity:.04;user-select:none;pointer-events:none;}
+.hero-deco.tl{top:8%;left:4%;animation:deco-float 4s ease-in-out infinite alternate;}
+.hero-deco.br{bottom:8%;right:4%;animation:deco-float 4s 2s ease-in-out infinite alternate;}
+@keyframes deco-float{0%{transform:translateY(0) rotate(-8deg);}100%{transform:translateY(-16px) rotate(8deg);}}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,104,138,.08);border:1.5px solid var(--border);border-radius:999px;padding:6px 18px;margin-bottom:24px;font-family:var(--fs);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);}
+.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--rose);animation:u-pulse 1.5s ease infinite;}
+.hero-name{font-family:var(--fd);font-style:italic;font-size:clamp(60px,14vw,140px);font-weight:700;line-height:.9;color:var(--ink);text-shadow:0 0 80px rgba(212,104,138,.15);margin-bottom:16px;letter-spacing:-.02em;}
+.hero-typewriter{font-family:var(--fh);font-size:clamp(18px,2.5vw,24px);color:var(--muted);min-height:36px;max-width:500px;margin:0 auto 20px;}
+.hero-tagline{font-family:var(--fd);font-style:italic;font-size:clamp(16px,2vw,20px);color:var(--muted2);max-width:460px;margin:0 auto 48px;line-height:1.8;}
+.hero-scroll{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.hero-scroll-text{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);}
+.hero-scroll-bar{width:1.5px;height:44px;background:linear-gradient(180deg,var(--rose),transparent);animation:scroll-pulse 1.5s ease-in-out infinite;}
+@keyframes scroll-pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* WHAT YOU ARE */
+#meaningSection{background:var(--warm);}
+.meaning-card{background:white;border-radius:16px;padding:36px 40px;box-shadow:0 8px 32px var(--shadow);border-left:4px solid var(--rose);position:relative;overflow:hidden;max-width:580px;margin:0 auto;}
+.meaning-card::before{content:'🌸';position:absolute;top:-10px;right:16px;font-size:56px;opacity:.07;}
+.meaning-card-lines{position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(212,104,138,.05) 31px,rgba(212,104,138,.05) 32px);border-radius:inherit;}
+.meaning-text{font-family:var(--fh);font-size:20px;color:var(--ink);line-height:1.8;position:relative;z-index:1;}
+
+/* THINGS I LOVE */
+#loveSection{background:var(--cream);}
+.love-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+.love-card{background:white;border-radius:14px;padding:22px;box-shadow:0 4px 20px var(--shadow);border:1.5px solid rgba(212,104,138,.1);transition:all .3s;cursor:pointer;position:relative;overflow:hidden;}
+.love-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--rose),transparent);transform:scaleX(0);transition:transform .4s;transform-origin:center;}
+.love-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px var(--shadow);}
+.love-card:hover::before{transform:scaleX(1);}
+.love-icon{font-size:26px;margin-bottom:12px;display:block;}
+.love-text{font-family:var(--fh);font-size:17px;color:var(--ink);line-height:1.55;}
+
+/* MEMORY WALL */
+#memoriesSection{background:var(--blush);}
+.memory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.memory-card{background:white;border-radius:14px;padding:22px;box-shadow:0 4px 20px var(--shadow);border:1.5px solid rgba(212,104,138,.1);transition:all .3s;}
+.memory-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px var(--shadow);}
+.memory-icon{font-size:28px;margin-bottom:12px;display:block;}
+.memory-title{font-family:var(--fd);font-style:italic;font-size:18px;color:var(--ink);margin-bottom:6px;}
+.memory-text{font-family:var(--fs);font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* INSIDE JOKES */
+#jokesSection{background:var(--warm);}
+.jokes-grid{display:flex;flex-direction:column;gap:12px;}
+.joke-item{background:white;border-radius:12px;padding:16px 22px;border-left:3px solid var(--lavender);box-shadow:0 2px 12px var(--shadow);font-family:var(--fh);font-size:18px;color:var(--ink);line-height:1.6;transition:all .3s;}
+.joke-item:hover{transform:translateX(6px);border-left-color:var(--rose);}
+
+/* HARD TIMES */
+#hardTimesSection{background:linear-gradient(160deg,var(--petal),var(--warm));}
+.hard-card{background:white;border-radius:16px;padding:32px 36px;box-shadow:0 8px 32px var(--shadow);max-width:580px;margin:0 auto;border-top:3px solid var(--sage);}
+.hard-text{font-family:var(--fh);font-size:19px;color:var(--ink);line-height:1.8;}
+
+/* PHOTOS */
+#photosSection{background:var(--cream);overflow:hidden;}
+.photos-caption{font-family:var(--fd);font-style:italic;font-size:22px;color:var(--ink);text-align:center;margin-bottom:28px;}
+.photo-track-wrap{overflow:hidden;position:relative;}
+.photo-track-wrap::before{content:'';position:absolute;left:0;top:0;bottom:0;width:80px;background:linear-gradient(90deg,var(--cream),transparent);z-index:1;pointer-events:none;}
+.photo-track-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(270deg,var(--cream),transparent);z-index:1;pointer-events:none;}
+.photo-track{display:flex;gap:16px;animation:photo-slide 24s linear infinite;width:max-content;padding:16px 0;}
+.photo-track:hover{animation-play-state:paused;}
+.polaroid{background:white;padding:10px 10px 36px;box-shadow:0 8px 28px var(--shadow);flex-shrink:0;transform:rotate(var(--r,0deg));transition:transform .3s;}
+.polaroid:hover{transform:rotate(0deg) scale(1.05);}
+.polaroid img{width:160px;height:160px;object-fit:cover;display:block;}
+.polaroid-label{text-align:center;font-family:var(--fh);font-size:13px;color:var(--muted);margin-top:8px;}
+@keyframes photo-slide{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* NOTES STACK */
+#notesSection{background:var(--blush);}
+.notes-stack-wrap{position:relative;width:300px;height:200px;margin:0 auto;}
+.stack-card{position:absolute;inset:0;background:white;border-radius:16px;padding:28px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 8px 32px var(--shadow);border:1.5px solid rgba(212,104,138,.15);font-family:var(--fh);font-size:18px;color:var(--ink);line-height:1.6;cursor:pointer;backface-visibility:hidden;user-select:none;overflow:hidden;}
+.stack-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--rose),transparent);}
+.stack-card:nth-child(2){transform:rotate(3deg) translateY(6px);z-index:1;}
+.stack-card:nth-child(3){transform:rotate(-2deg) translateY(12px);z-index:0;}
+.stack-card.top{z-index:3;transform:rotate(0deg);}
+.stack-card.fly-away{animation:card-fly .5s cubic-bezier(.16,1,.3,1) forwards;}
+@keyframes card-fly{0%{transform:rotate(0deg) translateX(0) translateY(0) scale(1);opacity:1;}100%{transform:rotate(8deg) translateX(120%) translateY(-40px) scale(.95);opacity:0;}}
+.card-stamp{font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--rose);margin-bottom:8px;opacity:.6;}
+.stack-counter{text-align:center;margin-top:24px;font-family:var(--fs);font-size:12px;font-weight:700;color:var(--muted2);letter-spacing:.08em;}
+.stack-hint{text-align:center;margin-top:6px;font-family:var(--fh);font-size:14px;color:var(--muted2);}
+
+/* CONTRIBUTORS */
+#contributorsSection{background:var(--warm);}
+.contrib-count{font-family:var(--fh);font-size:18px;color:var(--muted);text-align:center;margin-bottom:28px;}
+.contrib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.contrib-card{background:white;border-radius:16px;padding:22px;box-shadow:0 4px 20px var(--shadow);border:1.5px solid rgba(212,104,138,.1);transition:all .3s;animation:card-appear .5s cubic-bezier(.16,1,.3,1) both;}
+@keyframes card-appear{0%{opacity:0;transform:translateY(14px);}100%{opacity:1;transform:translateY(0);}}
+.contrib-card:hover{transform:translateY(-4px);}
+.contrib-photo{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--border);margin-bottom:10px;display:block;}
+.contrib-placeholder{width:52px;height:52px;border-radius:50%;background:rgba(212,104,138,.1);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px;}
+.contrib-emoji{font-size:20px;margin-bottom:6px;display:block;}
+.contrib-name{font-family:var(--fd);font-style:italic;font-size:17px;color:var(--rose2);margin-bottom:6px;}
+.contrib-message{font-family:var(--fh);font-size:15px;color:var(--muted);line-height:1.6;}
+.contrib-empty{text-align:center;padding:40px;font-family:var(--fh);font-size:18px;color:var(--muted2);}
+
+/* WISHES */
+#wishesSection{background:var(--cream);}
+.wishes-list{display:flex;flex-direction:column;gap:12px;max-width:580px;margin:0 auto;}
+.wish-item{display:flex;align-items:flex-start;gap:14px;background:white;border-radius:12px;padding:18px 22px;box-shadow:0 2px 12px var(--shadow);transition:all .3s;}
+.wish-item:hover{transform:translateX(5px);}
+.wish-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--rose2));color:white;font-family:var(--fs);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wish-text{font-family:var(--fh);font-size:17px;color:var(--ink);line-height:1.65;}
+
+/* PROMISE */
+#promiseSection{background:linear-gradient(160deg,var(--petal),var(--blush));}
+.promise-card{max-width:560px;margin:0 auto;text-align:center;padding:52px 40px;background:white;border-radius:24px;box-shadow:0 16px 48px var(--shadow);border:1.5px solid rgba(212,104,138,.12);position:relative;overflow:hidden;}
+.promise-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--rose),var(--lavender),var(--sage),transparent);}
+.promise-icon{font-size:48px;margin-bottom:20px;display:block;animation:deco-float 3s ease-in-out infinite alternate;}
+.promise-text{font-family:var(--fd);font-style:italic;font-size:clamp(20px,3vw,26px);color:var(--ink);line-height:1.75;}
+
+/* CLOSING */
+#closingSection{background:var(--cream);min-height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;z-index:2;}
+.closing-inner{padding:60px 40px;}
+.closing-icon{font-size:48px;margin-bottom:16px;display:block;animation:deco-float 3s ease-in-out infinite alternate;}
+.closing-text{font-family:var(--fd);font-style:italic;font-size:clamp(20px,3vw,26px);color:var(--ink);max-width:520px;margin:0 auto 16px;line-height:1.8;}
+.closing-signoff{font-family:var(--fh);font-size:22px;color:var(--rose);margin-bottom:28px;}
+.closing-badge{display:inline-flex;align-items:center;gap:8px;background:white;border:1.5px solid var(--border);border-radius:999px;padding:8px 20px;font-family:var(--fs);font-size:12px;font-weight:600;color:var(--muted);}
+
+/* MUSIC */
+#musicPlayer{position:fixed;bottom:24px;right:24px;z-index:800;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--rose2));border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:white;box-shadow:0 8px 24px rgba(180,100,130,.3);transition:all .3s;}
+#musicPlayer:hover{transform:scale(1.1);}
+#musicPlayer.playing{animation:music-glow 2s ease-in-out infinite alternate;}
+@keyframes music-glow{0%{box-shadow:0 8px 24px rgba(180,100,130,.3);}100%{box-shadow:0 8px 40px rgba(212,104,138,.6);}}
+
+/* CTA */
+#ctaSection{background:linear-gradient(160deg,#3a1a2a,#6a2a4a,#a04060);padding:80px 40px;text-align:center;position:relative;z-index:2;overflow:hidden;}
+#ctaSection::before{content:'🌸';position:absolute;font-size:200px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.04;pointer-events:none;}
+.cta-tag{display:inline-block;background:rgba(245,212,138,.15);border:1px solid rgba(245,212,138,.3);color:#f5d48a;font-family:var(--fs);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:5px 20px;border-radius:999px;margin-bottom:24px;}
+.cta-heading{font-family:var(--fd);font-style:italic;font-size:clamp(28px,5vw,52px);color:white;margin-bottom:14px;line-height:1.1;}
+.cta-heading em{color:#f5d48a;}
+.cta-sub{font-family:var(--fh);font-size:18px;color:rgba(255,255,255,.75);max-width:460px;margin:0 auto 32px;line-height:1.65;}
+.cta-btn{display:inline-flex;align-items:center;gap:10px;padding:16px 40px;border-radius:999px;background:linear-gradient(135deg,var(--rose),var(--rose2));color:white;font-family:var(--fs);font-size:15px;font-weight:800;text-decoration:none;box-shadow:0 8px 32px rgba(180,100,130,.4);transition:all .3s;}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(212,104,138,.55);}
+
+/* POPUP */
+#ctaPopup{position:fixed;inset:0;z-index:9998;background:rgba(30,10,20,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s;}
+#ctaPopup.show{opacity:1;pointer-events:all;}
+.popup-card{background:linear-gradient(160deg,#3a1a2a,#6a2a4a);border:2px solid rgba(245,212,138,.25);border-radius:20px;padding:40px 36px;max-width:440px;width:100%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:popup-in .4s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes popup-in{0%{transform:scale(.8);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.popup-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:none;width:28px;height:28px;border-radius:50%;color:rgba(255,255,255,.7);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.popup-close:hover{background:rgba(255,255,255,.2);}
+.popup-emoji{font-size:44px;margin-bottom:16px;display:block;animation:deco-float 2s ease-in-out infinite alternate;}
+.popup-title{font-family:var(--fd);font-style:italic;font-size:26px;color:white;margin-bottom:10px;}
+.popup-title em{color:#f5d48a;}
+.popup-sub{font-family:var(--fh);font-size:16px;color:rgba(255,255,255,.7);margin-bottom:24px;line-height:1.6;}
+.popup-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 32px;border-radius:999px;background:linear-gradient(135deg,var(--rose),var(--rose2));color:white;font-family:var(--fs);font-size:14px;font-weight:800;text-decoration:none;box-shadow:0 6px 24px rgba(180,100,130,.35);transition:all .3s;}
+.popup-btn:hover{transform:translateY(-2px);}
+.popup-note{font-size:11px;color:rgba(255,255,255,.4);margin-top:14px;font-family:var(--fs);letter-spacing:.06em;}
+
+/* CONFETTI */
+.confetti-p{position:fixed;pointer-events:none;animation:confetti-fall linear forwards;}
+@keyframes confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* ANIMATIONS */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+.rv.vi{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.07s;}.d2{transition-delay:.14s;}.d3{transition-delay:.21s;}.d4{transition-delay:.28s;}.d5{transition-delay:.35s;}.d6{transition-delay:.42s;}
+
+.page-foot{text-align:center;padding:40px;font-family:var(--fs);font-size:13px;color:var(--muted2);position:relative;z-index:2;}
+.page-foot a{color:var(--rose);text-decoration:none;font-family:var(--fh);}
+@media(max-width:768px){.topbar{padding:0 20px;}.section-inner{padding:0 20px;}.div-line{padding:8px 20px;}.notes-stack-wrap{width:260px;height:180px;}.closing-inner{padding:40px 20px;}}
+</style>
+</head>
+<body>
+<div id="petalLayer"></div>
+
+<!-- UNLOCK -->
+<div id="unlockScreen">
+  <div class="u-bg"></div>
+  <div class="u-petal-layer" id="uPetals"></div>
+  <div class="u-content">
+    <div class="u-badge"><span class="u-dot"></span>Friendship</div>
+    <h1 class="u-h1">A note for<br><em>you</em></h1>
+    <p class="u-sub" id="unlockSub">Your person made something just for you…</p>
+    <input id="unlockInput" class="u-input" type="text" placeholder="Type your name…" autocomplete="off" onkeydown="if(event.key==='Enter')tryUnlock()">
+    <button class="u-btn" onclick="tryUnlock()">Open with love 🌸</button>
+    <p class="u-error" id="unlockError">That doesn't seem right — try again</p>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar" style="display:none;" id="topbar">
+  <a href="index.html" class="topbar-logo">✦ Wisherly</a>
+  <div class="topbar-tag" id="topbarTag">Friendship 🌸</div>
+</div>
+<div id="musicPlayer" style="display:none;" onclick="toggleMusic()">🎵</div>
+<audio id="bgMusic" loop></audio>
+
+<div id="mainContent">
+
+  <!-- HERO -->
+  <section id="heroSection">
+    <div class="hero-deco tl">🌸</div>
+    <div class="hero-deco br">🌿</div>
+    <div style="position:relative;z-index:1;">
+      <div class="hero-badge"><span class="hero-badge-dot"></span>Friendship</div>
+      <h1 class="hero-name" id="heroName">You</h1>
+      <div class="hero-typewriter" id="heroTypewriter"></div>
+      <p class="hero-tagline" id="heroTagline">You know what's crazy? You're my person.</p>
+      <div class="hero-scroll"><span class="hero-scroll-text">Scroll down</span><div class="hero-scroll-bar"></div></div>
+    </div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌸</div><div class="div-line-l"></div></div>
+
+  <!-- WHAT YOU ARE -->
+  <section class="section" id="meaningSection">
+    <div class="section-inner"><div class="sec-label rv">What You Are to Me</div>
+    <div class="meaning-card rv d1"><div class="meaning-card-lines"></div><div class="meaning-text" id="meaningText"></div></div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌿</div><div class="div-line-l"></div></div>
+
+  <!-- THINGS I LOVE -->
+  <section class="section" id="loveSection">
+    <div class="section-inner"><div class="sec-label rv">Things I Love About You</div>
+    <div class="love-grid" id="loveGrid"></div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌸</div><div class="div-line-l"></div></div>
+
+  <!-- MEMORY WALL -->
+  <section class="section" id="memoriesSection">
+    <div class="section-inner"><div class="sec-label rv">Memories We Share</div>
+    <div class="memory-grid" id="memoryGrid"></div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌿</div><div class="div-line-l"></div></div>
+
+  <!-- INSIDE JOKES -->
+  <section class="section" id="jokesSection">
+    <div class="section-inner"><div class="sec-label rv">Our Inside Jokes</div>
+    <div class="jokes-grid" id="jokesGrid"></div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌸</div><div class="div-line-l"></div></div>
+
+  <!-- HARD TIMES -->
+  <section class="section" id="hardTimesSection">
+    <div class="section-inner"><div class="sec-label rv">When It Got Hard</div>
+    <div class="hard-card rv d1"><div class="hard-text" id="hardText"></div></div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌿</div><div class="div-line-l"></div></div>
+
+  <!-- PHOTOS -->
+  <section class="section" id="photosSection">
+    <div class="section-inner"><div class="sec-label rv">Our Moments</div>
+    <div class="photos-caption rv d1" id="photosCaption">Us, always 🌸</div></div>
+    <div class="photo-track-wrap rv d2"><div class="photo-track" id="photoTrack"></div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌸</div><div class="div-line-l"></div></div>
+
+  <!-- NOTES STACK -->
+  <section class="section" id="notesSection">
+    <div class="section-inner" style="text-align:center;">
+      <div class="sec-label rv" style="display:inline-flex;">Little Notes for You</div>
+      <div class="notes-stack-wrap rv d1" id="notesStack"></div>
+      <div class="stack-counter rv d2" id="stackCounter">Tap the card to read the next note</div>
+      <div class="stack-hint rv d3">🌸 Each one is just for you</div>
+    </div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌿</div><div class="div-line-l"></div></div>
+
+  <!-- CONTRIBUTORS -->
+  <section class="section" id="contributorsSection">
+    <div class="section-inner"><div class="sec-label rv">Others Who Love You Too</div>
+    <div class="contrib-count rv d1" id="contribCount">Loading messages…</div>
+    <div class="contrib-grid" id="contribGrid"></div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌸</div><div class="div-line-l"></div></div>
+
+  <!-- WISHES -->
+  <section class="section" id="wishesSection">
+    <div class="section-inner"><div class="sec-label rv">What I Wish for You</div>
+    <div class="wishes-list" id="wishesList"></div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌿</div><div class="div-line-l"></div></div>
+
+  <!-- PROMISE -->
+  <section class="section" id="promiseSection">
+    <div class="section-inner"><div class="sec-label rv">A Promise</div>
+    <div class="promise-card rv d1">
+      <span class="promise-icon">🌸</span>
+      <p class="promise-text" id="promiseText">I'm not going anywhere. Not now, not ever.</p>
+    </div></div>
+  </section>
+
+  <div class="div-line"><div class="div-line-l"></div><div class="div-line-icon">🌸</div><div class="div-line-l"></div></div>
+
+  <!-- CLOSING -->
+  <section id="closingSection">
+    <div class="closing-inner">
+      <span class="closing-icon">🌿</span>
+      <p class="closing-text" id="closingText">Thank you for being exactly who you are. And for letting me be exactly who I am.</p>
+      <div class="closing-signoff" id="closingSignoff">Always yours 🌸</div>
+      <div class="closing-badge">Made with love on <strong style="margin-left:4px;font-family:var(--fh);">Wisherly ✦</strong></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="ctaSection">
+    <div class="cta-tag">✦ Limited Time — Free Access ✦</div>
+    <h2 class="cta-heading">Create your first<br><em>surprise page free</em></h2>
+    <p class="cta-sub">Make someone feel exactly like this. Free during our launch. No signup needed.</p>
+    <a href="https://wisherly.co" class="cta-btn">🌸 Start free on Wisherly</a>
+  </section>
+
+</div>
+
+<!-- POPUP -->
+<div id="ctaPopup">
+  <div class="popup-card">
+    <button class="popup-close" onclick="closePopup()">x</button>
+    <span class="popup-emoji">🌸</span>
+    <h3 class="popup-title">Your <em>first page is free</em></h3>
+    <p class="popup-sub">Create a beautiful friendship, farewell, birthday or love note — free during our launch.</p>
+    <a href="https://wisherly.co" class="popup-btn">Create yours on Wisherly 🌸</a>
+    <div class="popup-note">FREE · 5 MINUTES · NO SIGNUP NEEDED</div>
+  </div>
+</div>
+<div class="page-foot"><a href="index.html">Wisherly</a> — made with 🌸</div>
+
+<script>
+var D = {}, pageId = '';
+
+async function loadPage() {
+  var params = new URLSearchParams(location.search);
+  pageId = params.get('id') || '';
+  if (pageId && window._db) {
+    try {
+      var snap = await window._db.collection('pages').doc(pageId).get();
+      if (snap.exists) {
+        D = snap.data();
+        if (D.photos && D.photos.length) {
+          var loaded = [];
+          for (var i = 0; i < D.photos.length; i++) {
+            var ref = D.photos[i];
+            var m = ref.match && ref.match(/^__photo__(.+)$/);
+            if (m) { try { var ps = await window._db.collection('photos').doc(m[1]).get(); if(ps.exists) loaded.push(ps.data().data); } catch(e){} }
+            else { loaded.push(ref); }
+          }
+          D._photos = loaded;
+        }
+        if (D.audioChunks) setupMusic(pageId, D.audioChunks, D.audioMime);
+        if (D.videoChunks) setupVideo(pageId, D.videoChunks, D.videoMime);
+      }
+    } catch(e){ console.error(e); }
+  }
+  renderPage();
+  if (pageId) listenContributions();
+}
+
+function initUnlock() {
+  var name = (D.name || '').trim();
+  if (!name) { showMain(); return; }
+  if (D.teaser) document.getElementById('unlockSub').textContent = D.teaser;
+  if (new URLSearchParams(location.search).get('unlock') === 'none') { showMain(); return; }
+}
+
+function tryUnlock() {
+  if (!D || !D.name) { showMain(); return; }
+  var val = document.getElementById('unlockInput').value.trim().toLowerCase();
+  var name = (D.name || '').trim().toLowerCase();
+  if (val === name || val === '') {
+    var screen = document.getElementById('unlockScreen');
+    screen.style.transition = 'opacity .5s';
+    screen.style.opacity = '0';
+    screen.style.pointerEvents = 'none';
+    setTimeout(showMain, 520);
+  } else {
+    document.getElementById('unlockError').style.display = 'block';
+    var inp = document.getElementById('unlockInput');
+    inp.style.transition = 'none'; inp.style.transform = 'translateX(-8px)';
+    setTimeout(function(){ inp.style.transition = 'transform .3s'; inp.style.transform = 'translateX(0)'; }, 80);
+  }
+}
+
+function showMain() {
+  document.getElementById('unlockScreen').style.display = 'none';
+  document.getElementById('topbar').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'block';
+  if (D.audioChunks) {
+    document.getElementById('musicPlayer').style.display = 'flex';
+    var audio = document.getElementById('bgMusic'); audio.volume = 0.4;
+    audio.play().then(function(){ musicPlaying = true; document.getElementById('musicPlayer').textContent = 'x'; document.getElementById('musicPlayer').classList.add('playing'); }).catch(function(){});
+  }
+  burstPetals();
+  startTypewriter();
+  initReveal();
+}
+
+function renderPage() {
+  var name = D.name || 'You';
+  var sender = D.sender || 'Your person';
+  var DEF = {
+    openingLine: D.openingLine || "You know what's crazy? You're my person. And I just needed you to know that.",
+    tagline: D.tagline || D.heroTagline || "You know what's crazy? You're my person.",
+    meaning: D.meaning || D.whatYouMean || "You are the kind of friend that doesn't come along twice. The kind that makes everything feel lighter just by being in it. I genuinely don't know what I'd do without you.",
+    loves: (D.loves || D.thingsILove || []).length ? (D.loves || D.thingsILove) : [
+      { icon:'😂', text:"The way you laugh — really laugh — at things nobody else finds funny" },
+      { icon:'💬', text:"How you always know exactly what to say, even when there are no right words" },
+      { icon:'🌿', text:"That you never make me feel like too much" },
+      { icon:'⭐', text:"The way you show up — not just when things are good" },
+      { icon:'🎯', text:"How honest you are, even when I don't want to hear it" },
+      { icon:'🌸', text:"That being around you always feels like home" },
+    ],
+    memories: (D.memories || []).length ? D.memories : [
+      { icon:'☕', title:'The long ones', text:'Those conversations that go on for hours and we lose all track of time.' },
+      { icon:'😭', title:'The ugly cry moment', text:'You held space for me when I had nothing left. I will never forget that.' },
+      { icon:'🎉', title:'That one night', text:'You know exactly which one I mean. Best decision we ever made.' },
+      { icon:'🌧️', title:'The hard season', text:'You stayed. That meant everything.' },
+    ],
+    jokes: (D.jokes || D.insideJokes || []).length ? (D.jokes || D.insideJokes) : [
+      "That thing we say that would make no sense to anyone else 😂",
+      "The code word. You know the one.",
+      "Every single time we say it at the same time.",
+    ],
+    hardTimes: D.hardTimes || D.hardText || "You showed up when I was at my lowest. You didn't try to fix it — you just sat with me in it. That's the kind of friend people spend their whole lives looking for. I found you.",
+    miniNotes: (D.miniNotes || D.notes || []).length ? (D.miniNotes || D.notes) : [
+      "You are one of my greatest blessings. No debate.",
+      "I hope you know how special you are. Not just to me — to everyone you touch.",
+      "Watching you grow has been one of the greatest privileges of my life.",
+      "You deserve every single good thing coming your way.",
+      "I am so proud of you. Every single day.",
+      "Thank you for choosing me too.",
+    ],
+    wishes: (D.wishes || D.advice || []).length ? (D.wishes || D.advice) : [
+      "I wish you the kind of joy that catches you off guard",
+      "I wish you rest — real, deep, well-earned rest",
+      "I wish you more of the things that make you feel alive",
+      "I wish you people who love you the way you love others",
+    ],
+    promise: D.promise || "I'm not going anywhere. Not now, not ever.",
+    closing: D.closing || D.goodbye || "Thank you for being exactly who you are. And for letting me be exactly who I am.",
+    signOff: D.signOff || D.signoff || "Always yours — " + sender + " 🌸",
+    photoCaption: D.photoCaption || "Us, always 🌸",
+  };
+
+  document.getElementById('heroName').textContent = name;
+  document.getElementById('heroTagline').textContent = DEF.tagline;
+  document.getElementById('topbarTag').textContent = 'For ' + name + ' 🌸';
+  window._typewriterText = DEF.openingLine;
+  document.getElementById('meaningText').textContent = DEF.meaning;
+
+  // Things I love
+  var loveEmojis = ['🌸','🌿','⭐','💕','😂','💬','🎯','✨'];
+  document.getElementById('loveGrid').innerHTML = DEF.loves.map(function(item, i){
+    var icon = item.icon || loveEmojis[i % loveEmojis.length];
+    var text = typeof item === 'string' ? item : (item.text || item);
+    return '<div class="love-card rv" style="transition-delay:' + (i*.07) + 's;"><span class="love-icon">' + icon + '</span><div class="love-text">' + text + '</div></div>';
+  }).join('');
+
+  // Memories
+  document.getElementById('memoryGrid').innerHTML = DEF.memories.map(function(m){
+    return '<div class="memory-card rv"><span class="memory-icon">' + (m.icon||'🌸') + '</span><div class="memory-title">' + (m.title||m.heading||'') + '</div><div class="memory-text">' + (m.text||m.desc||m.description||'') + '</div></div>';
+  }).join('');
+
+  // Inside jokes
+  document.getElementById('jokesGrid').innerHTML = DEF.jokes.map(function(j){
+    var text = typeof j === 'string' ? j : (j.text || j);
+    return '<div class="joke-item rv">' + text + '</div>';
+  }).join('');
+
+  // Hard times
+  document.getElementById('hardText').textContent = DEF.hardTimes;
+
+  // Photos
+  var photos = D._photos || D.photos || [];
+  if (photos.length) {
+    document.getElementById('photosCaption').textContent = DEF.photoCaption;
+    var rotations = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1];
+    var doubled = photos.concat(photos);
+    document.getElementById('photoTrack').innerHTML = doubled.map(function(src, i){
+      return '<div class="polaroid" style="--r:' + rotations[i % rotations.length] + 'deg;"><img src="' + src + '" alt="Memory" loading="lazy"><div class="polaroid-label">🌸</div></div>';
+    }).join('');
+  } else { document.getElementById('photosSection').style.display = 'none'; }
+
+  // Notes stack
+  var notes = DEF.miniNotes.slice(0, 6);
+  var stack = document.getElementById('notesStack');
+  stack.innerHTML = notes.map(function(note, i){
+    var text = typeof note === 'string' ? note : (note.text || note);
+    return '<div class="stack-card ' + (i===0?'top':'') + '" data-index="' + i + '"><div class="card-stamp">Note ' + String(i+1).padStart(2,'0') + '</div>' + text + '</div>';
+  }).join('');
+  initStack(notes.length);
+
+  // Wishes
+  document.getElementById('wishesList').innerHTML = DEF.wishes.map(function(w, i){
+    var text = typeof w === 'string' ? w : (w.text || w);
+    return '<div class="wish-item rv" style="transition-delay:' + (i*.07) + 's;"><div class="wish-num">' + (i+1) + '</div><div class="wish-text">' + text + '</div></div>';
+  }).join('');
+
+  // Promise
+  document.getElementById('promiseText').textContent = DEF.promise;
+
+  // Closing
+  document.getElementById('closingText').textContent = DEF.closing;
+  document.getElementById('closingSignoff').textContent = DEF.signOff;
+
+  initUnlock();
+}
+
+// NOTES STACK
+var stackCards = [], currentTop = 0, animating = false;
+function initStack(total) {
+  stackCards = Array.from(document.querySelectorAll('.stack-card'));
+  stackCards.forEach(function(card){
+    card.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      if (animating || !card.classList.contains('top')) return;
+      animating = true;
+      card.classList.add('fly-away');
+      setTimeout(function(){
+        card.classList.remove('fly-away','top'); card.style.zIndex = '0';
+        currentTop = (currentTop + 1) % stackCards.length;
+        stackCards[currentTop].classList.add('top');
+        stackCards.forEach(function(c, idx){
+          if (!c.classList.contains('top')) {
+            var offset = ((idx - currentTop + stackCards.length) % stackCards.length);
+            c.style.transform = 'rotate(' + (offset%2===0?2:-2) + 'deg) translateY(' + (offset*6) + 'px)';
+            c.style.zIndex = stackCards.length - offset;
+          }
+        });
+        updateStackCounter(total);
+        animating = false;
+      }, 500);
+    });
+    card.addEventListener('touchend', function(e){ e.preventDefault(); e.stopPropagation(); if(animating||!card.classList.contains('top'))return;card.click(); }, {passive:false});
+  });
+}
+function updateStackCounter(total) {
+  var remaining = total - currentTop;
+  document.getElementById('stackCounter').textContent = remaining > 0
+    ? remaining + ' note' + (remaining > 1 ? 's' : '') + ' remaining — tap to read'
+    : "All notes read — you are so loved 🌸";
+}
+
+// CONTRIBUTORS
+function listenContributions() {
+  if (!pageId || !window._db) return;
+  window._db.collection('contributions').doc(pageId).collection('messages')
+    .orderBy('timestamp','asc')
+    .onSnapshot(function(snapshot){
+      var messages = [];
+      snapshot.forEach(function(doc){ messages.push(Object.assign({id:doc.id}, doc.data())); });
+      renderContributions(messages);
+    }, function(err){ console.error(err); });
+}
+async function renderContributions(messages) {
+  var grid = document.getElementById('contribGrid');
+  var count = document.getElementById('contribCount');
+  if (!messages.length) {
+    if (count) count.textContent = 'No messages yet — more love is on its way 🌸';
+    if (grid) grid.innerHTML = '<div class="contrib-empty">🌸 No messages yet!</div>';
+    return;
+  }
+  if (count) count.textContent = messages.length + ' ' + (messages.length===1?'person':'people') + ' who love you 💕';
+  var cards = await Promise.all(messages.map(async function(msg, idx){
+    var photoSrc = '';
+    if (msg.photoRef) { try { var ps = await window._db.collection('contrib_photos').doc(msg.photoRef).get(); if(ps.exists) photoSrc = ps.data().data; } catch(e){} }
+    return '<div class="contrib-card" style="animation-delay:' + (idx*.08) + 's;">' +
+      (photoSrc ? '<img class="contrib-photo" src="' + photoSrc + '" alt="' + msg.name + '">' : '<div class="contrib-placeholder">' + (msg.emoji||'🌸') + '</div>') +
+      '<span class="contrib-emoji">' + (msg.emoji||'🌸') + '</span>' +
+      '<div class="contrib-name">' + (msg.name||'A friend') + '</div>' +
+      '<div class="contrib-message">' + (msg.message||'') + '</div></div>';
+  }));
+  if (grid) grid.innerHTML = cards.join('');
+}
+
+// TYPEWRITER
+function startTypewriter() {
+  var el = document.getElementById('heroTypewriter');
+  var text = window._typewriterText || "You know what's crazy? You're my person.";
+  var i = 0; el.textContent = '';
+  var cursor = document.createElement('span'); cursor.textContent = '|'; cursor.style.cssText = 'animation:tw-blink .7s ease infinite;color:var(--rose);';
+  var st = document.createElement('style'); st.textContent = '@keyframes tw-blink{0%,100%{opacity:1;}50%{opacity:0;}}'; document.head.appendChild(st);
+  el.appendChild(cursor);
+  setTimeout(function(){
+    var iv = setInterval(function(){
+      if (i < text.length) { el.insertBefore(document.createTextNode(text[i]), cursor); i++; }
+      else { clearInterval(iv); setTimeout(function(){ cursor.remove(); }, 1000); }
+    }, 45);
+  }, 600);
+}
+
+// MUSIC
+async function setupMusic(pid, total, mime) {
+  try {
+    var b64 = '';
+    for (var i = 0; i < total; i++) { var s = await window._db.collection('audio').doc(pid+'_'+i).get(); if(s.exists) b64 += s.data().data; }
+    document.getElementById('bgMusic').src = URL.createObjectURL(new Blob([Uint8Array.from(atob(b64), function(c){ return c.charCodeAt(0); })], {type: mime||'audio/mpeg'}));
+    document.getElementById('musicPlayer').style.display = 'flex';
+  } catch(e){}
+}
+var musicPlaying = false;
+function toggleMusic(){
+  var a=document.getElementById('bgMusic'),b=document.getElementById('musicPlayer');
+  if(musicPlaying){a.pause();b.textContent='🎵';b.classList.remove('playing');musicPlaying=false;}
+  else{a.play();b.textContent='⏸';b.classList.add('playing');musicPlaying=true;}
+}
+
+// VIDEO
+async function setupVideo(pid, total, mime) {
+  try {
+    var b64='';
+    for(var i=0;i<total;i++){var s=await window._db.collection('videos').doc(pid+'_'+i).get();if(s.exists)b64+=s.data().data;}
+    document.getElementById('mainVideo') && (document.getElementById('mainVideo').src=URL.createObjectURL(new Blob([Uint8Array.from(atob(b64),function(c){return c.charCodeAt(0);})],{type:mime||'video/mp4'})));
+  } catch(e){}
+}
+
+// PETALS BURST
+function burstPetals() {
+  var shapes = ['🌸','🌿','🌺','🍃','💕'];
+  for (var i=0;i<40;i++) {
+    var el=document.createElement('div');el.className='confetti-p';
+    el.style.cssText='left:'+Math.random()*100+'vw;top:-20px;font-size:'+(14+Math.random()*12)+'px;animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+(Math.random()*.8)+'s;';
+    el.textContent=shapes[Math.floor(Math.random()*shapes.length)];
+    document.body.appendChild(el);el.addEventListener('animationend',function(){if(this.parentNode)this.parentNode.removeChild(this);});
+  }
+}
+
+// FLOATING PETALS BG
+function initPetals() {
+  var layer = document.getElementById('petalLayer');
+  var shapes = ['🌸','🌺','🌿','🍃','💕'];
+  for (var i=0;i<14;i++) {
+    var el=document.createElement('div');el.className='petal';
+    el.textContent=shapes[Math.floor(Math.random()*shapes.length)];
+    el.style.cssText='left:'+Math.random()*100+'vw;top:-20px;font-size:'+(10+Math.random()*16)+'px;--drift:'+(Math.random()-.5)*120+'px;animation-duration:'+(18+Math.random()*18)+'s;animation-delay:-'+(Math.random()*20)+'s;';
+    layer.appendChild(el);
+  }
+  // Unlock petals
+  var up = document.getElementById('uPetals');
+  for(var j=0;j<8;j++){
+    var e=document.createElement('div');e.className='petal';
+    e.textContent=shapes[Math.floor(Math.random()*shapes.length)];
+    e.style.cssText='left:'+Math.random()*100+'%;top:-20px;font-size:'+(12+Math.random()*14)+'px;--drift:'+(Math.random()-.5)*80+'px;animation-duration:'+(12+Math.random()*12)+'s;animation-delay:-'+(Math.random()*12)+'s;color:rgba(255,255,255,.5);';
+    up.appendChild(e);
+  }
+}
+
+function initReveal(){
+  var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vi');});},{threshold:.1});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+}
+
+function closePopup(){document.getElementById('ctaPopup').classList.remove('show');}
+setTimeout(function(){document.getElementById('ctaPopup').classList.add('show');},60000);
+document.getElementById('ctaPopup').addEventListener('click',function(e){if(e.target===this)closePopup();});
+
+initPetals();
+loadPage();
+</script>
+</body>
+</html>
