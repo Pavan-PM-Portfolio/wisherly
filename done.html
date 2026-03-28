@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="fav.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wisherly — Your Page is Live! ✦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --white:#FFFFFF;--snow:#F7F9FF;--frost:#EFF3FF;--pale:#C7D9FF;
+  --navy:#07122A;--cobalt:#0D2260;--royal:#1A3FA6;--blue:#2563EB;--sky:#60A5FA;
+  --ink:#0A1628;--muted:#4A6FA5;--muted2:#7A9CC8;
+  --border:rgba(37,99,235,.1);--border2:rgba(37,99,235,.06);
+  --green:#10B981;
+  --fd:'Cormorant Garamond',serif;--fs:'Outfit',sans-serif;--fb:'Lora',serif;
+}
+body{background:var(--white);color:var(--ink);font-family:var(--fs);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(37,99,235,.05),transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(16,185,129,.04),transparent 60%);}
+
+nav{position:fixed;top:0;left:0;right:0;height:72px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,249,255,.88);backdrop-filter:blur(24px);border-bottom:1px solid rgba(37,99,235,.05);z-index:100;}
+.nav-brand{text-decoration:none;display:flex;align-items:center;gap:10px;}
+.nav-logo{height:44px;width:44px;object-fit:contain;}
+.nav-wordmark{font-family:var(--fs);font-size:18px;font-weight:600;color:var(--cobalt);}
+
+.wrap{max-width:640px;margin:0 auto;padding:120px 24px 80px;position:relative;z-index:2;}
+
+/* SUCCESS HERO */
+.success-hero{text-align:center;margin-bottom:48px;animation:hero-in .8s cubic-bezier(.16,1,.3,1) both;}
+@keyframes hero-in{0%{opacity:0;transform:translateY(30px);}100%{opacity:1;transform:translateY(0);}}
+.success-confetti{font-size:56px;display:block;margin-bottom:16px;animation:pop-in .6s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes pop-in{0%{transform:scale(.4);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.success-title{font-family:var(--fd);font-style:italic;font-size:clamp(36px,6vw,56px);font-weight:400;color:var(--cobalt);margin-bottom:10px;line-height:1.1;}
+.success-title em{background:linear-gradient(135deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.success-sub{font-family:var(--fb);font-style:italic;font-size:16px;color:var(--muted);line-height:1.65;}
+
+/* LINK CARDS */
+.link-card{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:28px;margin-bottom:16px;box-shadow:0 4px 24px rgba(37,99,235,.05);animation:hero-in .8s cubic-bezier(.16,1,.3,1) both;}
+.link-card:nth-child(2){animation-delay:.1s;}
+.link-card:nth-child(3){animation-delay:.2s;}
+.link-card-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.link-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.link-card-icon.blue{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(96,165,250,.1));border:1px solid rgba(37,99,235,.15);}
+.link-card-icon.green{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(52,211,153,.1));border:1px solid rgba(16,185,129,.15);}
+.link-card-title{font-family:var(--fd);font-size:20px;font-weight:400;color:var(--cobalt);}
+.link-card-desc{font-size:12px;color:var(--muted2);margin-top:2px;}
+.link-box{display:flex;gap:10px;align-items:center;background:var(--snow);border:1.5px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px;}
+.link-text{flex:1;font-family:var(--fs);font-size:13px;color:var(--cobalt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-copy{padding:8px 18px;border-radius:8px;border:1.5px solid var(--border);background:var(--frost);color:var(--blue);font-family:var(--fs);font-size:12px;font-weight:600;cursor:pointer;transition:all .25s;white-space:nowrap;flex-shrink:0;}
+.btn-copy:hover{background:var(--blue);color:white;border-color:var(--blue);}
+.btn-copy.copied{background:var(--green);color:white;border-color:var(--green);}
+.btn-wa{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,#25D366,#128C7E);color:white;font-family:var(--fs);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .3s;box-shadow:0 4px 16px rgba(37,215,102,.2);}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,215,102,.3);}
+.btn-wa svg{width:20px;height:20px;fill:white;flex-shrink:0;}
+.contrib-note{font-size:12px;color:var(--muted2);text-align:center;margin-top:10px;line-height:1.6;}
+
+/* PREVIEW BUTTON */
+.btn-preview{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border-radius:14px;border:1.5px solid var(--border);background:var(--snow);color:var(--cobalt);font-family:var(--fs);font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;text-decoration:none;margin-top:8px;}
+.btn-preview:hover{background:var(--frost);border-color:rgba(37,99,235,.25);}
+
+/* DIVIDER */
+.done-divider{display:flex;align-items:center;gap:12px;margin:28px 0;}
+.done-divider-line{flex:1;height:1px;background:var(--border);}
+.done-divider-text{font-size:12px;color:var(--muted2);font-weight:500;}
+
+/* CONFETTI BURST */
+.confetti-particle{position:fixed;pointer-events:none;animation:confetti-fall linear forwards;}
+@keyframes confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+@media(max-width:600px){nav{padding:0 20px;}.wrap{padding:100px 16px 60px;}.link-card{padding:20px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="logo.png" alt="Wisherly" class="nav-logo">
+    <span class="nav-wordmark">Wisherly</span>
+  </a>
+</nav>
+
+<div class="wrap">
+
+  <div class="success-hero">
+    <span class="success-confetti" id="confettiIcon">🎉</span>
+    <h1 class="success-title">Your page is <em>live!</em></h1>
+    <p class="success-sub" id="successSub">Share the link below with the person you made it for.</p>
+  </div>
+
+  <!-- RECIPIENT LINK -->
+  <div class="link-card">
+    <div class="link-card-header">
+      <div class="link-card-icon blue">💌</div>
+      <div>
+        <div class="link-card-title">Share with <span id="recipientName">them</span></div>
+        <div class="link-card-desc">This is the surprise page — send it directly to them</div>
+      </div>
+    </div>
+    <div class="link-box">
+      <div class="link-text" id="viewLinkText">Loading…</div>
+      <button class="btn-copy" onclick="copyLink('viewLink','copyBtn1')" id="copyBtn1">Copy</button>
+    </div>
+    <button class="btn-wa" onclick="shareWA('view')">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Share on WhatsApp
+    </button>
+  </div>
+
+  <!-- CONTRIBUTOR LINK (farewell only) -->
+  <div class="link-card" id="contribLinkCard" style="display:none;">
+    <div class="link-card-header">
+      <div class="link-card-icon green">👥</div>
+      <div>
+        <div class="link-card-title">Share with contributors</div>
+        <div class="link-card-desc">Let up to 5 friends add their farewell messages & photos</div>
+      </div>
+    </div>
+    <div class="link-box">
+      <div class="link-text" id="contribLinkText">Loading…</div>
+      <button class="btn-copy" onclick="copyLink('contribLink','copyBtn2')" id="copyBtn2">Copy</button>
+    </div>
+    <button class="btn-wa" onclick="shareWA('contrib')">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Share contributor link
+    </button>
+    <div class="contrib-note">Up to 5 people can each add a message + photo. Once all 5 spots are filled, the link closes automatically.</div>
+  </div>
+
+  <div class="done-divider"><div class="done-divider-line"></div><div class="done-divider-text">or</div><div class="done-divider-line"></div></div>
+
+  <a href="#" class="btn-preview" id="previewBtn">👁 Preview your page</a>
+
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const pageId = params.get('id') || '';
+const occasion = params.get('occasion') || 'birthday';
+const gender = params.get('gender') || 'her';
+const name = params.get('name') || 'them';
+
+// Build links
+const base = location.origin;
+const viewLink = `${base}/${occasion}_view_${gender}.html?id=${pageId}`;
+const contribLink = `${base}/farewell_contribute.html?id=${pageId}`;
+
+// Populate
+document.getElementById('recipientName').textContent = name;
+document.getElementById('viewLinkText').textContent = viewLink;
+document.getElementById('contribLinkText').textContent = contribLink;
+document.getElementById('previewBtn').href = viewLink + '&unlock=none';
+
+// Show contrib card only for farewell
+if (occasion === 'farewell') {
+  document.getElementById('contribLinkCard').style.display = 'block';
+  document.getElementById('successSub').textContent = `Share both links below — one for ${name}, one for contributors.`;
+  document.getElementById('confettiIcon').textContent = '🍃';
+}
+
+// Occasion-specific icon
+const icons = { birthday:'🎂', anniversary:'💍', apology:'🕊️', love:'💌', farewell:'🍃' };
+if (icons[occasion]) document.getElementById('confettiIcon').textContent = icons[occasion];
+
+// COPY
+const viewLinkVal = viewLink;
+const contribLinkVal = contribLink;
+
+function copyLink(type, btnId) {
+  const text = type === 'viewLink' ? viewLinkVal : contribLinkVal;
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = text;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+  });
+  const btn = document.getElementById(btnId);
+  btn.textContent = 'Copied!'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+}
+
+// WHATSAPP
+function shareWA(type) {
+  let msg = '';
+  const recipName = name;
+  if (type === 'view') {
+    msg = `Hey ${recipName}! 🎉 Someone made something special just for you on Wisherly. Open it here: ${viewLinkVal}`;
+  } else {
+    msg = `Hey! ${recipName} is leaving and we're making a surprise farewell page for them on Wisherly 🍃 Add your photo and message here (only 5 spots!): ${contribLinkVal}`;
+  }
+  const encoded = encodeURIComponent(msg);
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  window.open(isMobile ? `whatsapp://send?text=${encoded}` : `https://web.whatsapp.com/send?text=${encoded}`, '_blank');
+}
+
+// CONFETTI BURST
+function burstConfetti() {
+  const shapes = ['🎉','✦','⭐','💕','🌟'];
+  for(let i=0;i<40;i++){
+    const el=document.createElement('div');el.className='confetti-particle';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;font-size:${14+Math.random()*12}px;animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s;`;
+    el.textContent=shapes[Math.floor(Math.random()*shapes.length)];
+    document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());
+  }
+}
+burstConfetti();
+setTimeout(burstConfetti, 1200);
+</script>
+</body>
+</html>
