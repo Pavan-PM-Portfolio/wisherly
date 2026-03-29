@@ -1807,31 +1807,28 @@ document.getElementById('ptog').addEventListener('click',function(){
 <style>
 @keyframes wfp{0%,100%{opacity:1;}50%{opacity:.3;}}
 @media(max-width:768px){
-  /* force all footer inner divs to be fluid */
-  footer{overflow-x:hidden!important;width:100%!important;}
-  footer *{max-width:100%!important;box-sizing:border-box!important;}
-  /* collapse all grids */
-  footer div[style*="grid-template-columns"]{
-    display:flex!important;
-    flex-direction:column!important;
-    gap:24px!important;
-    width:100%!important;
-  }
-  /* fix paddings */
-  footer div[style*="padding:72px"]{padding:40px 20px 36px!important;}
-  footer div[style*="padding:48px"]{padding:32px 20px!important;}
-  footer div[style*="padding:60px"]{padding:32px 20px!important;}
-  footer div[style*="padding:0 52px"]{padding:0 20px!important;}
-  footer div[style*="padding:26px 0"]{padding:16px 0!important;}
-  footer div[style*="padding:26px 0 26px 32px"]{padding:16px 20px!important;border-right:none!important;border-bottom:1px solid rgba(255,255,255,.05)!important;}
-  footer div[style*="padding:18px 52px"]{padding:16px 20px 20px!important;flex-direction:column!important;align-items:flex-start!important;gap:10px!important;}
-  footer div[style*="padding:22px 52px"]{padding:14px 20px!important;}
-  /* occasions strip */
-  footer div[style*="overflow-x:auto"]{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;}
-  /* bottom bar */
-  footer div[style*="justify-content:space-between"]:last-child{flex-direction:column!important;align-items:flex-start!important;gap:8px!important;}
-  /* max-width containers */
+  footer{overflow-x:hidden!important;}
+  /* all inner containers — fluid padding */
   footer div[style*="max-width:1100px"]{padding-left:20px!important;padding-right:20px!important;}
+  /* hero band — stack columns */
+  footer div[style*="grid-template-columns:1fr 1fr"]{display:block!important;}
+  footer div[style*="grid-template-columns:1fr 1fr"] > div{margin-bottom:32px!important;}
+  footer div[style*="grid-template-columns:1fr 1fr"] > div:last-child{margin-bottom:0!important;}
+  /* stats strip — stack */
+  footer div[style*="grid-template-columns:repeat(4,1fr)"]{display:grid!important;grid-template-columns:1fr 1fr!important;}
+  footer div[style*="padding:26px 0 26px 32px"]{padding:16px 16px!important;border-right:none!important;border-bottom:1px solid rgba(255,255,255,.05)!important;}
+  footer div[style*="padding:26px 0;border-right"]{padding:16px 0!important;}
+  /* occasions strip — horizontal scroll */
+  footer div[style*="padding:22px 52px"]{padding:12px 20px!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;flex-wrap:nowrap!important;}
+  /* links grid — 2 col */
+  footer div[style*="grid-template-columns:repeat(4,1fr);gap:32px"]{display:grid!important;grid-template-columns:1fr 1fr!important;gap:24px!important;}
+  /* top padding of links section */
+  footer div[style*="padding:48px 52px"]{padding:32px 20px 28px!important;}
+  /* hero band top */
+  footer div[style*="padding:72px 52px"]{padding:36px 20px 28px!important;}
+  /* bottom bar */
+  footer div[style*="padding:18px 52px"]{padding:16px 20px 24px!important;flex-direction:column!important;align-items:flex-start!important;gap:8px!important;}
+  footer div[style*="padding:18px 52px"] div[style*="display:flex;gap:20px"]{flex-wrap:wrap!important;gap:12px!important;}
 }
 </style>
 </footer>
