@@ -478,8 +478,8 @@ section{position:relative;z-index:2;}
 }
 .occ-card:hover .occ-glow{opacity:.8;}
 .occ-emoji{font-size:34px;margin-bottom:18px;display:block;}
-.occ-title{font-family:var(--fs);font-size:18px;font-weight:600;color:var(--cobalt);margin-bottom:8px;}
-.occ-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+.occ-title{font-family:var(--fd);font-style:italic;font-size:18px;font-weight:400;color:var(--cobalt);margin-bottom:0;}
+.occ-desc{display:none;}
 .occ-link{
   display:inline-flex;align-items:center;gap:6px;margin-top:18px;
   font-family:var(--fs);font-size:12px;font-weight:600;letter-spacing:.04em;
@@ -991,7 +991,7 @@ section{position:relative;z-index:2;}
 </div>
 
 <!-- METRICS -->
-<section id="metrics" class="sp-sm"><div class="wrap">
+<section id="metrics" style="display:none;" class="sp-sm"><div class="wrap">
   <div class="sh" style="margin-bottom:48px;">
     <h2 class="s-h2 rv">The numbers that<br><em>speak for themselves</em></h2>
   </div>
@@ -1007,6 +1007,9 @@ section{position:relative;z-index:2;}
 <section id="hiw" class="sp"><div class="wrap">
 
   <!-- header -->
+  <div class="sh" style="margin-bottom:48px;">
+    <h2 class="s-h2 rv">Four steps to a surprise <em>they'll never forget</em></h2>
+  </div>
   <div class="hiw-header rv">
     <div>
       <h2 class="hiw-h1" style="font-size:clamp(44px,4.8vw,64px);letter-spacing:-1.5px;">From your heart<br>to <em>their smile.</em></h2>
@@ -1226,12 +1229,10 @@ section{position:relative;z-index:2;}
 
 <!-- OCCASIONS -->
 <section id="occasions" class="sp"><div class="wrap">
-  <div class="sh">
-  <h2 class="s-h2 rv d2">Perfect for every <em>special moment</em></h2>
-    <p class="s-sub rv d3">Whatever the occasion, Wisherly makes it unforgettable.</p>
+  <div class="sh" style="margin-bottom:40px;">
+    <h2 class="s-h2 rv d2">Perfect for every <em>special moment</em></h2>
   </div>
-  </div>
-  <div class="occ-grid" style="grid-template-columns:repeat(3,1fr);">
+  <div class="occ-grid" style="grid-template-columns:repeat(3,1fr);gap:14px;">
     <a class="occ-card rv" href="gender.html?occasion=birthday"><div class="occ-glow" style="background:rgba(37,99,235,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
   <style>.fl{animation:flicker 1.2s ease-in-out infinite;}.fl2{animation:flicker 1.2s .3s ease-in-out infinite;}@keyframes flicker{0%,100%{opacity:1;transform:scaleY(1);}50%{opacity:.7;transform:scaleY(.8);}}</style>
   <rect x="4" y="16" width="24" height="13" rx="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.4"/>
@@ -1243,7 +1244,7 @@ section{position:relative;z-index:2;}
   <ellipse class="fl" cx="11.25" cy="5" rx="1.5" ry="2.2" fill="#F59E0B"/>
   <ellipse class="fl2" cx="17.25" cy="4" rx="1.5" ry="2.2" fill="#EF4444"/>
   <ellipse class="fl" cx="23" cy="6" rx="1.2" ry="1.8" fill="#F59E0B" style="animation-delay:.5s;"/>
-</svg></span><div class="occ-title">Birthday Surprises</div><div class="occ-desc">Make their birthday the one they talk about for years. Photos, music, wishes from everyone they love.</div><div class="occ-link">Create birthday page &rarr;</div></a>
+</svg></span><div class="occ-title">Birthday</div></a>
     <a class="occ-card rv d1" href="gender.html?occasion=anniversary"><div class="occ-glow" style="background:rgba(236,72,153,.16);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
   <style>.hbeat{animation:hb 1.2s ease-in-out infinite;}@keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}</style>
   <g class="hbeat" style="transform-origin:16px 16px;">
@@ -1252,7 +1253,7 @@ section{position:relative;z-index:2;}
   </g>
   <circle cx="22" cy="10" r="3" fill="#FDF2F8" stroke="#F9A8D4" stroke-width="1"/>
   <path d="M21 10 L22 11 L24 9" stroke="#EC4899" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></span><div class="occ-title">Anniversary &amp; Romance</div><div class="occ-desc">Relive every chapter of your love story through photos, a memory timeline, and heartfelt messages.</div><div class="occ-link">Create anniversary page &rarr;</div></a>
+</svg></span><div class="occ-title">Anniversary</div></a>
     <a class="occ-card rv d2" href="gender.html?occasion=farewell"><div class="occ-glow" style="background:rgba(6,182,212,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
   <style>.plane{animation:fly 3s ease-in-out infinite;}@keyframes fly{0%,100%{transform:translate(0,0);}50%{transform:translate(3px,-3px);}}</style>
   <g class="plane">
@@ -1262,9 +1263,12 @@ section{position:relative;z-index:2;}
   <path d="M4 25 Q8 23 12 25" stroke="#BAE6FD" stroke-width="1" fill="none" stroke-linecap="round" stroke-dasharray="2 2"/>
   <circle cx="7" cy="10" r="2" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
   <circle cx="13" cy="7" r="1.5" fill="#FCE7F3" stroke="#EC4899" stroke-width=".8"/>
-</svg></span><div class="occ-title">Farewells &amp; Goodbyes</div><div class="occ-desc">Send someone off with a digital scrapbook of every amazing memory you&rsquo;ve shared together.</div><div class="occ-link">Create farewell page &rarr;</div></a>
+</svg></span><div class="occ-title">Farewell</div></a>
+    <a class="occ-card rv d1" href="gender.html?occasion=friendship"><div class="occ-glow" style="background:rgba(245,158,11,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="11" cy="10" r="4" fill="#FEF3C7" stroke="#D97706" stroke-width="1.2"/><circle cx="21" cy="10" r="4" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/><path d="M7 28 C7 22 15 20 16 20 C17 20 25 22 25 28" fill="#FEF3C7" stroke="#D97706" stroke-width="1.2"/><path d="M14 28 C14 23 18 21 18 21" stroke="#DBEAFE" stroke-width="1" fill="none"/></svg></span><div class="occ-title">Friendship</div></a>
+    <a class="occ-card rv d2" href="gender.html?occasion=love"><div class="occ-glow" style="background:rgba(236,72,153,.12);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="9" width="24" height="16" rx="3" fill="#FDF2F8" stroke="#EC4899" stroke-width="1.4"/><path d="M4 13 L16 20 L28 13" stroke="#F9A8D4" stroke-width="1.2" fill="none"/></svg></span><div class="occ-title">Love Notes</div></a>
+    <a class="occ-card rv d3" href="gender.html?occasion=apology"><div class="occ-glow" style="background:rgba(37,99,235,.12);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 3 L17.5 10 L24.5 10.8 L19 15.5 L21 23 L16 19.5 L11 23 L13 15.5 L7.5 10.8 L14.5 10Z" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.1"/></svg></span><div class="occ-title">Apology</div></a>
   </div>
-  <div style="text-align:center;margin-top:36px;">
+  <div style="text-align:center;margin-top:32px;">
     <a href="occasion.html" class="btn-hero-o" style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;font-size:14px;">
       View all 8 occasions
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7 L11 7 M8 4 L11 7 L8 10" stroke="#07122A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1444,7 +1448,7 @@ section{position:relative;z-index:2;}
 </section>
 
 <!-- PRICING -->
-<section id="pricing" class="sp"><div class="wrap">
+<section id="pricing" style="display:none;" class="sp"><div class="wrap">
   <div class="sh">
   <h2 class="s-h2 rv d2">Simple, transparent <em>pricing</em></h2>
     <p class="s-sub rv d3">Start for free. Upgrade when you need more magic.</p>
