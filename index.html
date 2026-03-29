@@ -236,7 +236,6 @@ section{position:relative;z-index:2;}
 @keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5);}50%{box-shadow:0 0 0 4px rgba(16,185,129,0);}}
 @keyframes efade{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
 @media(max-width:768px){
-  #live-ticker{margin-top:104px;}
   .hero-main{grid-template-columns:1fr;gap:32px;padding:36px 0 28px;min-height:auto;}
   .hero-h1{font-size:clamp(32px,9vw,48px);}
 }
@@ -757,26 +756,35 @@ section{position:relative;z-index:2;}
 .nav-mobile a:last-child{border-bottom:none;}
 @media(max-width:768px){.nav-hamburger{display:flex;}}
 
-/* ── Live ticker strip (Option 7 — ECG style) ── */
-#live-ticker{background:var(--white);border-bottom:1px solid rgba(37,99,235,.07);overflow:hidden;margin-top:114px;}
-.ticker-inner{display:flex;align-items:stretch;max-width:none;}
-.ticker-ecg{padding:9px 28px;background:var(--navy);display:flex;align-items:center;gap:12px;flex-shrink:0;}
-.ticker-ecg-label{font-family:var(--fs);font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);}
-.ticker-stats{display:flex;align-items:center;flex:1;}
-.ticker-stat{padding:9px 32px;border-right:1px solid rgba(37,99,235,.07);display:flex;align-items:center;gap:11px;}
+/* ── Live ticker strip ── */
+#live-ticker{background:var(--white);border-bottom:1px solid rgba(37,99,235,.08);overflow:hidden;margin-top:114px;position:relative;}
+.ticker-inner{display:flex;align-items:stretch;width:100%;min-height:48px;}
+.ticker-ecg{padding:9px 28px;background:var(--navy);display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.ticker-rec{display:flex;align-items:center;gap:6px;}
+.ticker-rec-dot{width:8px;height:8px;border-radius:50%;background:#EF4444;animation:ticker-blink 1.2s ease infinite;flex-shrink:0;}
+@keyframes ticker-blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+.ticker-rec-txt{font-family:'Courier New',monospace;font-size:9px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.5);}
+.ticker-signal{display:flex;align-items:flex-end;gap:2px;height:14px;}
+.ticker-bar{width:3px;border-radius:1px;background:#2563EB;}
+@keyframes ticker-sigbar{0%{transform:scaleY(.4);transform-origin:bottom;}100%{transform:scaleY(1);transform-origin:bottom;}}
+.ticker-scan{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(37,99,235,.08),transparent);animation:ticker-scan 3s linear infinite;pointer-events:none;z-index:3;}
+@keyframes ticker-scan{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+.ticker-stats{display:flex;align-items:center;flex:1;width:100%;}
+.ticker-stat{padding:9px 40px;border-right:1px solid rgba(37,99,235,.07);display:flex;align-items:center;gap:11px;flex:1;}
 .ticker-stat:last-of-type{border-right:none;}
 .ticker-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .ticker-n{font-family:var(--fd);font-style:italic;font-size:22px;color:var(--navy);line-height:1;}
 .ticker-n span{color:var(--blue);}
 .ticker-l{font-family:var(--fs);font-size:10px;color:var(--muted2);}
-.ticker-right{padding:0 24px;display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
-.ticker-live-dot{width:6px;height:6px;border-radius:50%;background:#10B981;animation:livepulse 1.5s ease infinite;}
-.ticker-live-txt{font-family:var(--fs);font-size:10px;color:#059669;font-weight:600;white-space:nowrap;}
 @media(max-width:768px){
-  .ticker-ecg{padding:8px 16px;}
-  .ticker-stat{padding:8px 16px;}
-  .ticker-right{padding:0 16px;}
-  .ticker-n{font-size:18px;}
+  .ticker-ecg{padding:8px 16px;gap:10px;}
+  .ticker-rec-txt{display:none;}
+  .ticker-stats{flex-direction:row;}
+  .ticker-stat{padding:8px 16px;flex:1;justify-content:center;gap:8px;}
+  .ticker-stat:last-of-type{border-right:none;}
+  .ticker-n{font-size:17px;}
+  .ticker-l{font-size:9px;}
+  .ticker-icon{width:22px;height:22px;}
 }
 </style>
 </head>
@@ -828,14 +836,20 @@ section{position:relative;z-index:2;}
 
 <!-- LIVE TICKER -->
 <div id="live-ticker">
+  <div class="ticker-scan"></div>
   <div class="ticker-inner">
     <div class="ticker-ecg">
-      <svg width="88" height="28" viewBox="0 0 88 28" fill="none">
-        <polyline points="0,14 14,14 20,3 26,25 32,7 38,21 44,14 88,14" stroke="#2563EB" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
-        <circle cx="44" cy="14" r="3" fill="#2563EB"/>
-        <circle cx="44" cy="14" r="6" fill="rgba(37,99,235,.2)" style="animation:ripple 1.5s ease-out infinite;"/>
-      </svg>
-      <span class="ticker-ecg-label">Live</span>
+      <div class="ticker-rec">
+        <div class="ticker-rec-dot"></div>
+        <span class="ticker-rec-txt">LIVE</span>
+      </div>
+      <div class="ticker-signal">
+        <div class="ticker-bar" style="height:4px;animation:ticker-sigbar .6s .0s ease-in-out infinite alternate;"></div>
+        <div class="ticker-bar" style="height:7px;animation:ticker-sigbar .6s .1s ease-in-out infinite alternate;"></div>
+        <div class="ticker-bar" style="height:10px;animation:ticker-sigbar .6s .2s ease-in-out infinite alternate;"></div>
+        <div class="ticker-bar" style="height:7px;animation:ticker-sigbar .6s .3s ease-in-out infinite alternate;"></div>
+        <div class="ticker-bar" style="height:4px;animation:ticker-sigbar .6s .4s ease-in-out infinite alternate;"></div>
+      </div>
     </div>
     <div class="ticker-stats">
       <div class="ticker-stat">
@@ -856,10 +870,6 @@ section{position:relative;z-index:2;}
           <div class="ticker-l">Memories shared</div>
         </div>
       </div>
-    </div>
-    <div class="ticker-right">
-      <div class="ticker-live-dot"></div>
-      <span class="ticker-live-txt">Updating Live</span>
     </div>
   </div>
 </div>
