@@ -732,6 +732,30 @@ section{position:relative;z-index:2;}
   .marquee-wrap{margin-top:0;}
   .met-cell{padding:28px 16px;}
   .met-num{font-size:40px;}
+  /* Metrics header */
+  #metrics .sh{margin-bottom:28px;}
+  /* Hero occasions grid — 2 col on mobile */
+  .hero-occ-grid{grid-template-columns:repeat(2,1fr)!important;gap:6px;}
+  .hero-occ-name{font-size:11px;}
+  .hero-occ-icon{width:28px;height:28px;}
+  /* Hero main */
+  .hero-main{grid-template-columns:1fr!important;gap:28px;padding:32px 0 24px;}
+  .hero-right{margin-top:0;}
+  /* HIW */
+  .hiw-header{grid-template-columns:1fr!important;gap:24px;}
+  .hiw-steps{grid-template-columns:1fr 1fr!important;}
+  .hiw-h1{font-size:clamp(36px,9vw,52px)!important;}
+  /* Demo section */
+  #demo .sh{margin-bottom:28px;}
+  #demo>div>div[style*="grid-template-columns:1fr 1fr"]{display:block!important;}
+  #demo>div>div[style*="grid-template-columns:1fr 1fr"]>div:first-child{margin-bottom:32px;}
+  #demo>div:last-child{grid-template-columns:1fr!important;display:flex!important;flex-direction:column!important;}
+  /* Comparison timeline */
+  .comp-timeline::before{left:16px;}
+  .comp-moment{grid-template-columns:24px 1fr;gap:10px;}
+  .comp-before{display:none;}
+  .comp-side.comp-after{padding-left:0;}
+  .comp-node{justify-content:flex-start;}
 }
 
 .nav-hamburger{
@@ -1336,6 +1360,10 @@ section{position:relative;z-index:2;}
 
 <!-- DEMO -->
 <section id="demo" class="sp" style="background:var(--white);padding-bottom:0;"><div class="wrap">
+  <div class="sh" style="margin-bottom:48px;">
+    <h2 class="s-h2 rv">See <em>exactly</em> what they'll experience</h2>
+    <p class="s-sub rv d1">Open a fully-loaded Wisherly page and feel the magic yourself.</p>
+  </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;margin-bottom:52px;">
     <div style="position:relative;">
       <div style="font-family:var(--fd);font-size:120px;color:#EFF6FF;line-height:.8;position:absolute;top:-20px;left:-16px;font-weight:400;user-select:none;">"</div>
@@ -1399,7 +1427,15 @@ section{position:relative;z-index:2;}
   </div>
   <div style="background:var(--snow);padding:28px 36px;">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/><circle cx="10" cy="16" r="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/><circle cx="16" cy="16" r="3" fill="#BFDBFE" stroke="#2563EB" stroke-width="1"/><circle cx="22" cy="16" r="3" fill="#93C5FD" stroke="#2563EB" stroke-width="1"/></svg>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="13" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/>
+  <path style="animation:hbeat 1.4s .0s ease-in-out infinite;transform-origin:10px 13px;" d="M10 17 L7.5 14.5 Q6 12.5 7.8 11.5 Q9.2 11 10.5 13 Q11.8 11 13.2 11.5 Q15 12.5 13.5 14.5Z" fill="#EC4899" opacity=".8"/>
+  <path style="animation:hbeat 1.4s .2s ease-in-out infinite;transform-origin:22px 13px;" d="M22 17 L19.5 14.5 Q18 12.5 19.8 11.5 Q21.2 11 22.5 13 Q23.8 11 25.2 11.5 Q27 12.5 25.5 14.5Z" fill="#2563EB" opacity=".6"/>
+  <path style="animation:hbeat 1.4s .4s ease-in-out infinite;transform-origin:10px 23px;" d="M10 27 L7.5 24.5 Q6 22.5 7.8 21.5 Q9.2 21 10.5 23 Q11.8 21 13.2 21.5 Q15 22.5 13.5 24.5Z" fill="#F59E0B" opacity=".7"/>
+  <path style="animation:hbeat 1.4s .6s ease-in-out infinite;transform-origin:22px 23px;" d="M22 27 L19.5 24.5 Q18 22.5 19.8 21.5 Q21.2 21 22.5 23 Q23.8 21 25.2 21.5 Q27 22.5 25.5 24.5Z" fill="#8B5CF6" opacity=".6"/>
+  <circle cx="26" cy="8" r="5" fill="#2563EB"/>
+  <text x="26" y="11.5" font-family="Cormorant Garamond,serif" font-size="7" font-weight="700" fill="white" text-anchor="middle" font-style="italic">8</text>
+</svg>
       <div style="font-family:var(--fd);font-style:italic;font-size:40px;color:var(--navy);line-height:1;"><span style="color:var(--blue);">8</span></div>
     </div>
     <div style="font-family:var(--fs);font-size:12px;color:var(--muted);line-height:1.6;">occasions — each with a unique emotional design and atmosphere</div>
