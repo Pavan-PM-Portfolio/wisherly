@@ -1806,14 +1806,32 @@ document.getElementById('ptog').addEventListener('click',function(){
 
 <style>
 @keyframes wfp{0%,100%{opacity:1;}50%{opacity:.3;}}
-@media(max-width:900px){
-  footer > div > div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;gap:40px!important;}
-  footer > div > div > div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr 1fr!important;}
-  footer > div[style*="padding:48px"]{padding:40px 20px!important;}
-  footer > div[style*="padding:72px"]{padding:48px 20px 40px!important;}
-  footer > div > div[style*="padding:0 52px"]{padding:0 20px!important;}
-  footer > div[style*="padding:22px 52px"]{padding:16px 20px!important;}
-  footer > div[style*="padding:18px 52px"]{padding:16px 20px 24px!important;flex-direction:column;align-items:flex-start!important;}
+@media(max-width:768px){
+  /* force all footer inner divs to be fluid */
+  footer{overflow-x:hidden!important;width:100%!important;}
+  footer *{max-width:100%!important;box-sizing:border-box!important;}
+  /* collapse all grids */
+  footer div[style*="grid-template-columns"]{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:24px!important;
+    width:100%!important;
+  }
+  /* fix paddings */
+  footer div[style*="padding:72px"]{padding:40px 20px 36px!important;}
+  footer div[style*="padding:48px"]{padding:32px 20px!important;}
+  footer div[style*="padding:60px"]{padding:32px 20px!important;}
+  footer div[style*="padding:0 52px"]{padding:0 20px!important;}
+  footer div[style*="padding:26px 0"]{padding:16px 0!important;}
+  footer div[style*="padding:26px 0 26px 32px"]{padding:16px 20px!important;border-right:none!important;border-bottom:1px solid rgba(255,255,255,.05)!important;}
+  footer div[style*="padding:18px 52px"]{padding:16px 20px 20px!important;flex-direction:column!important;align-items:flex-start!important;gap:10px!important;}
+  footer div[style*="padding:22px 52px"]{padding:14px 20px!important;}
+  /* occasions strip */
+  footer div[style*="overflow-x:auto"]{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;}
+  /* bottom bar */
+  footer div[style*="justify-content:space-between"]:last-child{flex-direction:column!important;align-items:flex-start!important;gap:8px!important;}
+  /* max-width containers */
+  footer div[style*="max-width:1100px"]{padding-left:20px!important;padding-right:20px!important;}
 }
 </style>
 </footer>
@@ -1843,24 +1861,32 @@ document.getElementById('ptog').addEventListener('click',function(){
       setTimeout(initCounter, 500);
       return;
     }
-    window._db.collection('stats').doc('global')
-      .onSnapshot(
-        function(doc) {
-          if (doc && doc.exists) {
-            var data = doc.data();
-            var count = (data && data.pageCount) ? data.pageCount : 0;
-            setAllCounters(count);
-          } else {
-            // doc doesn't exist yet — show 0
-            setAllCounters(0);
-          }
-        },
-        function(err) {
-          console.error('Wisherly counter error:', err.code, err.message);
-          // Firestore rules may be blocking — show 0
+    var ref = window._db.collection('stats').doc('global');
+    // First do an immediate .get() so counter shows without waiting
+    ref.get().then(function(doc) {
+      if (doc && doc.exists) {
+        var data = doc.data();
+        setAllCounters((data && data.pageCount) ? data.pageCount : 0);
+      } else {
+        setAllCounters(0);
+      }
+    }).catch(function(err) {
+      console.error('Wisherly counter .get() error:', err.code, err.message);
+    });
+    // Then subscribe for real-time updates
+    ref.onSnapshot(
+      function(doc) {
+        if (doc && doc.exists) {
+          var data = doc.data();
+          setAllCounters((data && data.pageCount) ? data.pageCount : 0);
+        } else {
           setAllCounters(0);
         }
-      );
+      },
+      function(err) {
+        console.error('Wisherly counter onSnapshot error:', err.code, err.message);
+      }
+    );
   }
 
   // Wait for DOM + Firebase to be ready
