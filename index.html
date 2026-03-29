@@ -205,128 +205,41 @@ section{position:relative;z-index:2;}
 /* ─────────────────────────────────────────────────────────
    HERO
 ───────────────────────────────────────────────────────── */
-#hero{padding-top:114px;position:relative;overflow:hidden;background:var(--snow);}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 114px);align-items:stretch;}
-.hero-left{padding:48px 40px 48px 56px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(37,99,235,.07);animation:efade .7s cubic-bezier(.16,1,.3,1) .1s both;}
-.hero-occ-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:30px;}
-.hero-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:500;border:1.5px solid rgba(37,99,235,.15);background:white;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;}
-.hero-pill:hover{border-color:rgba(37,99,235,.3);background:var(--frost);}
-.hero-pill.active{background:#07122A;color:white;border-color:#07122A;}
-.hero-h1{font-family:var(--fd);font-size:clamp(32px,2.8vw,44px);font-weight:400;color:#07122A;line-height:1.1;letter-spacing:-.3px;margin-bottom:16px;}
+#hero{padding-top:0;position:relative;overflow:hidden;background:var(--snow);}
+.hero-main{display:grid;grid-template-columns:1.1fr 1fr;min-height:calc(100vh - 160px);align-items:center;gap:60px;padding:52px 0 40px;}
+.hero-left{display:flex;flex-direction:column;justify-content:center;}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.hero-eyebrow-line{width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--mist));}
+.hero-h1{font-family:var(--fd);font-size:clamp(38px,4.2vw,58px);font-weight:400;color:var(--navy);line-height:1.0;letter-spacing:-.8px;margin-bottom:20px;}
 .hero-h1 em{font-style:italic;color:var(--blue);display:block;}
-.hero-sub{font-family:var(--fs);font-size:15px;color:var(--muted);line-height:1.75;max-width:420px;margin-bottom:28px;}
+.hero-sub{font-family:var(--fs);font-size:15px;color:var(--muted);line-height:1.8;max-width:400px;margin-bottom:28px;}
 .hero-btns{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
-.btn-hero-p{padding:13px 28px;border-radius:12px;background:linear-gradient(135deg,var(--royal),var(--blue));color:white;font-family:var(--fs);font-size:13px;font-weight:600;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(37,99,235,.28);transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-hero-p{padding:13px 28px;border-radius:12px;background:linear-gradient(135deg,var(--royal),var(--blue));color:white;font-family:var(--fs);font-size:13.5px;font-weight:600;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(37,99,235,.28);transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
 .btn-hero-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,99,235,.38);}
-.btn-hero-o{padding:13px 20px;border-radius:12px;background:white;color:#07122A;font-family:var(--fs);font-size:13px;font-weight:500;border:1.5px solid rgba(37,99,235,.15);cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-hero-o{padding:13px 20px;border-radius:12px;background:var(--white);color:var(--navy);font-family:var(--fs);font-size:13.5px;font-weight:500;border:1.5px solid rgba(37,99,235,.15);cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
 .btn-hero-o:hover{border-color:rgba(37,99,235,.3);background:var(--frost);transform:translateY(-2px);}
-.hero-soc-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;}
+.hero-soc-label{font-family:var(--fs);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;}
 .hero-soc-row{display:flex;gap:8px;}
-.hero-soc{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(37,99,235,.1);background:white;cursor:pointer;transition:all .2s;text-decoration:none;}
+.hero-soc{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(37,99,235,.1);background:var(--white);cursor:pointer;transition:all .2s;text-decoration:none;}
 .hero-soc:hover{border-color:rgba(37,99,235,.25);transform:translateY(-2px);}
-.hero-right{background:#EEF3FF;padding:44px 36px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;animation:efade .7s cubic-bezier(.16,1,.3,1) .2s both;}
-.h-deco{position:absolute;pointer-events:none;user-select:none;font-style:normal;}
-.h-deco-1{top:20px;left:20px;font-size:22px;opacity:.15;animation:dfloat 4s ease-in-out infinite alternate;}
-.h-deco-2{top:24px;right:24px;font-size:16px;opacity:.13;animation:dfloat 5s 1s ease-in-out infinite alternate;}
-.h-deco-3{bottom:24px;left:24px;font-size:18px;opacity:.13;animation:dfloat 4.5s .5s ease-in-out infinite alternate;}
-.h-deco-4{bottom:36px;right:20px;font-size:14px;opacity:.11;animation:dfloat 3.5s 2s ease-in-out infinite alternate;}
-.h-deco-5{top:48%;left:14px;font-size:12px;opacity:.09;animation:dfloat 6s 1.5s ease-in-out infinite alternate;}
-.h-deco-6{top:44%;right:14px;font-size:12px;opacity:.09;animation:dfloat 5.5s .8s ease-in-out infinite alternate;}
-@keyframes dfloat{0%{transform:translateY(0) rotate(-4deg);}100%{transform:translateY(-10px) rotate(4deg);}}
-.h-spark{position:absolute;pointer-events:none;}
-.h-spark-svg{animation:sptwinkle var(--sd,2.5s) ease-in-out infinite;}
-@keyframes sptwinkle{0%,100%{opacity:.07;transform:scale(.8);}50%{opacity:.3;transform:scale(1.2);}}
-.h-cdot{position:absolute;border-radius:50%;pointer-events:none;animation:cdrift ease-in-out infinite alternate;}
-@keyframes cdrift{0%{transform:translateY(0);}100%{transform:translateY(-8px);}}
-.h-card-wrap{position:relative;width:100%;max-width:340px;z-index:2;}
-.h-card{background:white;border-radius:20px;padding:22px;border:1px solid rgba(37,99,235,.08);box-shadow:0 8px 40px rgba(7,18,42,.09);}
-.h-card-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid rgba(37,99,235,.06);}
-.h-card-av{width:40px;height:40px;border-radius:12px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.h-card-title{font-family:var(--fd);font-style:italic;font-size:17px;color:#07122A;margin-bottom:2px;}
-.h-card-sub{font-size:11px;color:var(--muted2);}
-.h-photos{display:flex;gap:6px;margin-bottom:12px;}
-.h-photo{height:58px;border-radius:10px;flex:1;}
-.h-music{display:flex;align-items:center;gap:8px;background:#F0F5FF;border-radius:8px;padding:8px 12px;margin-bottom:12px;}
-.h-mbars{display:flex;align-items:center;gap:2px;}
-.h-mbar{width:3px;border-radius:2px;background:#2563EB;animation:hmb var(--md,.6s) ease-in-out infinite alternate;}
-@keyframes hmb{0%{height:3px;}100%{height:var(--mh,10px);}}
-.h-music-txt{font-size:11px;color:var(--muted);}
-.h-msg{background:#F7F9FF;border-radius:10px;padding:11px 13px;font-family:var(--fb);font-style:italic;font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:13px;}
-.h-footer{display:flex;align-items:center;justify-content:space-between;}
-.h-avs{display:flex;}
-.h-av{width:26px;height:26px;border-radius:50%;border:2px solid white;margin-left:-7px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:600;}
-.h-av:first-child{margin-left:0;}
-.h-cbadge{background:#EFF6FF;border-radius:999px;padding:5px 12px;font-size:11px;font-weight:600;color:#1D4ED8;}
-.h-notif{position:absolute;background:white;border-radius:14px;padding:10px 14px;border:1px solid rgba(37,99,235,.1);box-shadow:0 8px 28px rgba(7,18,42,.1);display:flex;align-items:center;gap:10px;z-index:10;min-width:200px;}
-.h-notif.n1{top:-18px;right:-8px;animation:nfloat 3.5s ease-in-out infinite alternate;}
-.h-notif.n2{bottom:-18px;right:-8px;animation:nfloat 3.5s 1.75s ease-in-out infinite alternate;}
-@keyframes nfloat{0%{transform:translateY(0);}100%{transform:translateY(-7px);}}
-.h-notif-icon{font-size:18px;flex-shrink:0;}
-.h-notif-txt{font-size:12px;font-weight:600;color:#07122A;}
-.h-notif-sub{font-size:10px;color:var(--muted2);margin-top:1px;}
-.h-pdots{display:flex;gap:5px;justify-content:center;margin-top:16px;}
-.h-pd{width:6px;height:6px;border-radius:50%;background:rgba(37,99,235,.2);}
-.h-pd.active{background:#2563EB;width:18px;border-radius:3px;}
-@media(max-width:768px){
-  .hero-grid{grid-template-columns:1fr;min-height:auto;}
-  .hero-left{padding:36px 20px 32px;border-right:none;border-bottom:1px solid rgba(37,99,235,.07);}
-  .hero-right{padding:32px 20px;min-height:400px;}
-  .hero-h1{font-size:clamp(32px,9vw,48px);}
-  .h-notif{display:none;}
-  .h-deco-2,.h-deco-4,.h-deco-5,.h-deco-6{display:none;}
-}
-
-/* Eyebrow */
-.eyebrow{
-  display:inline-flex;align-items:center;gap:12px;
-  margin-bottom:44px;
-  animation:efade .7s cubic-bezier(.16,1,.3,1) .05s both;
-}
-.eyebrow-line{width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--pale));}
-.eyebrow-line.r{background:linear-gradient(90deg,var(--pale),transparent);}
-.eyebrow-text{
-  font-family:var(--fs);font-size:11px;font-weight:500;
-  letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);
-}
-.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);animation:bdot 2.5s ease-in-out infinite;}
-@keyframes bdot{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(37,99,235,.3);}50%{opacity:.7;box-shadow:0 0 0 5px rgba(37,99,235,.05);}}
-
-
-
-
-100%{background-position:100% 50%;}}
-
-/* Animated underline on the italic */
-
-to{width:60%;}}
-
-
-
-
-
-/* Chips */
-
-.chip{
-  padding:7px 18px;border-radius:999px;
-  border:1px solid rgba(37,99,235,.12);
-  background:rgba(239,243,255,.8);backdrop-filter:blur(8px);
-  font-family:var(--fs);font-size:11.5px;font-weight:400;
-  color:var(--royal);letter-spacing:.02em;
-  display:inline-flex;align-items:center;gap:6px;
-  transition:all .25s;
-}
-.chip:hover{background:var(--frost);border-color:rgba(37,99,235,.25);box-shadow:0 4px 12px rgba(13,34,96,.06);}
-
-/* Scroll hint */
-.scroll-hint{
-  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  animation:efade 1s ease 1.5s both;
-}
-.scroll-hint span{font-family:var(--fs);font-size:9px;letter-spacing:.35em;color:var(--muted2);text-transform:uppercase;}
-.scroll-line{width:1px;height:44px;background:linear-gradient(180deg,var(--pale),transparent);animation:sla 3s ease infinite;}
-@keyframes sla{0%{transform:scaleY(0);transform-origin:top;}45%{transform:scaleY(1);transform-origin:top;}55%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+/* right — feature cards */
+.hero-right{display:flex;flex-direction:column;gap:10px;}
+.hero-feat{background:var(--white);border-radius:14px;padding:14px 18px;border:1px solid rgba(37,99,235,.08);display:flex;align-items:center;gap:13px;transition:all .25s;box-shadow:0 2px 8px rgba(7,18,42,.04);}
+.hero-feat:hover{border-color:rgba(37,99,235,.2);transform:translateX(4px);box-shadow:0 4px 16px rgba(7,18,42,.08);}
+.hero-feat-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-feat-title{font-family:var(--fd);font-style:italic;font-size:16px;color:var(--navy);margin-bottom:2px;}
+.hero-feat-sub{font-family:var(--fs);font-size:11px;color:var(--muted2);}
+.hero-feat-arrow{margin-left:auto;color:var(--mist);font-size:16px;flex-shrink:0;transition:all .25s;}
+.hero-feat:hover .hero-feat-arrow{color:var(--blue);transform:translateX(3px);}
+/* stats bar */
+@keyframes ripple{0%{transform:scale(1);opacity:.6;}100%{transform:scale(2.5);opacity:0;}}
+@keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5);}50%{box-shadow:0 0 0 4px rgba(16,185,129,0);}}
 @keyframes efade{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:768px){
+  #live-ticker{margin-top:104px;}
+  .hero-main{grid-template-columns:1fr;gap:32px;padding:36px 0 28px;min-height:auto;}
+  .hero-h1{font-size:clamp(32px,9vw,48px);}
+}
 
 /* ─────────────────────────────────────────────────────────
    MARQUEE
@@ -579,23 +492,29 @@ to{width:60%;}}
    COMPARISON
 ───────────────────────────────────────────────────────── */
 #comparison{background:var(--snow);}
-.comp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:940px;margin:0 auto;}
-.comp-card{border-radius:var(--r-lg);padding:52px 44px;border:1px solid var(--border);}
-.comp-card.before{background:var(--white);}
-.comp-card.after{background:linear-gradient(160deg,rgba(239,243,255,.8),rgba(224,233,255,.6));border-color:rgba(37,99,235,.18);}
-.comp-lbl{font-family:var(--fs);font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px;display:block;}
-.comp-card.before .comp-lbl{color:var(--muted2);}
-.comp-card.after .comp-lbl{color:var(--blue);}
-.comp-h{font-family:var(--fd);font-size:28px;font-weight:400;line-height:1.15;margin-bottom:28px;}
-.comp-card.before .comp-h{color:var(--muted);}
-.comp-card.after .comp-h{background:linear-gradient(135deg,var(--cobalt),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.comp-list{list-style:none;display:flex;flex-direction:column;gap:14px;}
-.comp-list li{display:flex;align-items:flex-start;gap:13px;font-size:14px;line-height:1.55;}
-.comp-card.before .comp-list li{color:var(--muted);}
-.comp-card.after .comp-list li{color:var(--ink2);}
-.comp-ico{width:28px;height:28px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;}
-.comp-card.before .comp-ico{background:var(--snow);}
-.comp-card.after .comp-ico{background:var(--frost);border:1px solid var(--mist);}
+.comp-timeline{position:relative;display:flex;flex-direction:column;gap:0;max-width:760px;margin:0 auto;}
+.comp-timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--mist) 10%,var(--mist) 90%,transparent);transform:translateX(-50%);}
+.comp-moment{display:grid;grid-template-columns:1fr 48px 1fr;align-items:center;padding:14px 0;}
+.comp-side{display:flex;}
+.comp-before{justify-content:flex-end;padding-right:28px;}
+.comp-after{justify-content:flex-start;padding-left:28px;}
+.comp-node{display:flex;align-items:center;justify-content:center;}
+.comp-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;transition:all .3s;}
+.comp-card-before{background:var(--white);border-radius:14px;padding:14px 18px;border:1px solid var(--border);max-width:300px;}
+.comp-card-after{background:linear-gradient(135deg,var(--frost),rgba(237,233,254,.4));border-radius:14px;padding:14px 18px;border:1px solid rgba(37,99,235,.12);max-width:300px;}
+.comp-card-lbl{font-family:var(--fs);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:5px;}
+.comp-card-before .comp-card-lbl{color:var(--muted2);}
+.comp-card-after .comp-card-lbl{color:var(--blue);}
+.comp-card-txt{font-family:var(--fs);font-size:13.5px;line-height:1.6;}
+.comp-card-before .comp-card-txt{color:var(--muted);}
+.comp-card-after .comp-card-txt{color:var(--cobalt);font-weight:500;}
+@media(max-width:768px){
+  .comp-timeline::before{left:20px;}
+  .comp-moment{grid-template-columns:28px 1fr;gap:12px;}
+  .comp-before{display:none;}
+  .comp-side.comp-after{padding-left:0;}
+  .comp-node{justify-content:flex-start;}
+}
 
 /* ─────────────────────────────────────────────────────────
    TESTIMONIALS
@@ -798,7 +717,7 @@ to{width:60%;}}
   /* Layout */
   .wrap,.wrap-sm{padding:0 20px;}
   /* Hero */
-  #hero{padding-top:100px;}
+  #live-ticker{margin-top:104px;}
   .btn-hero-p,.btn-hero-o{width:100%;justify-content:center;padding:14px 24px;}
   /* Sections */
   .hiw-layout,.demo-split,.comp-wrap,.f-mid{grid-template-columns:1fr;}
@@ -837,6 +756,28 @@ to{width:60%;}}
 }
 .nav-mobile a:last-child{border-bottom:none;}
 @media(max-width:768px){.nav-hamburger{display:flex;}}
+
+/* ── Live ticker strip (Option 7 — ECG style) ── */
+#live-ticker{background:var(--white);border-bottom:1px solid rgba(37,99,235,.07);overflow:hidden;margin-top:114px;}
+.ticker-inner{display:flex;align-items:stretch;max-width:none;}
+.ticker-ecg{padding:9px 28px;background:var(--navy);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.ticker-ecg-label{font-family:var(--fs);font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);}
+.ticker-stats{display:flex;align-items:center;flex:1;}
+.ticker-stat{padding:9px 32px;border-right:1px solid rgba(37,99,235,.07);display:flex;align-items:center;gap:11px;}
+.ticker-stat:last-of-type{border-right:none;}
+.ticker-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ticker-n{font-family:var(--fd);font-style:italic;font-size:22px;color:var(--navy);line-height:1;}
+.ticker-n span{color:var(--blue);}
+.ticker-l{font-family:var(--fs);font-size:10px;color:var(--muted2);}
+.ticker-right{padding:0 24px;display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
+.ticker-live-dot{width:6px;height:6px;border-radius:50%;background:#10B981;animation:livepulse 1.5s ease infinite;}
+.ticker-live-txt{font-family:var(--fs);font-size:10px;color:#059669;font-weight:600;white-space:nowrap;}
+@media(max-width:768px){
+  .ticker-ecg{padding:8px 16px;}
+  .ticker-stat{padding:8px 16px;}
+  .ticker-right{padding:0 16px;}
+  .ticker-n{font-size:18px;}
+}
 </style>
 </head>
 <body>
@@ -848,7 +789,7 @@ to{width:60%;}}
 <div id="topBanner">
   <span class="banner-shimmer"></span>
   <span class="banner-dot"></span>
-  <span class="banner-text"><strong>✦ Wisherly is free during launch</strong> — join <span id="bannerCount">12,000+</span> surprise pages already created</span>
+  <span class="banner-text">Join the <span id="bannerCount">many</span> who made their Loved One cry <strong>(Happily)</strong> &mdash; <span id="bannerPagesCount">0</span> pages created already</span>
   <span class="banner-sep">·</span>
   <a href="occasion.html" class="banner-link">Start free →</a>
   <button class="banner-close" onclick="closeBanner()" aria-label="Close">×</button>
@@ -885,22 +826,67 @@ to{width:60%;}}
   <a href="occasion.html" class="btn-cta-nav" style="text-align:center;">Create a Page</a>
 </div>
 
+<!-- LIVE TICKER -->
+<div id="live-ticker">
+  <div class="ticker-inner">
+    <div class="ticker-ecg">
+      <svg width="88" height="28" viewBox="0 0 88 28" fill="none">
+        <polyline points="0,14 14,14 20,3 26,25 32,7 38,21 44,14 88,14" stroke="#2563EB" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+        <circle cx="44" cy="14" r="3" fill="#2563EB"/>
+        <circle cx="44" cy="14" r="6" fill="rgba(37,99,235,.2)" style="animation:ripple 1.5s ease-out infinite;"/>
+      </svg>
+      <span class="ticker-ecg-label">Live</span>
+    </div>
+    <div class="ticker-stats">
+      <div class="ticker-stat">
+        <div class="ticker-icon" style="background:var(--frost);">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width=".9"/><circle cx="5" cy="7.5" r="1.8" fill="#93C5FD"/><path d="M1 11 L3.5 8.5 L6 11 L9 8 L15 12" stroke="#2563EB" stroke-width=".9" fill="none" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div class="ticker-n"><span id="tickerPagesCount">0</span>+</div>
+          <div class="ticker-l">Surprise pages created</div>
+        </div>
+      </div>
+      <div class="ticker-stat">
+        <div class="ticker-icon" style="background:#FDF2F8;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 13.5 L2.5 8 Q1 5.5 3.5 4 Q5.5 3 8 6 Q10.5 3 12.5 4 Q15 5.5 13.5 8Z" fill="#FCE7F3" stroke="#EC4899" stroke-width=".9"/></svg>
+        </div>
+        <div>
+          <div class="ticker-n"><span id="tickerMemoriesCount">0</span>+</div>
+          <div class="ticker-l">Memories shared</div>
+        </div>
+      </div>
+    </div>
+    <div class="ticker-right">
+      <div class="ticker-live-dot"></div>
+      <span class="ticker-live-txt">Updating Live</span>
+    </div>
+  </div>
+</div>
+
 <!-- HERO -->
 <section id="hero">
-
-  <div class="hero-grid">
+<div class="wrap">
+  <div class="hero-main">
 
     <!-- LEFT -->
-    <div class="hero-left">
-      <h1 class="hero-h1">A digital surprise<br>they'll talk about<br><em>for years.</em></h1>
-
-      <p class="hero-sub">Build a beautiful digital surprise page — with photos, music, and heartfelt messages from everyone who loves them. Free. No signup needed.</p>
-
-      <div class="hero-btns">
-        <a href="occasion.html" class="btn-hero-p">+ Create your page free</a>
-        <a href="demo.html" class="btn-hero-o">&#9654; See a live demo</a>
+    <div class="hero-left" style="animation:efade .7s cubic-bezier(.16,1,.3,1) .1s both;">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span class="s-tag" style="margin:0;font-size:10px;">Digital gifting &middot; Free during launch</span>
       </div>
-
+      <h1 class="hero-h1">A surprise they'll<br>talk about<br><em>for years.</em></h1>
+      <p class="hero-sub">Build a beautiful digital surprise page with photos, music and heartfelt messages from everyone who loves them. Free. No signup needed.</p>
+      <div class="hero-btns">
+        <a href="occasion.html" class="btn-hero-p">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" fill="rgba(255,255,255,.2)"/><path d="M5 7.5 L7 9.5 L10 6" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Create your page free
+        </a>
+        <a href="demo.html" class="btn-hero-o">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#07122A" stroke-width="1.1"/><path d="M5 4 L9 6.5 L5 9Z" fill="#07122A"/></svg>
+          See a live demo
+        </a>
+      </div>
       <div class="hero-soc-label">Follow us</div>
       <div class="hero-soc-row">
         <a href="#" class="hero-soc" title="Instagram" id="soc-instagram">
@@ -918,175 +904,54 @@ to{width:60%;}}
       </div>
     </div>
 
-    <!-- RIGHT -->
-    <div class="hero-right" style="padding:28px 28px;flex-direction:column;gap:10px;align-items:stretch;justify-content:center;">
-
-      <!-- sparkles -->
-      <div class="h-spark" style="top:18px;right:22px;"><svg class="h-spark-svg" style="--sd:2.5s;width:12px;height:12px;" viewBox="0 0 14 14" fill="none"><path d="M7 0v14M0 7h14M2 2l10 10M12 2L2 12" stroke="#2563EB" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-      <div class="h-spark" style="bottom:90px;left:18px;"><svg class="h-spark-svg" style="--sd:3.2s;width:10px;height:10px;" viewBox="0 0 14 14" fill="none"><path d="M7 0v14M0 7h14M2 2l10 10M12 2L2 12" stroke="#7C3AED" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-      <div class="h-cdot" style="width:5px;height:5px;background:#BFDBFE;top:20%;left:8%;animation-duration:3.2s;"></div>
-      <div class="h-cdot" style="width:4px;height:4px;background:#FCA5A5;top:75%;left:6%;animation-duration:4s;animation-delay:.6s;"></div>
-      <div class="h-cdot" style="width:4px;height:4px;background:#6EE7B7;top:30%;right:6%;animation-duration:3.5s;animation-delay:1s;"></div>
-
-      <!-- COUNTER CARD -->
-      <div style="background:white;border-radius:18px;border:1px solid rgba(37,99,235,.1);overflow:hidden;box-shadow:0 6px 28px rgba(7,18,42,.07);">
-
-        <!-- top split -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(37,99,235,.06);">
-
-          <!-- pages count -->
-          <div style="padding:18px 18px 14px;border-right:1px solid rgba(37,99,235,.06);">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-              <span style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A9CC8;font-family:var(--fs);">Pages created</span>
-              <div style="display:flex;align-items:center;gap:4px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:999px;padding:2px 7px;">
-                <div style="width:5px;height:5px;border-radius:50%;background:#10B981;animation:livepulse 1.5s ease infinite;"></div>
-                <span style="font-size:9px;font-weight:700;color:#059669;font-family:var(--fs);">Live</span>
-              </div>
-            </div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:42px;font-weight:400;color:#07122A;line-height:1;letter-spacing:-1.5px;margin-bottom:3px;"><span id="liveCounter">0</span><span style="color:#2563EB;font-style:normal;font-size:22px;vertical-align:super;">+</span></div>
-            <div style="font-size:11px;color:#7A9CC8;font-family:var(--fs);">and counting — every page matters</div>
-            <div style="display:flex;align-items:center;gap:4px;margin-top:8px;font-size:9px;color:#BFDBFE;font-family:var(--fs);">
-              <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="3.5" stroke="#BFDBFE" stroke-width="1"/><path d="M4.5 2.5v2l1.3 1.3" stroke="#BFDBFE" stroke-width="1" stroke-linecap="round"/></svg>
-              Updates the moment a page is created
-            </div>
-          </div>
-
-          <!-- memories -->
-          <div style="padding:18px 16px 14px;background:#FAFBFF;">
-            <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A9CC8;margin-bottom:8px;font-family:var(--fs);">Memories shared</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;font-weight:400;color:#07122A;line-height:1;letter-spacing:-.8px;margin-bottom:3px;"><span id="heroMemoriesCount">0</span><span style="color:#7C3AED;font-style:normal;">+</span></div>
-            <div style="font-size:11px;color:#7A9CC8;font-family:var(--fs);">photos, notes &amp; messages</div>
-            <div style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:#F3F0FF;border-radius:6px;padding:3px 8px;font-size:9px;color:#7C3AED;font-weight:600;font-family:var(--fs);">&#10022; auto-calculated</div>
-          </div>
+    <!-- RIGHT — feature list -->
+    <div class="hero-right" style="animation:efade .7s cubic-bezier(.16,1,.3,1) .2s both;">
+      <a href="occasion.html" class="hero-feat">
+        <div class="hero-feat-icon" style="background:#EFF6FF;">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="1" y="4" width="20" height="14" rx="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.1"/><circle cx="6" cy="10" r="2.5" fill="#93C5FD"/><path d="M1 15 L5 11 L9 15 L13 11 L21 16" stroke="#2563EB" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg>
         </div>
-
-        <!-- mini stats row — animated SVG icons -->
-        <style>
-          .stat-icon-wrap{width:28px;height:28px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;}
-          /* cake candle flicker */
-          @keyframes flicker{0%,100%{opacity:1;transform:scaleY(1);}50%{opacity:.7;transform:scaleY(.85);}}
-          .candle-flame{animation:flicker 1.2s ease-in-out infinite;}
-          /* tear drop */
-          @keyframes teardrop{0%,60%{transform:translateY(0);opacity:1;}100%{transform:translateY(5px);opacity:0;}}
-          .tear{animation:teardrop 2s ease-in-out infinite;}
-          .tear2{animation:teardrop 2s ease-in-out infinite;animation-delay:.6s;}
-          /* globe spin */
-          @keyframes globespin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-          .globe-lines{animation:globespin 8s linear infinite;transform-origin:12px 12px;}
-          /* stat cell hover */
-          .stat-cell{padding:12px 14px;position:relative;overflow:hidden;cursor:default;transition:background .2s;}
-          .stat-cell:hover{background:#F7F9FF;}
-          .stat-top-bar{position:absolute;top:0;left:0;right:0;height:2px;transform:scaleX(0);transition:transform .4s;transform-origin:left;}
-          .stat-cell:hover .stat-top-bar{transform:scaleX(1);}
-        </style>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid rgba(37,99,235,.06);">
-          <div class="stat-cell" style="border-right:1px solid rgba(37,99,235,.06);">
-            <div class="stat-top-bar" style="background:linear-gradient(90deg,#2563EB,#60A5FA);"></div>
-            <div class="stat-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <!-- cake base -->
-                <rect x="3" y="12" width="18" height="9" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/>
-                <rect x="6" y="9" width="12" height="4" rx="1" fill="#EFF6FF" stroke="#2563EB" stroke-width="1"/>
-                <!-- candles -->
-                <rect x="8" y="5" width="2" height="4" rx="1" fill="#BFDBFE"/>
-                <rect x="14" y="5" width="2" height="4" rx="1" fill="#BFDBFE"/>
-                <!-- flames -->
-                <ellipse class="candle-flame" cx="9" cy="4.5" rx="1.2" ry="1.8" fill="#F59E0B"/>
-                <ellipse class="candle-flame" cx="15" cy="4.5" rx="1.2" ry="1.8" fill="#F59E0B" style="animation-delay:.3s;"/>
-                <!-- frosting waves -->
-                <path d="M3 13 Q6 11 9 13 Q12 15 15 13 Q18 11 21 13" stroke="#93C5FD" stroke-width="1" fill="none"/>
-              </svg>
-            </div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#07122A;line-height:1;margin-bottom:2px;">8</div>
-            <div style="font-size:9.5px;color:#7A9CC8;font-family:var(--fs);">Occasions available</div>
-          </div>
-          <div class="stat-cell" style="border-right:1px solid rgba(37,99,235,.06);">
-            <div class="stat-top-bar" style="background:linear-gradient(90deg,#EC4899,#F9A8D4);"></div>
-            <div class="stat-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <!-- smiling face -->
-                <circle cx="12" cy="12" r="9" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2"/>
-                <!-- eyes with tears -->
-                <circle cx="9" cy="10" r="1.2" fill="#92400E"/>
-                <circle cx="15" cy="10" r="1.2" fill="#92400E"/>
-                <!-- happy mouth -->
-                <path d="M8.5 14.5 Q12 17.5 15.5 14.5" stroke="#92400E" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-                <!-- tears dropping -->
-                <path class="tear" d="M8 12 Q7.5 13.5 8 14.5" stroke="#60A5FA" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-                <ellipse class="tear" cx="8" cy="14.8" rx=".8" ry="1" fill="#93C5FD"/>
-                <path class="tear2" d="M16 12 Q16.5 13.5 16 14.5" stroke="#60A5FA" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-                <ellipse class="tear2" cx="16" cy="14.8" rx=".8" ry="1" fill="#93C5FD"/>
-              </svg>
-            </div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#07122A;line-height:1;margin-bottom:2px;">98%</div>
-            <div style="font-size:9.5px;color:#7A9CC8;font-family:var(--fs);">People cried, happily!</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-top-bar" style="background:linear-gradient(90deg,#059669,#6EE7B7);"></div>
-            <div class="stat-icon-wrap">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="9" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/>
-                <!-- spinning globe lines -->
-                <g class="globe-lines">
-                  <ellipse cx="12" cy="12" rx="4" ry="9" stroke="#93C5FD" stroke-width="1" fill="none"/>
-                  <line x1="3" y1="12" x2="21" y2="12" stroke="#93C5FD" stroke-width="1"/>
-                  <line x1="5" y1="7" x2="19" y2="7" stroke="#BFDBFE" stroke-width=".8"/>
-                  <line x1="5" y1="17" x2="19" y2="17" stroke="#BFDBFE" stroke-width=".8"/>
-                </g>
-                <circle cx="12" cy="12" r="9" stroke="#2563EB" stroke-width="1.2" fill="none"/>
-              </svg>
-            </div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#07122A;line-height:1;margin-bottom:2px;">100+</div>
-            <div style="font-size:9.5px;color:#7A9CC8;font-family:var(--fs);">Countries reached</div>
-          </div>
+        <div>
+          <div class="hero-feat-title">Cinematic photo slideshow</div>
+          <div class="hero-feat-sub">Unlimited photos &middot; auto-arranged &middot; polaroid wall</div>
         </div>
-
-        <!-- footer -->
-        <div style="padding:8px 16px;background:#F7F9FF;display:flex;align-items:center;justify-content:space-between;">
-          <div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#7A9CC8;font-family:var(--fs);">
-            <div style="width:4px;height:4px;border-radius:50%;background:#10B981;animation:livepulse 2s ease infinite;"></div>
-            Real data &middot; Firestore powered &middot; No estimates
-          </div>
-          <div style="font-size:9.5px;color:#2563EB;font-weight:600;font-family:var(--fs);">&#10022; Free during launch</div>
+        <span class="hero-feat-arrow">&rarr;</span>
+      </a>
+      <a href="occasion.html" class="hero-feat">
+        <div class="hero-feat-icon" style="background:#FDF2F8;">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><style>.hfmb{animation:hfeq .7s ease-in-out infinite alternate;transform-origin:bottom;}@keyframes hfeq{0%{transform:scaleY(.3);}100%{transform:scaleY(1);}}</style><rect class="hfmb" x="1" y="7" width="3" height="12" rx="1.5" fill="#EC4899"/><rect class="hfmb" x="6" y="4" width="3" height="15" rx="1.5" fill="#EC4899" style="animation-delay:.15s;"/><rect class="hfmb" x="11" y="6" width="3" height="13" rx="1.5" fill="#F9A8D4" style="animation-delay:.05s;"/><rect class="hfmb" x="16" y="3" width="3" height="16" rx="1.5" fill="#EC4899" style="animation-delay:.25s;"/></svg>
         </div>
-      </div>
-      <style>@keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5);}50%{box-shadow:0 0 0 4px rgba(16,185,129,0);}}</style>
-
-      <!-- OCCASION LABEL -->
-      <div style="font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7A9CC8;font-family:var(--fs);">Choose your occasion</div>
-
-      <!-- OCCASION GRID -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <a href="gender.html?occasion=birthday" style="background:white;border-radius:12px;padding:12px 14px;border:1.5px solid rgba(37,99,235,.12);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;position:relative;">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><rect x="2" y="10" width="16" height="8" rx="2" fill="#DBEAFE"/><rect x="5" y="7" width="10" height="4" rx="1" fill="#EFF6FF" stroke="#93C5FD" stroke-width=".8"/><ellipse cx="8" cy="6" rx="1" ry="1.5" fill="#FCD34D" style="animation:flicker 1.2s ease infinite;"/><ellipse cx="12" cy="6" rx="1" ry="1.5" fill="#FCD34D" style="animation:flicker 1.2s .3s ease infinite;"/></svg>
-          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Birthday</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Photos &middot; Music</div></div>
-          <span style="position:absolute;top:6px;right:8px;background:#EFF6FF;border-radius:999px;padding:1px 6px;font-size:8px;font-weight:700;color:#1D4ED8;font-family:var(--fs);">Popular</span>
-        </a>
-        <a href="gender.html?occasion=anniversary" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#FDF2F8" stroke="#F9A8D4" stroke-width="1"/><path d="M6.5 10 Q10 6 13.5 10 Q10 14 6.5 10Z" fill="#EC4899" opacity=".8"/></svg>
-          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Anniversary</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Timeline &middot; Love</div></div>
-        </a>
-        <a href="gender.html?occasion=farewell" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#F0FDF4"/><path d="M10 4 C7 6 5 9 8 11 C6 13 7 16 10 16 C13 16 14 13 12 11 C15 9 13 6 10 4Z" fill="#6EE7B7" stroke="#059669" stroke-width=".8"/></svg>
-          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Farewell</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Group wishes</div></div>
-        </a>
-        <a href="gender.html?occasion=friendship" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#FFFBEB"/><path d="M10 14 L6 10 Q5 7 8 7 Q9.5 7 10 9 Q10.5 7 12 7 Q15 7 14 10Z" fill="#FCD34D"/></svg>
-          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Friendship</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Memories</div></div>
-        </a>
-        <a href="gender.html?occasion=love" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#FDF2F8"/><rect x="5" y="7" width="10" height="7" rx="1.5" fill="#FBCFE8" stroke="#EC4899" stroke-width=".8"/><path d="M5 8 L10 11.5 L15 8" stroke="#EC4899" stroke-width=".8" fill="none"/></svg>
-          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Love Notes</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Letters &middot; Music</div></div>
-        </a>
-        <a href="gender.html?occasion=apology" style="background:white;border-radius:12px;padding:12px 14px;border:1px solid rgba(37,99,235,.08);text-decoration:none;display:flex;align-items:center;gap:10px;transition:all .2s;">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;"><circle cx="10" cy="10" r="7" fill="#F0F9FF"/><path d="M10 5 L10.8 9 L15 9.5 L11.5 12.5 L13 17 L10 14.5 L7 17 L8.5 12.5 L5 9.5 L9.2 9Z" fill="#93C5FD" stroke="#2563EB" stroke-width=".6"/></svg>
-          <div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#07122A;margin-bottom:1px;">Apology</div><div style="font-size:10px;color:#7A9CC8;font-family:var(--fs);">Heartfelt</div></div>
-        </a>
-      </div>
-
+        <div>
+          <div class="hero-feat-title">Their favourite song plays</div>
+          <div class="hero-feat-sub">Autoplays softly the moment they open it</div>
+        </div>
+        <span class="hero-feat-arrow">&rarr;</span>
+      </a>
+      <a href="occasion.html" class="hero-feat">
+        <div class="hero-feat-icon" style="background:#F0FDF4;">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="1" y="4" width="13" height="9" rx="2" fill="#DCFCE7" stroke="#059669" stroke-width="1.1"/><path d="M1 7 L7.5 10.5 L14 7" stroke="#6EE7B7" stroke-width=".9" fill="none"/><rect x="8" y="9" width="13" height="9" rx="2" fill="#D1FAE5" stroke="#059669" stroke-width="1"/></svg>
+        </div>
+        <div>
+          <div class="hero-feat-title">Messages from everyone</div>
+          <div class="hero-feat-sub">Friends contribute wish cards &mdash; no signup needed</div>
+        </div>
+        <span class="hero-feat-arrow">&rarr;</span>
+      </a>
+      <a href="occasion.html" class="hero-feat">
+        <div class="hero-feat-icon" style="background:#FFFBEB;">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><style>.hfcf{animation:hfcfall .9s ease-in-out infinite alternate;}@keyframes hfcfall{0%{transform:translateY(0);}100%{transform:translateY(3px);}}</style><circle cx="11" cy="14" r="5" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.1"/><path d="M8.5 14 L10.5 16 L14 12" stroke="#F59E0B" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect class="hfcf" x="2" y="2" width="4" height="4" rx="1" fill="#EF4444" opacity=".6" transform="rotate(15 4 4)"/><rect class="hfcf" x="15" y="2" width="4" height="4" rx="1" fill="#8B5CF6" opacity=".6" transform="rotate(-10 17 4)" style="animation-delay:.3s;"/></svg>
+        </div>
+        <div>
+          <div class="hero-feat-title">Name-unlock reveal</div>
+          <div class="hero-feat-sub">Countdown &middot; confetti &middot; 98% cry happy tears</div>
+        </div>
+        <span class="hero-feat-arrow">&rarr;</span>
+      </a>
     </div>
 
   </div>
+</div>
+
+
 </section>
 
 <!-- MARQUEE -->
@@ -1351,12 +1216,11 @@ to{width:60%;}}
 <section id="occasions" class="sp"><div class="wrap">
   <div class="sh">
     <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-    <div class="s-tag rv d1">Occasions</div>
     <h2 class="s-h2 rv d2">Perfect for every<br><em>special moment</em></h2>
     <p class="s-sub rv d3">Whatever the occasion, Wisherly makes it unforgettable.</p>
   </div>
-  <div class="occ-grid">
-    <a class="occ-card rv" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(239,68,68,.18);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <div class="occ-grid" style="grid-template-columns:repeat(3,1fr);">
+    <a class="occ-card rv" href="gender.html?occasion=birthday"><div class="occ-glow" style="background:rgba(37,99,235,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
   <style>.fl{animation:flicker 1.2s ease-in-out infinite;}.fl2{animation:flicker 1.2s .3s ease-in-out infinite;}@keyframes flicker{0%,100%{opacity:1;transform:scaleY(1);}50%{opacity:.7;transform:scaleY(.8);}}</style>
   <rect x="4" y="16" width="24" height="13" rx="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.4"/>
   <rect x="8" y="12" width="16" height="6" rx="1.5" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.1"/>
@@ -1367,8 +1231,8 @@ to{width:60%;}}
   <ellipse class="fl" cx="11.25" cy="5" rx="1.5" ry="2.2" fill="#F59E0B"/>
   <ellipse class="fl2" cx="17.25" cy="4" rx="1.5" ry="2.2" fill="#EF4444"/>
   <ellipse class="fl" cx="23" cy="6" rx="1.2" ry="1.8" fill="#F59E0B" style="animation-delay:.5s;"/>
-</svg></span><div class="occ-title">Birthday Surprises</div><div class="occ-desc">Make their birthday the one they talk about for years. Photos, music, wishes from everyone they love.</div><div class="occ-link">Create birthday page →</div></a>
-    <a class="occ-card rv d1" href="theme.html?occasion=anniversary"><div class="occ-glow" style="background:rgba(236,72,153,.16);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+</svg></span><div class="occ-title">Birthday Surprises</div><div class="occ-desc">Make their birthday the one they talk about for years. Photos, music, wishes from everyone they love.</div><div class="occ-link">Create birthday page &rarr;</div></a>
+    <a class="occ-card rv d1" href="gender.html?occasion=anniversary"><div class="occ-glow" style="background:rgba(236,72,153,.16);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
   <style>.hbeat{animation:hb 1.2s ease-in-out infinite;}@keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}</style>
   <g class="hbeat" style="transform-origin:16px 16px;">
     <path d="M16 26 L6 16 Q3 11 8 8 Q12 6 16 12 Q20 6 24 8 Q29 11 26 16Z" fill="#FCE7F3" stroke="#EC4899" stroke-width="1.4"/>
@@ -1376,56 +1240,93 @@ to{width:60%;}}
   </g>
   <circle cx="22" cy="10" r="3" fill="#FDF2F8" stroke="#F9A8D4" stroke-width="1"/>
   <path d="M21 10 L22 11 L24 9" stroke="#EC4899" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></span><div class="occ-title">Anniversary & Romance</div><div class="occ-desc">Relive every chapter of your love story through photos, a memory timeline, and a secret letter.</div><div class="occ-link">Create love page →</div></a>
-    <a class="occ-card rv d2" href="theme.html?occasion=friendship"><div class="occ-glow" style="background:rgba(37,99,235,.18);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="11" cy="10" r="4" fill="#FEF3C7" stroke="#D97706" stroke-width="1.2"/>
-  <circle cx="21" cy="10" r="4" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/>
-  <path d="M7 28 C7 22 15 20 16 20 C17 20 25 22 25 28" fill="#FEF3C7" stroke="#D97706" stroke-width="1.2"/>
-  <path d="M14 28 C14 23 18 21 18 21" stroke="#DBEAFE" stroke-width="1" fill="none"/>
-  <path d="M13 16 Q16 19 19 16" stroke="#D97706" stroke-width="1" fill="none" stroke-linecap="round"/>
-</svg></span><div class="occ-title">Friendship Dedications</div><div class="occ-desc">Celebrate the friend who always shows up. Let their whole squad contribute wishes.</div><div class="occ-link">Create friendship page →</div></a>
-    <a class="occ-card rv d1" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(245,158,11,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <style>.tassel{animation:sway 2s ease-in-out infinite;}@keyframes sway{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}</style>
-  <path d="M16 6 L30 12 L16 18 L2 12Z" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.4"/>
-  <path d="M8 15 L8 23 Q16 27 24 23 L24 15" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/>
-  <line x1="28" y1="12" x2="28" y2="19" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
-  <g class="tassel" style="transform-origin:28px 19px;">
-    <line x1="28" y1="19" x2="26" y2="25" stroke="#F59E0B" stroke-width="1.2" stroke-linecap="round"/>
-    <circle cx="26" cy="25" r="1.5" fill="#F59E0B"/>
-  </g>
-  <circle cx="16" cy="12" r="2" fill="#2563EB"/>
-</svg></span><div class="occ-title">Graduations</div><div class="occ-desc">Mark the milestone with a page full of proud memories, encouragement, and love.</div><div class="occ-link">Create graduation page →</div></a>
-    <a class="occ-card rv d2" href="theme.html?occasion=farewell"><div class="occ-glow" style="background:rgba(6,182,212,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+</svg></span><div class="occ-title">Anniversary &amp; Romance</div><div class="occ-desc">Relive every chapter of your love story through photos, a memory timeline, and heartfelt messages.</div><div class="occ-link">Create anniversary page &rarr;</div></a>
+    <a class="occ-card rv d2" href="gender.html?occasion=farewell"><div class="occ-glow" style="background:rgba(6,182,212,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
   <style>.plane{animation:fly 3s ease-in-out infinite;}@keyframes fly{0%,100%{transform:translate(0,0);}50%{transform:translate(3px,-3px);}}</style>
   <g class="plane">
     <path d="M28 12 L16 16 L8 24 L12 24 L16 20 L20 28 L22 28 L20 18 L28 14Z" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.2"/>
   </g>
   <path d="M4 22 Q8 20 12 22" stroke="#BAE6FD" stroke-width="1" fill="none" stroke-linecap="round" stroke-dasharray="2 2"/>
   <path d="M4 25 Q8 23 12 25" stroke="#BAE6FD" stroke-width="1" fill="none" stroke-linecap="round" stroke-dasharray="2 2"/>
-  <path d="M4 19 Q7 17 10 19" stroke="#BAE6FD" stroke-width="1" fill="none" stroke-linecap="round" stroke-dasharray="2 2"/>
   <circle cx="7" cy="10" r="2" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
   <circle cx="13" cy="7" r="1.5" fill="#FCE7F3" stroke="#EC4899" stroke-width=".8"/>
-</svg></span><div class="occ-title">Farewells & Goodbyes</div><div class="occ-desc">Send someone off with a digital scrapbook of every amazing memory you've shared.</div><div class="occ-link">Create farewell page →</div></a>
-    <a class="occ-card rv d3" href="theme.html?occasion=birthday"><div class="occ-glow" style="background:rgba(16,185,129,.13);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <style>.sparkle{animation:spk 1.5s ease-in-out infinite;}@keyframes spk{0%,100%{opacity:.3;transform:scale(.8);}50%{opacity:1;transform:scale(1.2);}}</style>
-  <path d="M16 6 C12 6 8 9 8 13 C8 19 16 26 16 26 C16 26 24 19 24 13 C24 9 20 6 16 6Z" fill="#FDF2F8" stroke="#EC4899" stroke-width="1.4"/>
-  <path d="M11 13 Q16 10 21 13" stroke="#F9A8D4" stroke-width="1" fill="none" stroke-linecap="round"/>
-  <path d="M11 11 Q12 9 14 10 Q14 13 12 14 Q10 13 10 10 Q12 9 13 11" stroke="#EC4899" stroke-width=".8" fill="#FDF2F8"/>
-  <g class="sparkle" style="transform-origin:6px 8px;"><path d="M6 5 L6 11 M3 8 L9 8" stroke="#F59E0B" stroke-width="1" stroke-linecap="round"/></g>
-  <g class="sparkle" style="transform-origin:26px 7px;animation-delay:.5s;"><path d="M26 4 L26 10 M23 7 L29 7" stroke="#FCA5A5" stroke-width="1" stroke-linecap="round"/></g>
-</svg></span><div class="occ-title">Thank You Pages</div><div class="occ-desc">A heartfelt thank-you that goes far beyond a card. Show them exactly how much they mean.</div><div class="occ-link">Create thank you page →</div></a>
+</svg></span><div class="occ-title">Farewells &amp; Goodbyes</div><div class="occ-desc">Send someone off with a digital scrapbook of every amazing memory you&rsquo;ve shared together.</div><div class="occ-link">Create farewell page &rarr;</div></a>
+  </div>
+  <div style="text-align:center;margin-top:36px;">
+    <a href="occasion.html" class="btn-hero-o" style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;font-size:14px;">
+      View all 8 occasions
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7 L11 7 M8 4 L11 7 L8 10" stroke="#07122A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
   </div>
 </div></section>
 
 <!-- COMPARISON -->
 <section id="comparison" class="sp"><div class="wrap">
   <div class="sh">
-    <div class="s-tag rv">Why Wisherly</div>
-    <h2 class="s-h2 rv d1">Gifts that are forgotten<br>vs gifts that are <em>felt</em></h2>
+    <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
+    <h2 class="s-h2 rv d1">Every gift tells a story.<br><em>Which story do you want to tell?</em></h2>
   </div>
-  <div class="comp-wrap">
-    <div class="comp-card before rv"><span class="comp-lbl">Traditional gifts</span><div class="comp-h">Forgotten in a week</div><ul class="comp-list"><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="6" width="12" height="10" rx="2" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/><path d="M14 8 Q17 8 17 11 Q17 14 14 14" stroke="#CBD5E1" stroke-width="1" fill="none"/><rect x="5" y="3" width="2" height="3" rx="1" fill="#E2E8F0"/><rect x="9" y="3" width="2" height="3" rx="1" fill="#E2E8F0"/></svg></div>Printed mugs that sit on a shelf</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 3 L3 6 L5 8 L5 17 L15 17 L15 8 L17 6 L13 3 Q12 5 10 5 Q8 5 7 3Z" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/></svg></div>Generic clothing they may never wear</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="2" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/><ellipse cx="10" cy="5" rx="2.5" ry="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width=".8"/><ellipse cx="10" cy="15" rx="2.5" ry="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width=".8"/><ellipse cx="5" cy="10" rx="3" ry="2.5" fill="#F1F5F9" stroke="#CBD5E1" stroke-width=".8"/><ellipse cx="15" cy="10" rx="3" ry="2.5" fill="#F1F5F9" stroke="#CBD5E1" stroke-width=".8"/></svg></div>Last-minute perfumes and flowers</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="11" rx="2" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/><path d="M2 7 L10 12 L18 7" stroke="#CBD5E1" stroke-width=".9" fill="none"/></svg></div>Greeting cards stored in a drawer</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="9" width="14" height="9" rx="1.5" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/><rect x="2" y="6" width="16" height="4" rx="1" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/><line x1="10" y1="6" x2="10" y2="18" stroke="#CBD5E1" stroke-width=".9"/><path d="M10 6 Q7 4 7 2 Q10 1 10 4" stroke="#CBD5E1" stroke-width=".8" fill="none"/><path d="M10 6 Q13 4 13 2 Q10 1 10 4" stroke="#CBD5E1" stroke-width=".8" fill="none"/></svg></div>Amazon gifts with no personal touch</li></ul></div>
-    <div class="comp-card after rv d1"><span class="comp-lbl">Wisherly surprises</span><div class="comp-h">Remembered forever</div><ul class="comp-list"><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="1" y="4" width="18" height="13" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/><circle cx="7" cy="10" r="3" fill="#93C5FD"/><path d="M1 14 L5 10 L9 14 L12 11 L19 16" stroke="#2563EB" stroke-width="1" fill="none" stroke-linecap="round"/><circle cx="16" cy="7" r="1.5" fill="#2563EB" opacity=".4"/></svg></div>A cinematic photo journey of shared memories</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><style>.cb1{animation:cb 0.7s ease-in-out infinite alternate;}.cb2{animation:cb 0.5s .1s ease-in-out infinite alternate;}.cb3{animation:cb 0.9s .05s ease-in-out infinite alternate;}@keyframes cb{0%{transform:scaleY(.4);transform-origin:bottom;}100%{transform:scaleY(1);transform-origin:bottom;}}</style><rect class="cb1" x="2" y="8" width="3" height="10" rx="1.5" fill="#2563EB" opacity=".7"/><rect class="cb2" x="7" y="5" width="3" height="13" rx="1.5" fill="#2563EB"/><rect class="cb3" x="12" y="7" width="3" height="11" rx="1.5" fill="#3B82F6" opacity=".8"/><rect class="cb1" x="17" y="9" width="2" height="9" rx="1" fill="#2563EB" opacity=".5"/></svg></div>The song that makes them cry (happily)</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="11" rx="2" fill="#FDF2F8" stroke="#EC4899" stroke-width="1"/><path d="M2 7 L10 12 L18 7" stroke="#F9A8D4" stroke-width=".9" fill="none"/><circle cx="5" cy="4" r="1.5" fill="#FCE7F3" stroke="#EC4899" stroke-width=".7"/><circle cx="15" cy="4" r="1.5" fill="#FCE7F3" stroke="#EC4899" stroke-width=".7"/></svg></div>Messages from everyone who loves them</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke="#BAE6FD" stroke-width="1.5"/><circle cx="10" cy="5" r="2.5" fill="#0EA5E9" stroke="white" stroke-width="1"/><circle cx="10" cy="10" r="2.5" fill="#2563EB" stroke="white" stroke-width="1"/><circle cx="10" cy="15" r="2.5" fill="#7C3AED" stroke="white" stroke-width="1"/><rect x="13" y="3.5" width="6" height="3" rx="1" fill="#E0F2FE"/><rect x="1" y="8.5" width="6" height="3" rx="1" fill="#DBEAFE"/><rect x="13" y="13.5" width="6" height="3" rx="1" fill="#EDE9FE"/></svg></div>A timeline of your story together</li><li><div class="comp-ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><style>.ccf{animation:ccfl .9s ease-in-out infinite alternate;}@keyframes ccfl{0%{transform:translateY(0);}100%{transform:translateY(3px);}}</style><rect class="ccf" x="3" y="2" width="3.5" height="3.5" rx=".8" fill="#EF4444" transform="rotate(12 4.75 3.75)"/><rect class="ccf" x="13" y="3" width="3" height="3" rx=".8" fill="#F59E0B" transform="rotate(-8 14.5 4.5)" style="animation-delay:.3s;"/><rect class="ccf" x="8" y="1" width="2.5" height="2.5" rx=".6" fill="#8B5CF6" transform="rotate(20 9.25 2.25)" style="animation-delay:.15s;"/><circle cx="16" cy="10" r="1.8" fill="#10B981"/><circle cx="4" cy="11" r="1.4" fill="#EC4899"/><path d="M6 16 Q10 12 14 16 Q10 20 6 16Z" fill="#FCD34D" stroke="#D97706" stroke-width=".8"/></svg></div>An experience they'll replay and share</li></ul></div>
+  <div class="comp-timeline rv">
+    <div class="comp-moment">
+      <div class="comp-side comp-before">
+        <div class="comp-card-before">
+          <div class="comp-card-lbl">The usual gift</div>
+          <div class="comp-card-txt">You order something generic online at 11pm the night before</div>
+        </div>
+      </div>
+      <div class="comp-node"><div class="comp-dot" style="background:#E5E7EB;box-shadow:0 0 0 4px rgba(229,231,235,.4);"></div></div>
+      <div class="comp-side comp-after">
+        <div class="comp-card-after">
+          <div class="comp-card-lbl">With Wisherly</div>
+          <div class="comp-card-txt">You pick the occasion, theme, and emotional mood that fits them perfectly</div>
+        </div>
+      </div>
+    </div>
+    <div class="comp-moment">
+      <div class="comp-side comp-before">
+        <div class="comp-card-before">
+          <div class="comp-card-lbl">The usual gift</div>
+          <div class="comp-card-txt">One person gives. Nobody else is involved. It feels small.</div>
+        </div>
+      </div>
+      <div class="comp-node"><div class="comp-dot" style="background:#BFDBFE;box-shadow:0 0 0 4px rgba(191,219,254,.4);"></div></div>
+      <div class="comp-side comp-after">
+        <div class="comp-card-after">
+          <div class="comp-card-lbl">With Wisherly</div>
+          <div class="comp-card-txt">Friends and family all add their own heartfelt wish cards &mdash; no account needed</div>
+        </div>
+      </div>
+    </div>
+    <div class="comp-moment">
+      <div class="comp-side comp-before">
+        <div class="comp-card-before">
+          <div class="comp-card-lbl">The usual gift</div>
+          <div class="comp-card-txt">They say thanks. Put it in a drawer. Forget about it by next week.</div>
+        </div>
+      </div>
+      <div class="comp-node"><div class="comp-dot" style="background:#93C5FD;box-shadow:0 0 0 4px rgba(147,197,253,.3);"></div></div>
+      <div class="comp-side comp-after">
+        <div class="comp-card-after">
+          <div class="comp-card-lbl">With Wisherly</div>
+          <div class="comp-card-txt">They type their name, the countdown begins &mdash; then they burst into happy tears</div>
+        </div>
+      </div>
+    </div>
+    <div class="comp-moment">
+      <div class="comp-side comp-before">
+        <div class="comp-card-before">
+          <div class="comp-card-lbl">The usual gift</div>
+          <div class="comp-card-txt">Forgotten within a week. You wonder if it even mattered.</div>
+        </div>
+      </div>
+      <div class="comp-node"><div class="comp-dot" style="background:var(--blue);box-shadow:0 0 0 6px rgba(37,99,235,.2);"></div></div>
+      <div class="comp-side comp-after">
+        <div class="comp-card-after">
+          <div class="comp-card-lbl">With Wisherly</div>
+          <div class="comp-card-txt">They replay it for years. It becomes one of their most treasured memories.</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div></section>
 
@@ -1838,11 +1739,14 @@ document.getElementById('ptog').addEventListener('click',function(){
   function setAllCounters(count) {
     var memories = count * 5;
     var els = {
-      'liveCounter':     function(el){ el.textContent = count.toLocaleString(); },
+      'liveCounter':     function(el){ el.textContent = count.toLocaleString(); }, // kept for compat
       'bannerCount':     function(el){ el.textContent = count.toLocaleString() + '+'; },
+      'bannerPagesCount': function(el){ el.textContent = count.toLocaleString(); },
       'metPagesCount':   function(el){ el.textContent = count.toLocaleString(); el.setAttribute('data-t', count); },
       'heroMemoriesCount': function(el){ el.textContent = memories.toLocaleString(); },
       'metMemoriesCount':  function(el){ el.textContent = memories.toLocaleString(); el.setAttribute('data-t', memories); },
+      'tickerPagesCount':  function(el){ el.textContent = count.toLocaleString(); },
+      'tickerMemoriesCount': function(el){ el.textContent = (count * 5).toLocaleString(); },
       'footerPagesCount':  function(el){ el.textContent = count.toLocaleString(); },
       'footerMemoriesCount': function(el){ el.textContent = memories.toLocaleString(); }
     };
