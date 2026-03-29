@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <rect width="32" height="32" rx="8" fill="%2307122A"/><polyline points="2,16 8,16 11,6 14,26 17,10 20,22 23,16 30,16" stroke="%232563EB" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" fill="none"/></svg>">
+
 <meta charset="UTF-8">
-<link rel="icon" type="image/png" href="fav.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="fav.png">
+  <link rel="apple-touch-icon" href="fav.png">
+  <link rel="shortcut icon" href="fav.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wisherly — One Last Step ✦</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -334,9 +338,9 @@ input::placeholder{color:var(--muted2);}
         <div class="success-wrap" id="successWrap" style="display:none;">
           <div class="success-icon">🎉</div>
           <div class="success-title">Your page is <em>ready!</em></div>
-          <div class="success-sub">5 friends opened your link. Your anniversary surprise page is now being created…</div>
+          <div class="success-sub" id="successSub">5 friends opened your link. Your surprise page is now being created…</div>
           <button class="btn-primary" id="createFinalBtn" onclick="createFinalPage()">
-            <span>💍</span> Create My Anniversary Page
+            Create My Surprise Page
           </button>
         </div>
 
@@ -354,6 +358,26 @@ input::placeholder{color:var(--muted2);}
    INIT — read sessionStorage
 ══════════════════════════════ */
 const pendingData = JSON.parse(sessionStorage.getItem('wisherly_pending') || 'null');
+
+// Dynamically update CTA text based on occasion
+(function() {
+  var occ = (pendingData && pendingData.occasion) ? pendingData.occasion : 'surprise';
+  var occLabels = {
+    'birthday': 'Birthday',
+    'anniversary': 'Anniversary',
+    'farewell': 'Farewell',
+    'friendship': 'Friendship',
+    'love': 'Love',
+    'apology': 'Apology',
+    'graduation': 'Graduation',
+    'thankyou': 'Thank You'
+  };
+  var label = occLabels[occ] || 'Surprise';
+  var btn = document.getElementById('createFinalBtn');
+  if (btn) btn.textContent = 'Create My ' + label + ' Page';
+  var sub = document.getElementById('successSub');
+  if (sub) sub.textContent = '5 friends opened your link. Your ' + label.toLowerCase() + ' surprise page is now being created…';
+})();
 const pageId = sessionStorage.getItem('wisherly_pageId');
 const refId = pageId || (Date.now().toString(36) + Math.random().toString(36).slice(2,6));
 
@@ -654,6 +678,16 @@ async function createFinalPage() {
     btn.innerHTML = '<span>💍</span> Finishing…';
     await db.collection('pages').doc(pageId).set(data);
 
+    // Increment global page counter
+    try {
+      var statsRef = db.collection('stats').doc('global');
+      await statsRef.set({
+        pageCount: firebase.firestore.FieldValue.increment(1),
+        lastCreatedAt: Date.now(),
+        lastOccasion: data.occasion || 'unknown'
+      }, {merge: true});
+    } catch(e) { console.log('Counter increment failed:', e.message); }
+
     // Clear sessionStorage
     sessionStorage.removeItem('wisherly_pending');
     sessionStorage.removeItem('wisherly_pageId');
@@ -667,7 +701,7 @@ async function createFinalPage() {
   } catch(err) {
     console.error(err);
     btn.disabled = false;
-    btn.innerHTML = '<span>💍</span> Create My Anniversary Page';
+    btn.innerHTML = 'Create My Surprise Page';
     showToast('❌ Something went wrong — please try again');
   }
 }
