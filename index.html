@@ -749,16 +749,15 @@ section{position:relative;z-index:2;}
   #demo>div>div[style*="grid-template-columns:1fr 1fr"]>div:first-child{margin-bottom:32px;}
   #demo>div:last-child{grid-template-columns:1fr!important;display:flex!important;flex-direction:column!important;}
   /* Comparison timeline */
-  #comparison .wrap{padding:0 16px;}
   .comp-timeline{max-width:100%;}
-  .comp-timeline::before{left:12px;transform:none;}
-  .comp-moment{grid-template-columns:24px 1fr;gap:10px;padding:10px 0;}
+  .comp-timeline::before{left:10px;transform:none;}
+  .comp-moment{display:flex;flex-direction:row;align-items:flex-start;gap:12px;padding:10px 0;}
   .comp-before{display:none;}
-  .comp-side.comp-after{padding-left:0;justify-content:flex-start;}
-  .comp-node{justify-content:flex-start;}
-  .comp-card-after{max-width:100%;width:100%;}
+  .comp-node{flex-shrink:0;width:20px;display:flex;justify-content:center;margin-top:14px;}
   .comp-dot{width:10px;height:10px;}
-  .comp-card-txt{font-size:13px;}
+  .comp-side.comp-after{padding-left:0;flex:1;}
+  .comp-card-after{max-width:100%;width:100%;box-sizing:border-box;}
+  .comp-card-txt{font-size:13px;line-height:1.55;}
 }
 
 .nav-hamburger{
@@ -1281,9 +1280,8 @@ section{position:relative;z-index:2;}
 
 <!-- COMPARISON -->
 <section id="comparison" class="sp"><div class="wrap">
-  <div class="sh">
-  <h2 class="s-h2 rv d1">Every gift tells a story.<br><em>Which story do you want to tell?</em></h2>
-  </div>
+  <div class="sh" style="margin-bottom:40px;">
+    <h2 class="s-h2 rv d1">Every gift tells a story. <em>Which story do you want to tell?</em></h2>
   </div>
   <div class="comp-timeline rv">
     <div class="comp-moment">
