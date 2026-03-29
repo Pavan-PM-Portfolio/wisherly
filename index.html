@@ -104,8 +104,8 @@ body::after{
 .wrap{max-width:1240px;margin:0 auto;padding:0 52px;position:relative;z-index:2;}
 .wrap-sm{max-width:860px;margin:0 auto;padding:0 52px;position:relative;z-index:2;}
 section{position:relative;z-index:2;}
-.sp{padding:140px 0;}
-.sp-sm{padding:88px 0;}
+.sp{padding:80px 0;}
+.sp-sm{padding:52px 0;}
 
 /* ─────────────────────────────────────────────────────────
    SCROLL REVEAL
@@ -223,14 +223,14 @@ section{position:relative;z-index:2;}
 .hero-soc{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(37,99,235,.1);background:var(--white);cursor:pointer;transition:all .2s;text-decoration:none;}
 .hero-soc:hover{border-color:rgba(37,99,235,.25);transform:translateY(-2px);}
 /* right — feature cards */
-.hero-right{display:flex;flex-direction:column;gap:10px;}
-.hero-feat{background:var(--white);border-radius:14px;padding:14px 18px;border:1px solid rgba(37,99,235,.08);display:flex;align-items:center;gap:13px;transition:all .25s;box-shadow:0 2px 8px rgba(7,18,42,.04);}
-.hero-feat:hover{border-color:rgba(37,99,235,.2);transform:translateX(4px);box-shadow:0 4px 16px rgba(7,18,42,.08);}
-.hero-feat-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.hero-feat-title{font-family:var(--fd);font-style:italic;font-size:16px;color:var(--navy);margin-bottom:2px;}
-.hero-feat-sub{font-family:var(--fs);font-size:11px;color:var(--muted2);}
-.hero-feat-arrow{margin-left:auto;color:var(--mist);font-size:16px;flex-shrink:0;transition:all .25s;}
-.hero-feat:hover .hero-feat-arrow{color:var(--blue);transform:translateX(3px);}
+.hero-right{display:flex;flex-direction:column;gap:0;}
+.hero-occ-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.hero-occ-tile{background:var(--white);border-radius:12px;padding:11px 8px 10px;border:1px solid rgba(37,99,235,.07);display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;cursor:pointer;text-decoration:none;transition:all .22s;box-shadow:0 2px 8px rgba(7,18,42,.03);}
+.hero-occ-tile:hover{border-color:rgba(37,99,235,.2);transform:translateY(-3px);box-shadow:0 6px 20px rgba(7,18,42,.09);}
+.hero-occ-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-occ-name{font-family:var(--fd);font-style:italic;font-size:13px;color:var(--navy);line-height:1.2;}
+.hero-occ-sub{font-family:var(--fs);font-size:9.5px;color:var(--muted2);line-height:1.3;}
+@media(max-width:768px){.hero-occ-grid{grid-template-columns:repeat(2,1fr);gap:6px;}.hero-occ-name{font-size:11px;}.hero-occ-icon{width:28px;height:28px;}}
 /* stats bar */
 @keyframes ripple{0%{transform:scale(1);opacity:.6;}100%{transform:scale(2.5);opacity:0;}}
 @keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5);}50%{box-shadow:0 0 0 4px rgba(16,185,129,0);}}
@@ -264,7 +264,7 @@ section{position:relative;z-index:2;}
 /* ─────────────────────────────────────────────────────────
    SECTION HEADERS
 ───────────────────────────────────────────────────────── */
-.sh{text-align:center;margin-bottom:80px;}
+.sh{text-align:center;margin-bottom:40px;}
 .s-tag{
   display:inline-flex;align-items:center;gap:10px;
   font-family:var(--fs);font-size:11px;font-weight:600;
@@ -727,7 +727,7 @@ section{position:relative;z-index:2;}
   #cta{padding:60px 20px;}
   .ft{grid-template-columns:1fr 1fr;gap:24px;}
   .f-brand{grid-column:span 2;}
-  .sp{padding:40px 0;}
+  .sp{padding:48px 0;}
   .sp-sm{padding:32px 0;}
   .marquee-wrap{margin-top:0;}
   .met-cell{padding:28px 16px;}
@@ -894,46 +894,48 @@ section{position:relative;z-index:2;}
 
     <!-- RIGHT — feature list -->
     <div class="hero-right" style="animation:efade .7s cubic-bezier(.16,1,.3,1) .2s both;">
-      <a href="occasion.html" class="hero-feat">
-        <div class="hero-feat-icon" style="background:#EFF6FF;">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="1" y="4" width="20" height="14" rx="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.1"/><circle cx="6" cy="10" r="2.5" fill="#93C5FD"/><path d="M1 15 L5 11 L9 15 L13 11 L21 16" stroke="#2563EB" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg>
-        </div>
-        <div>
-          <div class="hero-feat-title">Cinematic photo slideshow</div>
-          <div class="hero-feat-sub">Unlimited photos &middot; auto-arranged &middot; polaroid wall</div>
-        </div>
-        <span class="hero-feat-arrow">&rarr;</span>
-      </a>
-      <a href="occasion.html" class="hero-feat">
-        <div class="hero-feat-icon" style="background:#FDF2F8;">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><style>.hfmb{animation:hfeq .7s ease-in-out infinite alternate;transform-origin:bottom;}@keyframes hfeq{0%{transform:scaleY(.3);}100%{transform:scaleY(1);}}</style><rect class="hfmb" x="1" y="7" width="3" height="12" rx="1.5" fill="#EC4899"/><rect class="hfmb" x="6" y="4" width="3" height="15" rx="1.5" fill="#EC4899" style="animation-delay:.15s;"/><rect class="hfmb" x="11" y="6" width="3" height="13" rx="1.5" fill="#F9A8D4" style="animation-delay:.05s;"/><rect class="hfmb" x="16" y="3" width="3" height="16" rx="1.5" fill="#EC4899" style="animation-delay:.25s;"/></svg>
-        </div>
-        <div>
-          <div class="hero-feat-title">Their favourite song plays</div>
-          <div class="hero-feat-sub">Autoplays softly the moment they open it</div>
-        </div>
-        <span class="hero-feat-arrow">&rarr;</span>
-      </a>
-      <a href="occasion.html" class="hero-feat">
-        <div class="hero-feat-icon" style="background:#F0FDF4;">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="1" y="4" width="13" height="9" rx="2" fill="#DCFCE7" stroke="#059669" stroke-width="1.1"/><path d="M1 7 L7.5 10.5 L14 7" stroke="#6EE7B7" stroke-width=".9" fill="none"/><rect x="8" y="9" width="13" height="9" rx="2" fill="#D1FAE5" stroke="#059669" stroke-width="1"/></svg>
-        </div>
-        <div>
-          <div class="hero-feat-title">Messages from everyone</div>
-          <div class="hero-feat-sub">Friends contribute wish cards &mdash; no signup needed</div>
-        </div>
-        <span class="hero-feat-arrow">&rarr;</span>
-      </a>
-      <a href="occasion.html" class="hero-feat">
-        <div class="hero-feat-icon" style="background:#FFFBEB;">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><style>.hfcf{animation:hfcfall .9s ease-in-out infinite alternate;}@keyframes hfcfall{0%{transform:translateY(0);}100%{transform:translateY(3px);}}</style><circle cx="11" cy="14" r="5" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.1"/><path d="M8.5 14 L10.5 16 L14 12" stroke="#F59E0B" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect class="hfcf" x="2" y="2" width="4" height="4" rx="1" fill="#EF4444" opacity=".6" transform="rotate(15 4 4)"/><rect class="hfcf" x="15" y="2" width="4" height="4" rx="1" fill="#8B5CF6" opacity=".6" transform="rotate(-10 17 4)" style="animation-delay:.3s;"/></svg>
-        </div>
-        <div>
-          <div class="hero-feat-title">Name-unlock reveal</div>
-          <div class="hero-feat-sub">Countdown &middot; confetti &middot; 98% cry happy tears</div>
-        </div>
-        <span class="hero-feat-arrow">&rarr;</span>
-      </a>
+      <div class="hero-occ-grid">
+        <a href="gender.html?occasion=birthday" class="hero-occ-tile">
+          <div class="hero-occ-icon" style="background:#EFF6FF;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="11" width="18" height="9" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/><rect x="5" y="8" width="12" height="4" rx="1" fill="#EFF6FF" stroke="#93C5FD" stroke-width=".8"/><ellipse cx="7.5" cy="6.5" rx=".7" ry="1.2" fill="#F59E0B" style="animation:flicker 1.2s ease-in-out infinite;"/><ellipse cx="11" cy="6" rx=".7" ry="1.2" fill="#EF4444" style="animation:flicker 1.2s .3s ease-in-out infinite;"/><ellipse cx="14.5" cy="6.5" rx=".6" ry="1" fill="#F59E0B" style="animation:flicker 1.2s .5s ease-in-out infinite;"/></svg></div>
+          <div class="hero-occ-name">Birthday</div>
+          <div class="hero-occ-sub">Photos &middot; Music</div>
+        </a>
+        <a href="gender.html?occasion=anniversary" class="hero-occ-tile">
+          <div class="hero-occ-icon" style="background:#FDF2F8;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path style="animation:hbeat 1.4s ease-in-out infinite;transform-origin:11px 11px;" d="M11 18 L4.5 11.5 Q2.5 8.5 5.5 7 Q7.5 6.5 11 10 Q14.5 6.5 16.5 7 Q19.5 8.5 17.5 11.5Z" fill="#FCE7F3" stroke="#EC4899" stroke-width="1"/></svg></div>
+          <div class="hero-occ-name">Anniversary</div>
+          <div class="hero-occ-sub">Timeline &middot; Love</div>
+        </a>
+        <a href="gender.html?occasion=farewell" class="hero-occ-tile">
+          <div class="hero-occ-icon" style="background:#F0FDF4;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><style>.hotplane{animation:fly 3s ease-in-out infinite;}@keyframes fly{0%,100%{transform:translate(0,0);}50%{transform:translate(2px,-2px);}}</style><g class="hotplane"><path d="M18 4 L10 8 L6 14 L9 14 L11 11 L13.5 17 L15.5 17 L13 10 L18 5.5Z" fill="#DCFCE7" stroke="#059669" stroke-width="1"/></g></svg></div>
+          <div class="hero-occ-name">Farewell</div>
+          <div class="hero-occ-sub">Group wishes</div>
+        </a>
+        <a href="gender.html?occasion=friendship" class="hero-occ-tile">
+          <div class="hero-occ-icon" style="background:#FFFBEB;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="8" cy="8" r="3.5" fill="#FEF3C7" stroke="#D97706" stroke-width="1"/><circle cx="14" cy="8" r="3.5" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/><path d="M3 19 C3 15 8 13.5 11 13.5" stroke="#D97706" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M19 19 C19 15 14 13.5 11 13.5" stroke="#2563EB" stroke-width="1" fill="none" stroke-linecap="round"/></svg></div>
+          <div class="hero-occ-name">Friendship</div>
+          <div class="hero-occ-sub">Memories</div>
+        </a>
+        <a href="gender.html?occasion=love" class="hero-occ-tile">
+          <div class="hero-occ-icon" style="background:#FDF2F8;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="6" width="18" height="12" rx="2.5" fill="#FDF2F8" stroke="#EC4899" stroke-width="1"/><path d="M2 8.5 L11 13.5 L20 8.5" stroke="#F9A8D4" stroke-width=".9" fill="none"/></svg></div>
+          <div class="hero-occ-name">Love Notes</div>
+          <div class="hero-occ-sub">Letters &middot; Music</div>
+        </a>
+        <a href="gender.html?occasion=apology" class="hero-occ-tile">
+          <div class="hero-occ-icon" style="background:#EFF6FF;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2 L12.1 7 L17.5 7.5 L13 11 L14.7 17 L11 14.2 L7.3 17 L9 11 L4.5 7.5 L9.9 7Z" fill="#DBEAFE" stroke="#2563EB" stroke-width=".9"/></svg></div>
+          <div class="hero-occ-name">Apology</div>
+          <div class="hero-occ-sub">Heartfelt</div>
+        </a>
+        <a href="gender.html?occasion=graduation" class="hero-occ-tile">
+          <div class="hero-occ-icon" style="background:#EFF6FF;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4 L20 8 L11 12 L2 8Z" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/><path d="M5 10 L5 15 Q11 18 17 15 L17 10" fill="#EFF6FF" stroke="#2563EB" stroke-width=".9"/><line x1="20" y1="8" x2="20" y2="13" stroke="#2563EB" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          <div class="hero-occ-name">Graduation</div>
+          <div class="hero-occ-sub">Milestone</div>
+        </a>
+        <a href="gender.html?occasion=thankyou" class="hero-occ-tile">
+          <div class="hero-occ-icon" style="background:#FDF2F8;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3 C8 3 5 5.5 5 8.5 C5 13 11 19 11 19 C11 19 17 13 17 8.5 C17 5.5 14 3 11 3Z" fill="#FDF2F8" stroke="#EC4899" stroke-width="1"/><path d="M8 8.5 Q11 7 14 8.5" stroke="#F9A8D4" stroke-width=".9" fill="none" stroke-linecap="round"/></svg></div>
+          <div class="hero-occ-name">Thank You</div>
+          <div class="hero-occ-sub">Gratitude</div>
+        </a>
+      </div>
     </div>
 
   </div>
@@ -966,6 +968,9 @@ section{position:relative;z-index:2;}
 
 <!-- METRICS -->
 <section id="metrics" class="sp-sm"><div class="wrap">
+  <div class="sh" style="margin-bottom:48px;">
+    <h2 class="s-h2 rv">The numbers that<br><em>speak for themselves</em></h2>
+  </div>
   <div class="met-row rv">
     <div class="met-cell"><div class="met-num"><span class="cnt" id="metPagesCount" data-t="10000">0</span>+</div><div class="met-lbl">Surprise pages created</div></div>
     <div class="met-cell"><div class="met-num"><span class="cnt" id="metMemoriesCount" data-t="50000">0</span>+</div><div class="met-lbl">Memories shared</div></div>
@@ -980,11 +985,7 @@ section{position:relative;z-index:2;}
   <!-- header -->
   <div class="hiw-header rv">
     <div>
-      <div class="hiw-eyebrow">
-        <div class="hiw-eyebrow-line"></div>
-        <div class="s-tag" style="margin:0;">How it works</div>
-      </div>
-      <h2 class="hiw-h1">From your heart<br>to <em>their smile.</em></h2>
+      <h2 class="hiw-h1" style="font-size:clamp(44px,4.8vw,64px);letter-spacing:-1.5px;">From your heart<br>to <em>their smile.</em></h2>
     </div>
     <div>
       <p class="hiw-sub">No design skills. No tech. Pick an occasion, personalise with photos and music, invite friends to contribute &mdash; and share the surprise. Five minutes. Lifetime of memories.</p>
@@ -1130,10 +1131,9 @@ section{position:relative;z-index:2;}
 <!-- FEATURES -->
 <section id="features" class="sp"><div class="wrap">
   <div class="sh">
-    <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-    <div class="s-tag rv d1">Features</div>
-    <h2 class="s-h2 rv d2">Everything you need to create<br>something <em>unforgettable</em></h2>
+  <h2 class="s-h2 rv d2">Everything you need to create<br>something <em>unforgettable</em></h2>
     <p class="s-sub rv d3">A complete toolkit for emotional, beautiful surprises.</p>
+  </div>
   </div>
   <div class="bento">
     <div class="bc b1 rv" data-mouse><div class="f-orb" style="width:220px;height:220px;background:radial-gradient(circle,rgba(37,99,235,.08),transparent);top:-80px;right:-60px;"></div><div class="f-ico"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1203,9 +1203,9 @@ section{position:relative;z-index:2;}
 <!-- OCCASIONS -->
 <section id="occasions" class="sp"><div class="wrap">
   <div class="sh">
-    <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-    <h2 class="s-h2 rv d2">Perfect for every<br><em>special moment</em></h2>
+  <h2 class="s-h2 rv d2">Perfect for every <em>special moment</em></h2>
     <p class="s-sub rv d3">Whatever the occasion, Wisherly makes it unforgettable.</p>
+  </div>
   </div>
   <div class="occ-grid" style="grid-template-columns:repeat(3,1fr);">
     <a class="occ-card rv" href="gender.html?occasion=birthday"><div class="occ-glow" style="background:rgba(37,99,235,.15);"></div><span class="occ-emoji"><svg width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -1251,8 +1251,8 @@ section{position:relative;z-index:2;}
 <!-- COMPARISON -->
 <section id="comparison" class="sp"><div class="wrap">
   <div class="sh">
-    <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-    <h2 class="s-h2 rv d1">Every gift tells a story.<br><em>Which story do you want to tell?</em></h2>
+  <h2 class="s-h2 rv d1">Every gift tells a story.<br><em>Which story do you want to tell?</em></h2>
+  </div>
   </div>
   <div class="comp-timeline rv">
     <div class="comp-moment">
@@ -1321,9 +1321,8 @@ section{position:relative;z-index:2;}
 <!-- TESTIMONIALS -->
 <section id="testimonials" class="sp"><div class="wrap">
   <div class="sh">
-    <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-    <div class="s-tag rv d1">Testimonials</div>
-    <h2 class="s-h2 rv d2">People who made<br>someone <em>cry (happily)</em></h2>
+  <h2 class="s-h2 rv d2">People who made someone <em>cry (happily)</em></h2>
+  </div>
   </div>
   <div class="testi-grid">
     <div class="testi rv"><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><p class="testi-q">"My girlfriend literally sobbed when she opened her birthday page. The polaroid wall with all our travel photos was the most beautiful thing I've ever made."</p><div class="testi-auth"><div class="testi-av">R</div><div><div class="testi-name">Rohan M.</div><div class="testi-loc">Bengaluru, India</div></div></div></div>
@@ -1336,75 +1335,84 @@ section{position:relative;z-index:2;}
 </div></section>
 
 <!-- DEMO -->
-<section id="demo" class="sp"><div class="wrap">
-  <div class="demo-split rv">
-    <div>
-      <div class="ornament" style="justify-content:flex-start;margin:0 0 20px;"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-      <div class="s-tag" style="margin-bottom:20px;">Live Demo</div>
-      <h2>See <em>exactly</em> what<br>they'll experience</h2>
-    </div>
-    <div>
-      <p class="demo-p">Open a fully-loaded Wisherly page and feel the magic yourself — the unlock screen, confetti, memories, wishes, and everything in between.</p>
-      <div class="demo-checks">
-        <div class="dci"><div class="dci-ico">✓</div>Name-unlock screen</div>
-        <div class="dci"><div class="dci-ico">✓</div>3-2-1 countdown</div>
-        <div class="dci"><div class="dci-ico">✓</div>Cinematic slideshow</div>
-        <div class="dci"><div class="dci-ico">✓</div>Confetti explosion</div>
-        <div class="dci"><div class="dci-ico">✓</div>Group wish wall</div>
-        <div class="dci"><div class="dci-ico">✓</div>Memory mini-game</div>
-      </div>
-    </div>
-  </div>
-  <div class="demo-cards rv d1">
-    <div class="dc">
-      <div class="dc-main">
-        <div class="dc-lbl">What they see when they open it</div>
-        <div class="dc-screen">
-          <div style="padding:14px 12px;text-align:center;"><div style="font-family:'Cormorant Garamond',serif;font-size:10px;font-style:italic;color:#1A3FA6;margin-bottom:2px;letter-spacing:.08em;">Happy Birthday ✦</div><div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:#07122A;font-style:italic;line-height:1;">Sarah</div><div style="font-size:8px;color:#4A6FA5;margin-top:2px;font-style:italic;">A surprise made just for you</div></div>
-          <div style="height:1px;background:rgba(37,99,235,.1);margin:0 12px;"></div>
-          <div style="height:54px;background:linear-gradient(135deg,#BFDBFE,#DDD6FE,#EDE9FE);display:flex;align-items:center;justify-content:center;gap:8px;">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" fill="rgba(255,255,255,.3)" stroke="rgba(255,255,255,.6)" stroke-width="1"/><path d="M6 9.5 L8 11.5 L12 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="12" rx="2" fill="rgba(255,255,255,.3)" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle cx="6" cy="8" r="2" fill="rgba(255,255,255,.5)"/><path d="M1 12 L5 9 L8 12 L11 9.5 L17 13" stroke="rgba(255,255,255,.7)" stroke-width="1" fill="none" stroke-linecap="round"/></svg>
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2 L9.7 5.5 L13.5 6 L10.5 8.8 L11.5 13 L9 11 L6.5 13 L7.5 8.8 L4.5 6 L8.3 5.5Z" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.7)" stroke-width=".8"/></svg>
-    </div>
-          <div style="padding:10px 12px;">
-            <div class="ps-wish"><div class="ps-av"></div><div class="ps-txt">So proud of the person you've become. Every day with you is a gift. ✦</div></div>
-            <div class="ps-wish"><div class="ps-av" style="background:linear-gradient(135deg,#1D4ED8,#7C3AED)"></div><div class="ps-txt">Best friend forever, no matter where life takes us ✦</div></div>
-            <div class="ps-wish"><div class="ps-av" style="background:linear-gradient(135deg,#0EA5E9,#2563EB)"></div><div class="ps-txt">Remember when we stayed up all night? ✨</div></div>
-          </div>
+<section id="demo" class="sp" style="background:var(--white);padding-bottom:0;"><div class="wrap">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;margin-bottom:52px;">
+    <div style="position:relative;">
+      <div style="font-family:var(--fd);font-size:120px;color:#EFF6FF;line-height:.8;position:absolute;top:-20px;left:-16px;font-weight:400;user-select:none;">"</div>
+      <div style="font-family:var(--fd);font-size:clamp(28px,3vw,36px);font-weight:400;color:var(--navy);line-height:1.2;letter-spacing:-.4px;margin-bottom:24px;position:relative;z-index:1;padding-top:12px;">She called me crying.<br>Said it was the most<br><em style="font-style:italic;color:var(--blue);">beautiful thing</em><br>anyone had ever done for her.</div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--snow);border-radius:14px;border:1px solid rgba(37,99,235,.08);margin-bottom:28px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#DBEAFE,#93C5FD);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-style:italic;font-size:18px;color:#1A3FA6;">A</div>
+        <div>
+          <div style="color:#F59E0B;font-size:13px;letter-spacing:1px;margin-bottom:2px;">★★★★★</div>
+          <div style="font-family:var(--fs);font-size:13px;color:var(--navy);font-weight:600;">Arjun M.</div>
+          <div style="font-family:var(--fs);font-size:11px;color:var(--muted2);">Made a Birthday surprise for his partner</div>
         </div>
       </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="demo.html" class="btn-hero-p" style="display:inline-flex;align-items:center;gap:7px;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="rgba(255,255,255,.5)" stroke-width="1"/><path d="M5 4.5 L9 7 L5 9.5Z" fill="white"/></svg>Open Live Demo</a>
+        <a href="occasion.html" class="btn-hero-o">Create Yours &rarr;</a>
+      </div>
     </div>
-    <div class="dc rv d2"><div class="dc-stat"><span class="dc-stat-ico"><svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-      <style>.dtear{animation:dt 2s ease-in-out infinite;}.dtear2{animation:dt 2s .6s ease-in-out infinite;}@keyframes dt{0%,60%{transform:translateY(0);opacity:1;}100%{transform:translateY(7px);opacity:0;}}</style>
-      <circle cx="18" cy="18" r="14" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
-      <circle cx="13" cy="15" r="2" fill="#92400E"/>
-      <circle cx="23" cy="15" r="2" fill="#92400E"/>
-      <path d="M12 23 Q18 27 24 23" stroke="#92400E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <path class="dtear" d="M12 17.5 Q11 20 12 22" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-      <ellipse class="dtear" cx="12" cy="22.5" rx="1.2" ry="1.5" fill="#93C5FD"/>
-      <path class="dtear2" d="M24 17.5 Q25 20 24 22" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-      <ellipse class="dtear2" cx="24" cy="22.5" rx="1.2" ry="1.5" fill="#93C5FD"/>
-    </svg></span><div><div class="dc-stat-num">98%</div><div class="dc-stat-lbl">of recipients said it made them emotional on first open</div></div></div></div>
-    <div class="dc rv d3"><div class="dc-stat"><span class="dc-stat-ico"><svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-      <style>.bolt{animation:boltpulse 1.5s ease-in-out infinite;}@keyframes boltpulse{0%,100%{opacity:1;filter:drop-shadow(0 0 2px #F59E0B);}50%{opacity:.7;filter:drop-shadow(0 0 6px #F59E0B);}}</style>
-      <circle cx="18" cy="18" r="14" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
-      <path class="bolt" d="M21 6 L12 19 L17 19 L15 30 L24 17 L19 17Z" fill="#F59E0B"/>
-    </svg></span><div><div class="dc-stat-num">&lt;&nbsp;5<span style="font-size:.45em">min</span></div><div class="dc-stat-lbl">average time to build a full surprise page from scratch</div></div></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding-top:8px;">
+      <div style="background:var(--snow);border-radius:14px;padding:14px 18px;border:1px solid rgba(37,99,235,.07);display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;border-radius:11px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.1"/><path d="M7 10 L9 12 L13 8" stroke="#2563EB" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div style="font-family:var(--fd);font-style:italic;font-size:15px;color:var(--navy);margin-bottom:1px;">Name-unlock screen</div><div style="font-family:var(--fs);font-size:11px;color:var(--muted2);">They type their name — the magic begins</div></div>
+        <span style="margin-left:auto;color:var(--mist);">&rarr;</span>
+      </div>
+      <div style="background:var(--snow);border-radius:14px;padding:14px 18px;border:1px solid rgba(37,99,235,.07);display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;border-radius:11px;background:#FDF2F8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="1" y="4" width="18" height="13" rx="3" fill="#FCE7F3" stroke="#EC4899" stroke-width="1.1"/><circle cx="6" cy="10" r="2.5" fill="#F9A8D4"/><path d="M1 13 L5 10 L8 13 L11 10 L19 14" stroke="#EC4899" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg></div>
+        <div><div style="font-family:var(--fd);font-style:italic;font-size:15px;color:var(--navy);margin-bottom:1px;">Cinematic photo slideshow</div><div style="font-family:var(--fs);font-size:11px;color:var(--muted2);">Unlimited photos, beautifully arranged</div></div>
+        <span style="margin-left:auto;color:var(--mist);">&rarr;</span>
+      </div>
+      <div style="background:var(--snow);border-radius:14px;padding:14px 18px;border:1px solid rgba(37,99,235,.07);display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;border-radius:11px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="1" y="4" width="12" height="9" rx="2" fill="#DCFCE7" stroke="#059669" stroke-width="1.1"/><path d="M1 7 L7 10.5 L13 7" stroke="#6EE7B7" stroke-width=".9" fill="none"/><rect x="7" y="9" width="12" height="8" rx="2" fill="#D1FAE5" stroke="#059669" stroke-width="1"/></svg></div>
+        <div><div style="font-family:var(--fd);font-style:italic;font-size:15px;color:var(--navy);margin-bottom:1px;">Messages from everyone</div><div style="font-family:var(--fs);font-size:11px;color:var(--muted2);">Friends add wish cards — no signup needed</div></div>
+        <span style="margin-left:auto;color:var(--mist);">&rarr;</span>
+      </div>
+      <div style="background:var(--snow);border-radius:14px;padding:14px 18px;border:1px solid rgba(37,99,235,.07);display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;border-radius:11px;background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><style>.dcf{animation:hfcfall .9s ease-in-out infinite alternate;}@keyframes hfcfall{0%{transform:translateY(0);}100%{transform:translateY(3px);}}</style><circle cx="10" cy="13" r="5" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.1"/><path d="M8 13 L10 15 L13 11" stroke="#F59E0B" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect class="dcf" x="2" y="2" width="4" height="4" rx="1" fill="#EF4444" opacity=".6" transform="rotate(15 4 4)"/><rect class="dcf" x="13" y="2" width="4" height="4" rx="1" fill="#8B5CF6" opacity=".6" transform="rotate(-10 15 4)" style="animation-delay:.3s;"/></svg></div>
+        <div><div style="font-family:var(--fd);font-style:italic;font-size:15px;color:var(--navy);margin-bottom:1px;">3-2-1 countdown + confetti</div><div style="font-family:var(--fs);font-size:11px;color:var(--muted2);">An unforgettable reveal moment</div></div>
+        <span style="margin-left:auto;color:var(--mist);">&rarr;</span>
+      </div>
+      <div style="background:var(--snow);border-radius:14px;padding:14px 18px;border:1px solid rgba(37,99,235,.07);display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;border-radius:11px;background:#EDE9FE;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><style>.dmb{animation:hfeq .7s ease-in-out infinite alternate;transform-origin:bottom;}@keyframes hfeq{0%{transform:scaleY(.3);}100%{transform:scaleY(1);}}</style><rect class="dmb" x="1" y="7" width="3" height="10" rx="1.5" fill="#8B5CF6"/><rect class="dmb" x="6" y="4" width="3" height="13" rx="1.5" fill="#8B5CF6" style="animation-delay:.12s;"/><rect class="dmb" x="11" y="6" width="3" height="11" rx="1.5" fill="#A78BFA" style="animation-delay:.06s;"/><rect class="dmb" x="16" y="3" width="3" height="14" rx="1.5" fill="#8B5CF6" style="animation-delay:.2s;"/></svg></div>
+        <div><div style="font-family:var(--fd);font-style:italic;font-size:15px;color:var(--navy);margin-bottom:1px;">Background music autoplay</div><div style="font-family:var(--fs);font-size:11px;color:var(--muted2);">Their favourite song plays on open</div></div>
+        <span style="margin-left:auto;color:var(--mist);">&rarr;</span>
+      </div>
+    </div>
   </div>
-  <div class="demo-cta rv d2">
-    <a href="demo.html" class="btn-hero-p">Open Live Demo <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="display:inline;vertical-align:middle;margin-left:3px;"><path d="M7 1 L7.7 4.5 L11 5 L8 7.5 L9 11 L7 9 L5 11 L6 7.5 L3 5 L6.3 4.5Z" fill="white" opacity=".8"/></svg></a>
-    <a href="occasion.html" class="btn-hero-o">Create Yours →</a>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(37,99,235,.08);border-top:1px solid rgba(37,99,235,.08);">
+  <div style="background:var(--snow);padding:28px 36px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2"/><circle cx="11" cy="13" r="2" fill="#92400E"/><circle cx="21" cy="13" r="2" fill="#92400E"/><path d="M10 21 Q16 26 22 21" stroke="#92400E" stroke-width="1.4" fill="none" stroke-linecap="round"/><path style="animation:dt 2s ease-in-out infinite;" d="M10 15 Q9 18 10 20" stroke="#60A5FA" stroke-width="1.4" stroke-linecap="round" fill="none"/><path style="animation:dt 2s .6s ease-in-out infinite;" d="M22 15 Q23 18 22 20" stroke="#60A5FA" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg>
+      <div style="font-family:var(--fd);font-style:italic;font-size:40px;color:var(--navy);line-height:1;"><span style="color:var(--blue);">98</span>%</div>
+    </div>
+    <div style="font-family:var(--fs);font-size:12px;color:var(--muted);line-height:1.6;">of recipients cried happy tears the moment they opened it</div>
   </div>
-</div></section>
+  <div style="background:var(--snow);padding:28px 36px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.2"/><path style="animation:boltpulse 1.5s ease-in-out infinite;" d="M19 4 L10 17 L15 17 L13 28 L22 15 L17 15Z" fill="#F59E0B"/></svg>
+      <div style="font-family:var(--fd);font-style:italic;font-size:40px;color:var(--navy);line-height:1;">&lt;&nbsp;<span style="color:var(--blue);">5</span><span style="font-size:.45em;color:var(--navy);">min</span></div>
+    </div>
+    <div style="font-family:var(--fs);font-size:12px;color:var(--muted);line-height:1.6;">average time to build a complete surprise page from scratch</div>
+  </div>
+  <div style="background:var(--snow);padding:28px 36px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.2"/><circle cx="10" cy="16" r="3" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/><circle cx="16" cy="16" r="3" fill="#BFDBFE" stroke="#2563EB" stroke-width="1"/><circle cx="22" cy="16" r="3" fill="#93C5FD" stroke="#2563EB" stroke-width="1"/></svg>
+      <div style="font-family:var(--fd);font-style:italic;font-size:40px;color:var(--navy);line-height:1;"><span style="color:var(--blue);">8</span></div>
+    </div>
+    <div style="font-family:var(--fs);font-size:12px;color:var(--muted);line-height:1.6;">occasions — each with a unique emotional design and atmosphere</div>
+  </div>
+</div>
+</section>
 
 <!-- PRICING -->
 <section id="pricing" class="sp"><div class="wrap">
   <div class="sh">
-    <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-    <div class="s-tag rv d1">Pricing</div>
-    <h2 class="s-h2 rv d2">Simple, transparent<br><em>pricing</em></h2>
+  <h2 class="s-h2 rv d2">Simple, transparent <em>pricing</em></h2>
     <p class="s-sub rv d3">Start for free. Upgrade when you need more magic.</p>
+  </div>
   </div>
   <div class="ptog-row rv">
     <span>Monthly</span>
@@ -1422,9 +1430,8 @@ section{position:relative;z-index:2;}
 <!-- FAQ -->
 <section id="faq" class="sp"><div class="wrap-sm">
   <div class="sh">
-    <div class="ornament rv"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line r"></div></div>
-    <div class="s-tag rv d1">FAQ</div>
-    <h2 class="s-h2 rv d2">Questions?<br>We've got <em>answers.</em></h2>
+  <h2 class="s-h2 rv d2">Questions? We've got <em>answers.</em></h2>
+  </div>
   </div>
   <div class="faq-list rv">
     <div class="fitem"><div class="fq">Do I need to create an account?<div class="fqico">+</div></div><div class="fa"><p>No account needed to get started. Just open the builder, fill in your details, and share the link. Simple as that.</p></div></div>
